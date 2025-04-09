@@ -47,3 +47,19 @@ Run the development server:
 psql-> create database arogyam_db
 
 python manage.py createsuperuser   -> admin -> admin@arogyam.com -> password
+
+
+pip install djangorestframework psycopg2
+
+
+
+python manage.py inspectdb users orders product orderitems prescription doctor booksappointment healthrecords payments labtests reports supporttickets feedback notifications offers useroffers > arogyam/backend/models.py
+
+
+then manuky add
+
+    def __str__(self):
+        return str(self.userid) for all
+
+        # The composite primary key (userid, offerid) found, that is not supported. The first column is selected.
+                unique_together = (('userid', 'offerid'),)
