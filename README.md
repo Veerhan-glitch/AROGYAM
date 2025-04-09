@@ -1,0 +1,49 @@
+#inital setup
+Clone the repository:
+
+##
+    git clone https://github.com/Veerhan-glitch/AROGYAM/
+    
+Navigate to the project folder:
+
+##
+    cd AROGYAM
+    
+Create and activate a virtual environment:
+
+On Linux/macOS:
+
+##
+    python -m venv venv
+    source venv/bin/activate
+
+On Windows:
+##
+    python -m venv venv
+    venv\Scripts\activate
+    
+Install dependencies:
+
+##
+    pip install -r requirements.txt
+
+
+Apply database migrations:
+
+##
+    python manage.py migrate
+
+
+Run the development server:
+
+##
+    python manage.py runserver
+
+
+
+
+##
+
+psql-> create database arogyam_db
+
+python manage.py createsuperuser   -> admin -> admin@arogyam.com -> password
