@@ -1,96 +1,90 @@
-const apiUrl = 'http://127.0.0.1:8000/api';
-const output = document.getElementById('output');
+// Wait for DOM to load
+window.addEventListener('DOMContentLoaded', () => {
+  // Splash Screen Timeout
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('loginSection').style.display = 'block';
+  }, 2000);
 
-function show(data) {
-  output.innerText = JSON.stringify(data, null, 2);
-}
+  // Attach event listeners safely
+  const loginForm = document.querySelector('#loginSection form');
+  const registerForm = document.querySelector('#registerSection form');
 
-function getUserOrders() {
-  const userId = document.getElementById('user_id').value;
-  if (!userId) {
-    alert('Please enter a user id');
-    return;
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
   }
-  axios.get(`${apiUrl}/orders/?userid=${userId}`)
-    .then(response => show(response.data))
-    .catch(error => console.error(error));
-}
 
-function getUserAppointments() {
-  const userId = document.getElementById('user_id').value;
-  if (!userId) {
-    alert('Please enter a user id');
-    return;
+  if (registerForm) {
+    registerForm.addEventListener('submit', handleRegister);
   }
-  axios.get(`${apiUrl}/appointments/?userid=${userId}`)
-    .then(response => show(response.data))
-    .catch(error => console.error(error));
+});
+
+// Show Register Page
+function showRegister() {
+  document.getElementById('loginSection').style.display = 'none';
+  document.getElementById('registerSection').style.display = 'block';
 }
 
-function getUserPrescriptions() {
-  const userId = document.getElementById('user_id').value;
-  if (!userId) {
-    alert('Please enter a user id');
-    return;
+// Show Login Page
+function showLogin() {
+  document.getElementById('registerSection').style.display = 'none';
+  document.getElementById('loginSection').style.display = 'block';
+}
+
+// Handle Registration
+function handleRegister(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const phone = document.getElementById('regPhone').value;
+  const type = document.getElementById('regType').value;
+
+  if (name && email && phone && type) {
+    alert('Registered Successfully');
+    showLogin();
   }
-  axios.get(`${apiUrl}/prescriptions/?userid=${userId}`)
-    .then(response => show(response.data))
-    .catch(error => console.error(error));
 }
 
-// New function to get feedback based on order id
-function getFeedback() {
-  const orderId = document.getElementById('order_id').value;
-  if (!orderId) {
-    alert('Please enter an order id');
-    return;
+// Handle Login
+function handleLogin(event) {
+  event.preventDefault();
+  const userType = document.getElementById('usertype').value;
+
+  // Hide all sections first
+  document.getElementById('loginSection').style.display = 'none';
+  document.getElementById('registerSection').style.display = 'none';
+  document.getElementById('dashboardSection').style.display = 'none';
+  document.getElementById('doctorSection').style.display = 'none';
+  document.getElementById('adminSection').style.display = 'none';
+
+  // Show dashboard based on userType
+  if (userType === 'user') {
+    document.getElementById('dashboardSection').style.display = 'block';
+  } else if (userType === 'doctor') {
+    document.getElementById('doctorSection').style.display = 'block';
+  } else if (userType === 'admin') {
+    document.getElementById('adminSection').style.display = 'block';
   }
-  axios.get(`${apiUrl}/feedback/?orderid=${orderId}`)
-    .then(response => show(response.data))
-    .catch(error => console.error(error));
 }
 
-// Existing functions remain unchanged
-function getAllDoctors() {
-  axios.get(`${apiUrl}/doctors/`)
-    .then(response => show(response.data))
-    .catch(error => console.error(error));
+// Show Profile
+function showProfile(type) {
+  document.getElementById('userProfile').style.display = 'none';
+  document.getElementById('doctorProfile').style.display = 'none';
+  document.getElementById('adminProfile').style.display = 'none';
+
+  if (type === 'user') {
+    document.getElementById('userProfile').style.display = 'block';
+  } else if (type === 'doctor') {
+    document.getElementById('doctorProfile').style.display = 'block';
+  } else if (type === 'admin') {
+    document.getElementById('adminProfile').style.display = 'block';
+  }
 }
 
-function uploadPrescription() {
-  axios.post(`${apiUrl}/prescriptions/`, {
-      userid: 1,
-      details: "Test Prescription"
-  })
-  .then(response => show(response.data))
-  .catch(error => console.error(error));
-}
-
-function bookAppointment() {
-  axios.post(`${apiUrl}/appointments/`, {
-      userid: 1,
-      doctorid: 2,
-      date: "2025-04-10"
-  })
-  .then(response => show(response.data))
-  .catch(error => console.error(error));
-}
-
-function giveFeedback() {
-  axios.post(`${apiUrl}/feedback/`, {
-      userid: 1,
-      message: "Great Service!"
-  })
-  .then(response => show(response.data))
-  .catch(error => console.error(error));
-}
-
-function orderProducts() {
-  axios.post(`${apiUrl}/orders/`, {
-      userid: 1,
-      date: "2025-04-10",
-      status: "Pending"
-  })
-  .then(response => show(response.data))
-  .catch(error => console.error(error));
+// Toggle Notifications
+function toggleNotifications() {
+  const dropdown = document.getElementById('notifDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }

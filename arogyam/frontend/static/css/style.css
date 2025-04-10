@@ -1,8 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    text-align: center;
-    margin-top: 50px;
+  font-family: 'Poppins', sans-serif;
+  background: #f2f7ff;
+  margin: 0;
+  padding: 0;
+}
+
+.splash {
+  background-color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-content {
+  text-align: center;
+  animation: fadeOut 1s ease 2s forwards;
+}
+
+.app-title {
+  font-size: 3em;
+  font-weight: bold;
+  color: #007BFF;
+}
+
+.slogan {
+  font-size: 1.2em;
+  color: #444;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
-  
+}
+
+.login-section,
+.signup-section,
+.dashboard {
+  display: none;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.login-box {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: inline-block;
+}
+
+input,
+select,
+button {
+  margin: 10px 0;
+  padding: 10px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.logoutBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #dc3545;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background-color: #a71d2a;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 60px auto 20px;
+  padding: 10px 20px;
+}
+
+.notification {
+  position: relative;
+  font-size: 22px;
+  color: #007BFF;
+  cursor: pointer;
+}
+
+.notif-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 250px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+  text-align: left;
+}
+
+.menu {
+  display: grid;
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 12px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.menu a:hover {
+  transform: translateX(5px);
+  background-color: #e0ecff;
+}
+
+.menu a i {
+  margin-right: 10px;
+  color: #007BFF;
+}
+
+.profileBtn {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+  font-weight: 600;
+  font-size: 14px;
+  justify-content: center;
+}
+
+.profile-details {
+  display: none;
+  margin-top: 20px;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+.link-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.register-section {
+  display: none;
+  padding: 40px;
+  text-align: center;
+}
+
+.link-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.link-text a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: 600;
+}
