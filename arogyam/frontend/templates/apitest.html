@@ -1,178 +1,447 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Arogyam API Tester</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        h1, h3 { color: #333; }
-        input, select, button { margin: 5px; padding: 5px; }
-        pre { background: #f0f0f0; border: 1px solid #ccc; padding: 10px; }
-        .section { margin-bottom: 20px; }
-    </style>
-    <script>
-        // Generic function to call an API endpoint and display its JSON result.
-        async function fetchAPI(endpoint) {
-            try {
-                const response = await fetch(endpoint);
-                const data = await response.json();
-                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                document.getElementById('output').textContent = 'Error: ' + error;
-            }
-        }
-
-        // Doctor-related functions.
-        async function populateSpecializations() {
-            try {
-                const response = await fetch('/api/get-specializations/');
-                const specs = await response.json();
-                const select = document.getElementById('specialization');
-                // Clear previous options and add default.
-                select.innerHTML = '<option value="">--Select--</option>';
-                specs.forEach(function(spec) {
-                    const option = document.createElement('option');
-                    option.value = spec;
-                    option.textContent = spec;
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error fetching specializations', error);
-            }
-        }
-
-        function getDoctorsBySpec() {
-            const spec = document.getElementById('specialization').value;
-            if (!spec) { alert('Select a specialization.'); return; }
-            fetchAPI('/api/get-doctors/specialization/' + encodeURIComponent(spec) + '/');
-        }
-
-        function getDoctorsSortedByRating() {
-            fetchAPI('/api/get-doctors/sort/rating/');
-        }
-
-        function getDoctorsSortedByFee() {
-            fetchAPI('/api/get-doctors/sort/fee/');
-        }
-
-        // Fetch schedule for a doctor.
-        function getDoctorSchedule() {
-            const doctorId = document.getElementById('doc_id').value;
-            if (!doctorId) { alert('Enter Doctor ID.'); return; }
-            fetchAPI('/api/get-appointments-by-doctor/' + doctorId + '/');
-        }
-
-        // Other endpoint functions.
-        function getFeedbackByOrder() {
-            const orderId = document.getElementById('orderid').value;
-            if (!orderId) { alert('Enter Order ID.'); return; }
-            fetchAPI('/api/get-feedback-by-order/' + orderId + '/');
-        }
-
-        function getFeedbackByUser() {
-            const userId = document.getElementById('userid').value;
-            if (!userId) { alert('Enter User ID.'); return; }
-            fetchAPI('/api/get-feedback-by-user/' + userId + '/');
-        }
-
-        function getAppointments() {
-            const userId = document.getElementById('app_userid').value;
-            if (!userId) { alert('Enter User ID for Appointments.'); return; }
-            fetchAPI('/api/get-appointments/' + userId + '/');
-        }
-
-        function getLabTests() {
-            const testId = document.getElementById('lab_testid').value;
-            if (!testId) { alert('Enter Test ID.'); return; }
-            fetchAPI('/api/get-labtests/' + testId + '/');
-        }
-
-        function getPrescriptions() {
-            const userId = document.getElementById('pres_userid').value;
-            if (!userId) { alert('Enter User ID for Prescriptions.'); return; }
-            fetchAPI('/api/get-prescriptions/' + userId + '/');
-        }
-
-        function getOrders() {
-            const userId = document.getElementById('order_userid').value;
-            if (!userId) { alert('Enter User ID for Orders.'); return; }
-            fetchAPI('/api/get-orders/' + userId + '/');
-        }
-
-        // Load specializations on page load.
-        window.onload = function() {
-            populateSpecializations();
-        };
-    </script>
+  <meta charset="UTF-8">
+  <title>Arogyam API Tester</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #333; }
+    h2 { border-bottom: 2px solid #333; padding-bottom: 5px; }
+    section { margin-bottom: 40px; border: 1px solid #ccc; padding: 10px; }
+    label, input, select, button { margin: 5px; padding: 5px; }
+    pre { background: #f0f0f0; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
+  </style>
+  <script>
+    const API = '/api/';
+    function showOutput(data) {
+      document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+    }
+    function callAPI(endpoint, method="POST", payload={}) {
+      fetch(API + endpoint, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: method === "GET" ? null : JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => showOutput(data))
+      .catch(err => showOutput({ error: err.toString() }));
+    }
+    // ---------- CUSTOMER FUNCTIONS ----------
+    function getPastOrders() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("orders/", "POST", { userid });
+    }
+    function getFeedbackByUser() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("feedback-by-user/", "POST", { userid });
+    }
+    function getFeedbackByOrder() {
+      const orderid = document.getElementById('order_id_feedback').value;
+      if (!orderid) { alert("Enter Order ID!"); return; }
+      callAPI("feedback-by-order/", "POST", { orderid });
+    }
+    function getUserAppointments() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("appointments/", "POST", { userid });
+    }
+    function getUserPrescriptions() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("prescriptions/", "POST", { userid });
+    }
+    function bookAppointment() {
+      const userid = document.getElementById('appt_userid').value;
+      const doctorid = document.getElementById('appt_docid').value;
+      const date = document.getElementById('appt_date').value;
+      const type = document.getElementById('appt_type').value;
+      if (!userid || !doctorid || !date || !type) {
+        alert("Fill all fields for appointment booking.");
+        return;
+      }
+      callAPI("book-appointment/", "POST", { userid, doctorid, date, type });
+    }
+    function getPaymentHistory() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("payment-history/", "POST", { userid });
+    }
+    function browseLabTests() {
+      const name = document.getElementById('labtest_query').value;
+      callAPI("labtests/", "POST", { name });
+    }
+    function viewReports() {
+      const testid = document.getElementById('report_testid').value;
+      if (!testid) { alert("Enter Test ID!"); return; }
+      callAPI("reports/", "POST", { testid });
+    }
+    function submitSupportTicket() {
+      const userid = document.getElementById('cust_userid').value;
+      const issuetype = document.getElementById('ticket_type').value;
+      const description = document.getElementById('ticket_desc').value;
+      if (!userid || !issuetype || !description) {
+        alert("Fill all support ticket fields.");
+        return;
+      }
+      callAPI("submit-ticket/", "POST", { userid, issuetype, description });
+    }
+    function viewSupportTickets() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("support-tickets/", "POST", { userid });
+    }
+    function getUserNotifications() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("notifications/", "POST", { userid });
+    }
+    function getUserOffers() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("user-offers/", "POST", { userid });
+    }
+    function searchProducts() {
+      const query = document.getElementById('prod_query').value;
+      callAPI("search-products/", "POST", { query });
+    }
+    function viewProductDetails() {
+      const productid = document.getElementById('prod_id').value;
+      if (!productid) { alert("Enter Product ID!"); return; }
+      callAPI("product-details/", "POST", { productid });
+    }
+    // ---------- DOCTOR FUNCTIONS ----------
+    function getDoctorSchedule() {
+      const doctorid = document.getElementById('doc_id').value;
+      const mode = document.getElementById('doc_mode').value;
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("doctor-schedule/", "POST", { doctorid, mode });
+    }
+    function submitDoctorFeedback() {
+      const userid = document.getElementById('doc_feedback_userid').value;
+      const orderid = document.getElementById('doc_feedback_orderid').value;
+      const description = document.getElementById('doc_feedback_desc').value;
+      const rating = document.getElementById('doc_feedback_rating').value;
+      if (!userid || !orderid || !description || !rating) {
+        alert("Fill all doctor feedback fields.");
+        return;
+      }
+      callAPI("doctor-feedback/", "POST", { userid, orderid, description, rating });
+    }
+    function viewHealthRecords() {
+      const userid = document.getElementById('health_userid').value;
+      if (!userid) { alert("Enter Patient ID!"); return; }
+      callAPI("health-records/", "POST", { userid });
+    }
+    function viewDoctorProfile() {
+      const doctorid = document.getElementById('doc_profileid').value;
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("doctor-profile/", "POST", { doctorid });
+    }
+    function updateDoctorRating() {
+      const doctorid = document.getElementById('doc_upd_id').value;
+      const new_rating = document.getElementById('doc_new_rating').value;
+      if (!doctorid || !new_rating) { alert("Fill all fields for updating rating."); return; }
+      callAPI("update-doctor-rating/", "POST", { doctorid, new_rating });
+    }
+    function getAppointmentsByDoctor() {
+      const doctorid = document.getElementById('doc_id').value;
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("appointments-by-doctor/", "POST", { doctorid });
+    }
+    function allDoctors() {
+      callAPI("doctors/", "GET");
+    }
+    function filterDoctorsBySpecialization() {
+      const specialization = document.getElementById('doc_specialization').value;
+      if (!specialization) { alert("Select a specialization!"); return; }
+      callAPI("doctors/filter/", "POST", { specialization });
+    }
+    function sortDoctorsByRating() {
+      const spec = document.getElementById('doc_specialization').value;
+      let endpoint = "doctors/sort/rating/";
+      if (spec) { endpoint += "?specialization=" + encodeURIComponent(spec); }
+      callAPI(endpoint, "GET");
+    }
+    function sortDoctorsByFee() {
+      const spec = document.getElementById('doc_specialization').value;
+      let endpoint = "doctors/sort/fee/";
+      if (spec) { endpoint += "?specialization=" + encodeURIComponent(spec); }
+      callAPI(endpoint, "GET");
+    }
+    function loadDoctorSpecializations() {
+      fetch(API + "doctor-specializations/")
+      .then(res => res.json())
+      .then(data => {
+         const sel = document.getElementById('doc_specialization');
+         sel.innerHTML = '<option value="">--Select--</option>';
+         data.forEach(spec => { sel.innerHTML += `<option value="${spec}">${spec}</option>`; });
+      })
+      .catch(err => console.error(err));
+    }
+    // ---------- ADMIN FUNCTIONS ----------
+    function viewAllUsers() { callAPI("all-users/", "GET"); }
+    function addUser() {
+      const name = document.getElementById('new_user_name').value;
+      const email = document.getElementById('new_user_email').value;
+      const phonenumber = document.getElementById('new_user_phone').value;
+      const password = document.getElementById('new_user_password').value;
+      callAPI("add-user/", "POST", { name, email, phonenumber, password });
+    }
+    function deleteUser() {
+      const user_id = document.getElementById('adm_userid').value;
+      if (!user_id) { alert("Enter User ID to delete."); return; }
+      callAPI("delete-user/" + user_id + "/", "DELETE");
+    }
+    function addProduct() {
+      const name = document.getElementById('new_prod_name').value;
+      const brand = document.getElementById('new_prod_brand').value;
+      const price = parseFloat(document.getElementById('new_prod_price').value);
+      const composition = document.getElementById('new_prod_comp').value;
+      const type = document.getElementById('new_prod_type').value;
+      const prescriptionneeded = document.getElementById('new_prod_pres').checked;
+      callAPI("add-product/", "POST", { name, brand, price, composition, type, prescriptionneeded });
+    }
+    function updateProductPrice() {
+      const product_id = document.getElementById('upd_prod_id').value;
+      const new_price = parseFloat(document.getElementById('upd_prod_price').value);
+      callAPI("update-product-price/", "POST", { product_id, new_price });
+    }
+    function deleteProduct() {
+      const product_id = document.getElementById('del_prod_id').value;
+      if (!product_id) { alert("Enter Product ID to delete."); return; }
+      callAPI("delete-product/" + product_id + "/", "DELETE");
+    }
+    function getSalesByMonth() { callAPI("sales-by-month/", "GET"); }
+    function getMostOrderedProducts() { callAPI("most-ordered-products/", "GET"); }
+    function addLabTest() {
+      const name = document.getElementById('lab_name').value;
+      const price = parseFloat(document.getElementById('lab_price').value);
+      const status = document.getElementById('lab_status').value;
+      const testdetails = document.getElementById('lab_details').value;
+      callAPI("add-lab-test/", "POST", { name, price, status, testdetails });
+    }
+    function linkReport() {
+      const filepath = document.getElementById('rep_filepath').value;
+      const test_id = document.getElementById('rep_testid2').value;
+      callAPI("link-report/", "POST", { filepath, test_id });
+    }
+    function viewAllOffers() { callAPI("all-offers/", "GET"); }
+    function sendNotification() {
+      const user_id = document.getElementById('not_userid').value;
+      const message = document.getElementById('not_message').value;
+      const type = document.getElementById('not_type').value;
+      callAPI("send-notification/", "POST", { user_id, message, type });
+    }
+    // Load doctor specializations on page load.
+    window.onload = loadDoctorSpecializations;
+  </script>
 </head>
 <body>
-    <h1>Arogyam API Tester</h1>
-
-    <!-- Feedback Section -->
-    <div class="section">
-        <h3>Feedback</h3>
-        <div>
-            <label>By Order ID:</label>
-            <input type="number" id="orderid" placeholder="Order ID">
-            <button onclick="getFeedbackByOrder()">Get Feedback by Order</button>
-        </div>
-        <div>
-            <label>By User ID:</label>
-            <input type="number" id="userid" placeholder="User ID">
-            <button onclick="getFeedbackByUser()">Get Feedback by User</button>
-        </div>
+  <h1>Arogyam API Tester</h1>
+  <hr>
+  <section>
+    <h2>Customer Features</h2>
+    <div>
+      <label>User ID:</label>
+      <input type="number" id="cust_userid" placeholder="User ID">
+      <button onclick="getPastOrders()">View Past Orders</button>
+      <button onclick="getUserAppointments()">View Appointments</button>
+      <button onclick="getUserPrescriptions()">View Prescriptions</button>
+      <button onclick="getPaymentHistory()">Payment History</button>
     </div>
-
-    <!-- Appointments Section -->
-    <div class="section">
-        <h3>Appointments</h3>
-        <input type="number" id="app_userid" placeholder="User ID">
-        <button onclick="getAppointments()">Get Appointments</button>
+    <div>
+      <label>Order ID (Feedback):</label>
+      <input type="number" id="order_id_feedback" placeholder="Order ID">
+      <button onclick="getFeedbackByOrder()">Feedback by Order</button>
+      <button onclick="getFeedbackByUser()">View My Feedback</button>
     </div>
-
-    <!-- Lab Tests Section -->
-    <div class="section">
-        <h3>Lab Tests</h3>
-        <input type="number" id="lab_testid" placeholder="Test ID">
-        <button onclick="getLabTests()">Get Lab Test</button>
+    <div>
+      <label>Search Product (name/brand):</label>
+      <input type="text" id="prod_query" placeholder="Search query">
+      <button onclick="searchProducts()">Search Products</button>
     </div>
-
-    <!-- Prescriptions Section -->
-    <div class="section">
-        <h3>Prescriptions</h3>
-        <input type="number" id="pres_userid" placeholder="User ID">
-        <button onclick="getPrescriptions()">Get Prescriptions</button>
+    <div>
+      <label>Product ID:</label>
+      <input type="number" id="prod_id" placeholder="Product ID">
+      <button onclick="viewProductDetails()">View Product Details</button>
     </div>
-
-    <!-- Orders with Items Section -->
-    <div class="section">
-        <h3>Orders with Items</h3>
-        <input type="number" id="order_userid" placeholder="User ID">
-        <button onclick="getOrders()">Get Orders + Items</button>
+    <div>
+      <h4>Book Appointment</h4>
+      <label>User ID:</label>
+      <input type="number" id="appt_userid" placeholder="User ID">
+      <label>Doctor ID:</label>
+      <input type="number" id="appt_docid" placeholder="Doctor ID">
+      <label>Date:</label>
+      <input type="date" id="appt_date">
+      <label>Type:</label>
+      <select id="appt_type">
+          <option value="Routine">Routine</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Consultation">Consultation</option>
+      </select>
+      <button onclick="bookAppointment()">Book Appointment</button>
     </div>
-
-    <!-- Doctors Section -->
-    <div class="section">
-        <h3>Doctors</h3>
-        <button onclick="fetchAPI('/api/get-doctors/')">Get All Doctors</button>
-        <br>
-        <label>Filter by Specialization:</label>
-        <select id="specialization">
-            <!-- Options populated dynamically -->
-        </select>
-        <button onclick="getDoctorsBySpec()">Filter Doctors</button>
-        <br>
-        <button onclick="getDoctorsSortedByRating()">Sort Doctors by Rating</button>
-        <button onclick="getDoctorsSortedByFee()">Sort Doctors by Fee</button>
-        <br>
-        <h4>Doctor Schedule</h4>
-        <label>Doctor ID:</label>
-        <input type="number" id="doc_id" placeholder="Doctor ID">
-        <button onclick="getDoctorSchedule()">Get Doctor's Schedule</button>
+    <div>
+      <label>Test ID (Reports):</label>
+      <input type="number" id="report_testid" placeholder="Test ID">
+      <button onclick="viewReports()">View Reports</button>
     </div>
-
-    <!-- Output Section -->
-    <h3>Output:</h3>
-    <pre id="output"></pre>
+    <div>
+      <h4>Support Ticket</h4>
+      <label>Issue Type:</label>
+      <select id="ticket_type">
+          <option value="Payment Issue">Payment Issue</option>
+          <option value="Technical Issue">Technical Issue</option>
+          <option value="Other">Other</option>
+      </select>
+      <label>Description:</label>
+      <input type="text" id="ticket_desc" placeholder="Description">
+      <button onclick="submitSupportTicket()">Submit Ticket</button>
+      <button onclick="viewSupportTickets()">View My Tickets</button>
+    </div>
+    <div>
+      <button onclick="getUserNotifications()">View My Notifications</button>
+      <button onclick="getUserOffers()">View Offers Used</button>
+    </div>
+  </section>
+  <hr>
+  <section>
+    <h2>Doctor Features</h2>
+    <div>
+      <label>Doctor ID:</label>
+      <input type="number" id="doc_id" placeholder="Doctor ID">
+      <label>Mode:</label>
+      <select id="doc_mode">
+          <option value="all">All</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
+      </select>
+      <button onclick="getDoctorSchedule()">View My Schedule</button>
+      <button onclick="getAppointmentsByDoctor()">View Appointments by Doctor</button>
+    </div>
+    <div>
+      <h4>Doctor Feedback</h4>
+      <label>User ID:</label>
+      <input type="number" id="doc_feedback_userid" placeholder="User ID">
+      <label>Order ID:</label>
+      <input type="number" id="doc_feedback_orderid" placeholder="Order ID">
+      <label>Feedback:</label>
+      <input type="text" id="doc_feedback_desc" placeholder="Feedback">
+      <label>Rating:</label>
+      <input type="number" step="0.1" id="doc_feedback_rating" placeholder="Rating">
+      <button onclick="submitDoctorFeedback()">Submit Feedback</button>
+    </div>
+    <div>
+      <label>Patient ID (Health Records):</label>
+      <input type="number" id="health_userid" placeholder="Patient ID">
+      <button onclick="viewHealthRecords()">View Health Records</button>
+    </div>
+    <div>
+      <label>Doctor ID (Profile):</label>
+      <input type="number" id="doc_profileid" placeholder="Doctor ID">
+      <button onclick="viewDoctorProfile()">View My Profile</button>
+    </div>
+    <div>
+      <h4>Update Doctor Rating (Admin Action)</h4>
+      <label>Doctor ID:</label>
+      <input type="number" id="doc_upd_id" placeholder="Doctor ID">
+      <label>New Rating:</label>
+      <input type="number" step="0.1" id="doc_new_rating" placeholder="New Rating">
+      <button onclick="updateDoctorRating()">Update Rating</button>
+    </div>
+  </section>
+  <hr>
+  <section>
+    <h2>Doctor Search & Sort</h2>
+    <div>
+      <label>Specialization:</label>
+      <select id="doc_specialization"></select>
+      <button onclick="filterDoctorsBySpecialization()">Filter Doctors</button>
+      <button onclick="sortDoctorsByRating()">Sort by Rating</button>
+      <button onclick="sortDoctorsByFee()">Sort by Fee</button>
+      <button onclick="allDoctors()">Get All Doctors</button>
+    </div>
+  </section>
+  <hr>
+  <section>
+    <h2>Admin Features</h2>
+    <div>
+      <button onclick="viewAllUsers()">View All Users</button>
+    </div>
+    <div>
+      <h4>Add New User</h4>
+      <input type="text" id="new_user_name" placeholder="Name">
+      <input type="email" id="new_user_email" placeholder="Email">
+      <input type="text" id="new_user_phone" placeholder="Phone">
+      <input type="password" id="new_user_password" placeholder="Password">
+      <button onclick="addUser()">Create User</button>
+    </div>
+    <div>
+      <h4>Add New Product</h4>
+      <input type="text" id="new_prod_name" placeholder="Product Name">
+      <input type="text" id="new_prod_brand" placeholder="Brand">
+      <input type="number" step="0.01" id="new_prod_price" placeholder="Price">
+      <input type="text" id="new_prod_comp" placeholder="Composition">
+      <input type="text" id="new_prod_type" placeholder="Type">
+      <label>Prescription Needed:</label>
+      <input type="checkbox" id="new_prod_pres">
+      <button onclick="addProduct()">Add Product</button>
+    </div>
+    <div>
+      <h4>Update Product Price</h4>
+      <input type="number" id="upd_prod_id" placeholder="Product ID">
+      <input type="number" step="0.01" id="upd_prod_price" placeholder="New Price">
+      <button onclick="updateProductPrice()">Update Price</button>
+    </div>
+    <div>
+      <label>Product ID to Delete:</label>
+      <input type="number" id="del_prod_id" placeholder="Product ID">
+      <button onclick="deleteProduct()">Delete Product</button>
+    </div>
+    <div>
+      <button onclick="getSalesByMonth()">Total Sales by Month</button>
+      <button onclick="getMostOrderedProducts()">Most Ordered Products</button>
+    </div>
+    <div>
+      <h4>Add a Lab Test</h4>
+      <input type="text" id="lab_name" placeholder="Test Name">
+      <input type="number" step="0.01" id="lab_price" placeholder="Price">
+      <label>Status:</label>
+      <select id="lab_status">
+          <option value="Available">Available</option>
+          <option value="Unavailable">Unavailable</option>
+      </select>
+      <input type="text" id="lab_details" placeholder="Details">
+      <button onclick="addLabTest()">Add Lab Test</button>
+    </div>
+    <div>
+      <h4>Link Report to Lab Test</h4>
+      <input type="text" id="rep_filepath" placeholder="File Path">
+      <input type="number" id="rep_testid2" placeholder="Test ID">
+      <button onclick="linkReport()">Link Report</button>
+    </div>
+    <div>
+      <button onclick="viewAllOffers()">View All Offers</button>
+    </div>
+    <div>
+      <h4>Send Notification</h4>
+      <input type="number" id="not_userid" placeholder="User ID">
+      <input type="text" id="not_message" placeholder="Message">
+      <label>Type:</label>
+      <select id="not_type">
+          <option value="Lab">Lab</option>
+          <option value="Support">Support</option>
+          <option value="General">General</option>
+      </select>
+      <button onclick="sendNotification()">Send Notification</button>
+    </div>
+  </section>
+  <hr>
+  <section>
+    <h2>Output</h2>
+    <pre id="output">Responses will appear here...</pre>
+  </section>
 </body>
 </html>
