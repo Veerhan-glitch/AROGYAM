@@ -38,3 +38,11 @@ htmlcov/
 
 # Others
 *.sqlite3
+arogyam/__pycache__/serializers.cpython-313.pyc
+arogyam/__pycache__/views.cpython-313.pyc
+arogyam/__pycache__/urls.cpython-313.pyc
+arogyam/__pycache__/serializers.cpython-313.pyc
+arogyam/__pycache__/urls.cpython-313.pyc
+arogyam/__pycache__/views.cpython-313.pyc
+arogyam/backend/__pycache__/models.cpython-313.pyc
+arogyam/backend/migrations/__pycache__/0001_initial.cpython-313.pyc

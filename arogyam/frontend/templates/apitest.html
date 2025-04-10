@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Arogyam API Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1, h3 { color: #333; }
+        input, select, button { margin: 5px; padding: 5px; }
+        pre { background: #f0f0f0; border: 1px solid #ccc; padding: 10px; }
+        .section { margin-bottom: 20px; }
+    </style>
+    <script>
+        // Generic function to call an API endpoint and display its JSON result.
+        async function fetchAPI(endpoint) {
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('output').textContent = 'Error: ' + error;
+            }
+        }
+
+        // Doctor-related functions.
+        async function populateSpecializations() {
+            try {
+                const response = await fetch('/api/get-specializations/');
+                const specs = await response.json();
+                const select = document.getElementById('specialization');
+                // Clear previous options and add default.
+                select.innerHTML = '<option value="">--Select--</option>';
+                specs.forEach(function(spec) {
+                    const option = document.createElement('option');
+                    option.value = spec;
+                    option.textContent = spec;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching specializations', error);
+            }
+        }
+
+        function getDoctorsBySpec() {
+            const spec = document.getElementById('specialization').value;
+            if (!spec) { alert('Select a specialization.'); return; }
+            fetchAPI('/api/get-doctors/specialization/' + encodeURIComponent(spec) + '/');
+        }
+
+        function getDoctorsSortedByRating() {
+            fetchAPI('/api/get-doctors/sort/rating/');
+        }
+
+        function getDoctorsSortedByFee() {
+            fetchAPI('/api/get-doctors/sort/fee/');
+        }
+
+        // Fetch schedule for a doctor.
+        function getDoctorSchedule() {
+            const doctorId = document.getElementById('doc_id').value;
+            if (!doctorId) { alert('Enter Doctor ID.'); return; }
+            fetchAPI('/api/get-appointments-by-doctor/' + doctorId + '/');
+        }
+
+        // Other endpoint functions.
+        function getFeedbackByOrder() {
+            const orderId = document.getElementById('orderid').value;
+            if (!orderId) { alert('Enter Order ID.'); return; }
+            fetchAPI('/api/get-feedback-by-order/' + orderId + '/');
+        }
+
+        function getFeedbackByUser() {
+            const userId = document.getElementById('userid').value;
+            if (!userId) { alert('Enter User ID.'); return; }
+            fetchAPI('/api/get-feedback-by-user/' + userId + '/');
+        }
+
+        function getAppointments() {
+            const userId = document.getElementById('app_userid').value;
+            if (!userId) { alert('Enter User ID for Appointments.'); return; }
+            fetchAPI('/api/get-appointments/' + userId + '/');
+        }
+
+        function getLabTests() {
+            const testId = document.getElementById('lab_testid').value;
+            if (!testId) { alert('Enter Test ID.'); return; }
+            fetchAPI('/api/get-labtests/' + testId + '/');
+        }
+
+        function getPrescriptions() {
+            const userId = document.getElementById('pres_userid').value;
+            if (!userId) { alert('Enter User ID for Prescriptions.'); return; }
+            fetchAPI('/api/get-prescriptions/' + userId + '/');
+        }
+
+        function getOrders() {
+            const userId = document.getElementById('order_userid').value;
+            if (!userId) { alert('Enter User ID for Orders.'); return; }
+            fetchAPI('/api/get-orders/' + userId + '/');
+        }
+
+        // Load specializations on page load.
+        window.onload = function() {
+            populateSpecializations();
+        };
+    </script>
+</head>
+<body>
+    <h1>Arogyam API Tester</h1>
+
+    <!-- Feedback Section -->
+    <div class="section">
+        <h3>Feedback</h3>
+        <div>
+            <label>By Order ID:</label>
+            <input type="number" id="orderid" placeholder="Order ID">
+            <button onclick="getFeedbackByOrder()">Get Feedback by Order</button>
+        </div>
+        <div>
+            <label>By User ID:</label>
+            <input type="number" id="userid" placeholder="User ID">
+            <button onclick="getFeedbackByUser()">Get Feedback by User</button>
+        </div>
+    </div>
+
+    <!-- Appointments Section -->
+    <div class="section">
+        <h3>Appointments</h3>
+        <input type="number" id="app_userid" placeholder="User ID">
+        <button onclick="getAppointments()">Get Appointments</button>
+    </div>
+
+    <!-- Lab Tests Section -->
+    <div class="section">
+        <h3>Lab Tests</h3>
+        <input type="number" id="lab_testid" placeholder="Test ID">
+        <button onclick="getLabTests()">Get Lab Test</button>
+    </div>
+
+    <!-- Prescriptions Section -->
+    <div class="section">
+        <h3>Prescriptions</h3>
+        <input type="number" id="pres_userid" placeholder="User ID">
+        <button onclick="getPrescriptions()">Get Prescriptions</button>
+    </div>
+
+    <!-- Orders with Items Section -->
+    <div class="section">
+        <h3>Orders with Items</h3>
+        <input type="number" id="order_userid" placeholder="User ID">
+        <button onclick="getOrders()">Get Orders + Items</button>
+    </div>
+
+    <!-- Doctors Section -->
+    <div class="section">
+        <h3>Doctors</h3>
+        <button onclick="fetchAPI('/api/get-doctors/')">Get All Doctors</button>
+        <br>
+        <label>Filter by Specialization:</label>
+        <select id="specialization">
+            <!-- Options populated dynamically -->
+        </select>
+        <button onclick="getDoctorsBySpec()">Filter Doctors</button>
+        <br>
+        <button onclick="getDoctorsSortedByRating()">Sort Doctors by Rating</button>
+        <button onclick="getDoctorsSortedByFee()">Sort Doctors by Fee</button>
+        <br>
+        <h4>Doctor Schedule</h4>
+        <label>Doctor ID:</label>
+        <input type="number" id="doc_id" placeholder="Doctor ID">
+        <button onclick="getDoctorSchedule()">Get Doctor's Schedule</button>
+    </div>
+
+    <!-- Output Section -->
+    <h3>Output:</h3>
+    <pre id="output"></pre>
+</body>
+</html>

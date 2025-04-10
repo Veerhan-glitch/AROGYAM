@@ -1,11 +1,5 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+
 
 class Users(models.Model):
     userid = models.AutoField(primary_key=True)
@@ -17,27 +11,24 @@ class Users(models.Model):
     password = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
         db_table = 'users'
     
     def __str__(self):
         return str(self.userid)
 
 
-class Orders(models.Model):
-    orderid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
-    date = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=50)
-    trackinginfo = models.CharField(max_length=100, blank=True, null=True)
-    deliveryoption = models.CharField(max_length=50)
+class Doctor(models.Model):
+    doctorid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    rating = models.DecimalField(max_digits=3, decimal_places=2)
+    specialization = models.CharField(max_length=100)
+    fee = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        managed = False
-        db_table = 'orders'
+        db_table = 'doctor'
 
     def __str__(self):
-        return str(self.orderid)
+        return str(self.doctorid)
 
 
 class Product(models.Model):
@@ -50,65 +41,61 @@ class Product(models.Model):
     prescriptionneeded = models.BooleanField()
 
     class Meta:
-        managed = False
         db_table = 'product'
 
     def __str__(self):
         return str(self.productid)
 
+class Orders(models.Model):
+    orderid = models.AutoField(primary_key=True)
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
+    date = models.DateField(blank=True, null=True)
+    status = models.CharField(max_length=50)
+    trackinginfo = models.CharField(max_length=100, blank=True, null=True)
+    deliveryoption = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'orders'
+
+    def __str__(self):
+        return str(self.orderid)
+
 
 class Orderitems(models.Model):
     orderitemid = models.AutoField(primary_key=True)
-    orderid = models.ForeignKey(Orders, models.DO_NOTHING, db_column='orderid')
-    productid = models.ForeignKey(Product, models.DO_NOTHING, db_column='productid')
+    orderid = models.ForeignKey(Orders, on_delete=models.CASCADE, db_column='orderid')
+    productid = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='productid')
     quantity = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'orderitems'
+        unique_together = (('orderid', 'productid'),)
 
     def __str__(self):
-        return str(self.orderitemid)
+        return f"User ID: {self.orderid}, Offer ID: {self.productid}"
 
 
 class Prescription(models.Model):
     prescriptionid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
     filepath = models.TextField()
 
     class Meta:
-        managed = False
         db_table = 'prescription'
 
     def __str__(self):
         return str(self.prescriptionid)
 
 
-class Doctor(models.Model):
-    doctorid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    rating = models.DecimalField(max_digits=3, decimal_places=2)
-    specialization = models.CharField(max_length=100)
-    fee = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        managed = False
-        db_table = 'doctor'
-
-    def __str__(self):
-        return str(self.doctorid)
-
-
 class Booksappointment(models.Model):
     appointmentid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
-    doctorid = models.ForeignKey(Doctor, models.DO_NOTHING, db_column='doctorid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
+    doctorid = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='doctorid')
     date = models.DateField()
     type = models.CharField(max_length=50)
     status = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
         db_table = 'booksappointment'
 
     def __str__(self):
@@ -117,11 +104,10 @@ class Booksappointment(models.Model):
 
 class Healthrecords(models.Model):
     recordid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
     filepath = models.TextField()
 
     class Meta:
-        managed = False
         db_table = 'healthrecords'
 
     def __str__(self):
@@ -130,13 +116,12 @@ class Healthrecords(models.Model):
 
 class Payments(models.Model):
     paymentid = models.AutoField(primary_key=True)
-    orderid = models.ForeignKey(Orders, models.DO_NOTHING, db_column='orderid')
+    orderid = models.ForeignKey(Orders, on_delete=models.CASCADE, db_column='orderid')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     method = models.CharField(max_length=50)
     status = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
         db_table = 'payments'
 
     def __str__(self):
@@ -151,7 +136,6 @@ class Labtests(models.Model):
     testdetails = models.TextField()
 
     class Meta:
-        managed = False
         db_table = 'labtests'
 
     def __str__(self):
@@ -161,10 +145,9 @@ class Labtests(models.Model):
 class Reports(models.Model):
     reportid = models.AutoField(primary_key=True)
     filepath = models.TextField()
-    testid = models.ForeignKey(Labtests, models.DO_NOTHING, db_column='testid')
+    testid = models.ForeignKey(Labtests, on_delete=models.CASCADE, db_column='testid')
 
     class Meta:
-        managed = False
         db_table = 'reports'
 
     def __str__(self):
@@ -173,42 +156,47 @@ class Reports(models.Model):
 
 class Supporttickets(models.Model):
     ticketid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
     issuetype = models.CharField(max_length=100)
     status = models.CharField(max_length=50)
     description = models.TextField()
 
     class Meta:
-        managed = False
         db_table = 'supporttickets'
 
     def __str__(self):
         return str(self.ticketid)
 
-
 class Feedback(models.Model):
     feedbackid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
+    orderid = models.ForeignKey(Orders, on_delete=models.CASCADE, db_column='orderid')
     description = models.TextField()
     rating = models.DecimalField(max_digits=3, decimal_places=2)
 
     class Meta:
-        managed = False
         db_table = 'feedback'
 
-    def __str__(self):
-        return str(self.feedbackid)
+    def clean(self):
+        """Ensure that the order's user matches the feedback's user."""
+        if self.orderid.userid_id != self.userid_id:
+            raise ValidationError("The user associated with the order does not match the feedback's user.")
 
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Validate before saving
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Feedback {self.feedbackid} - User {self.userid_id} - Order {self.orderid_id}"
 
 class Notifications(models.Model):
     notificationid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(Users, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
     message = models.TextField()
     datetime = models.DateTimeField()
     type = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
         db_table = 'notifications'
 
     def __str__(self):
@@ -221,7 +209,6 @@ class Offers(models.Model):
     validuntil = models.DateField()
 
     class Meta:
-        managed = False
         db_table = 'offers'
 
     def __str__(self):
@@ -236,7 +223,6 @@ class Useroffers(models.Model):
     class Meta:
         db_table = 'useroffers'
         unique_together = (('userid', 'offerid'),)
-        managed = False
         
     def __str__(self):
         return f"User ID: {self.userid}, Offer ID: {self.offerid}"

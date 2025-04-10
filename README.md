@@ -63,3 +63,9 @@ then manuky add
 
         # The composite primary key (userid, offerid) found, that is not supported. The first column is selected.
                 unique_together = (('userid', 'offerid'),)
+
+                change: useroferid
+
+                        managed = False removed, delet on cascde
+                        feedback product id not done in .sql
+                        all defalt id are 0
