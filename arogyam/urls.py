@@ -3,12 +3,11 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    # Admin and Home
+    # Admin and home
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
 
     # ---------- CUSTOMER ENDPOINTS ----------
-    # (All expect POST requests, so CSRF protection is disabled for demo)
     path('api/feedback-by-user/', views.feedback_by_user, name='feedback_by_user'),
     path('api/feedback-by-order/', views.feedback_by_order, name='feedback_by_order'),
     path('api/orders/', views.user_orders, name='user_orders'),
@@ -18,7 +17,7 @@ urlpatterns = [
     path('api/payment-history/', views.user_payments, name='user_payments'),
     path('api/labtests/', views.lab_tests, name='lab_tests'),
     path('api/reports/', views.test_reports, name='test_reports'),
-    path('api/submit-ticket/', views.support_ticket, name='support_ticket'),
+    path('api/submit-ticket/', views.support_ticket, name='submit_ticket'),
     path('api/support-tickets/', views.user_support_tickets, name='user_support_tickets'),
     path('api/notifications/', views.user_notifications, name='user_notifications'),
     path('api/user-offers/', views.user_offers, name='user_offers'),
@@ -32,7 +31,6 @@ urlpatterns = [
     path('api/doctor-profile/', views.doctor_profile, name='doctor_profile'),
     path('api/update-doctor-rating/', views.update_doctor_rating, name='update_doctor_rating'),
     path('api/appointments-by-doctor/', views.get_appointments_by_doctor, name='appointments_by_doctor'),
-    # For filtering and sorting doctors (each as separate endpoints)
     path('api/doctors/', views.all_doctors, name='all_doctors'),
     path('api/doctors/filter/', views.filter_doctors_by_specialization, name='filter_doctors_by_specialization'),
     path('api/doctors/sort/rating/', views.sort_doctors_by_rating, name='sort_doctors_by_rating'),

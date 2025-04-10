@@ -1,13 +1,13 @@
-import json, datetime
+import datetime, json
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.db.models import Sum, F, Count
-from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum, F, Count, Q
 from django.utils.dateparse import parse_date
+from django.views.decorators.csrf import csrf_exempt
 from arogyam.backend.models import *
 from .serializers import *
 
-# Home: Render the apitest.html page.
+# ---------- HOME ----------
 def index(request):
     return render(request, "apitest.html")
 
@@ -15,7 +15,6 @@ def index(request):
 
 @csrf_exempt
 def feedback_by_user(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         data = json.loads(request.body)
         fb = Feedback.objects.filter(userid_id=data.get("userid"))
@@ -24,7 +23,6 @@ def feedback_by_user(request):
 
 @csrf_exempt
 def feedback_by_order(request):
-    # Expects POST with {"orderid": ...}
     if request.method == "POST":
         data = json.loads(request.body)
         fb = Feedback.objects.filter(orderid_id=data.get("orderid"))
@@ -33,7 +31,6 @@ def feedback_by_order(request):
 
 @csrf_exempt
 def user_orders(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         orders = Orders.objects.filter(userid_id=userid)
@@ -48,7 +45,6 @@ def user_orders(request):
 
 @csrf_exempt
 def user_appointments(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         apps = Booksappointment.objects.filter(userid_id=userid)
@@ -57,7 +53,6 @@ def user_appointments(request):
 
 @csrf_exempt
 def prescriptions(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         presc = Prescription.objects.filter(userid_id=userid)
@@ -66,7 +61,6 @@ def prescriptions(request):
 
 @csrf_exempt
 def book_appointment(request):
-    # Expects POST with {"userid": ..., "doctorid": ..., "date": "YYYY-MM-DD", "type": ...}
     if request.method == "POST":
         data = json.loads(request.body)
         Booksappointment.objects.create(
@@ -77,10 +71,10 @@ def book_appointment(request):
             status="Scheduled"
         )
         return JsonResponse({"message": "Appointment booked"})
-    
+    return JsonResponse({"error": "Invalid method"}, status=400)
+
 @csrf_exempt
 def user_payments(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         order_ids = Orders.objects.filter(userid_id=userid).values_list("orderid", flat=True)
@@ -90,7 +84,7 @@ def user_payments(request):
 
 @csrf_exempt
 def lab_tests(request):
-    # Expects POST with {"name": "..."} to search lab tests by name (only those available)
+    # Expects POST with {"name": "..."}; uses icontains to wrap query in %input%.
     if request.method == "POST":
         name = json.loads(request.body).get("name", "")
         tests = Labtests.objects.filter(name__icontains=name, status="Available")
@@ -99,7 +93,6 @@ def lab_tests(request):
 
 @csrf_exempt
 def test_reports(request):
-    # Expects POST with {"testid": ...}
     if request.method == "POST":
         testid = json.loads(request.body).get("testid")
         reports = Reports.objects.filter(testid_id=testid)
@@ -108,7 +101,6 @@ def test_reports(request):
 
 @csrf_exempt
 def support_ticket(request):
-    # Expects POST with {"userid": ..., "issuetype": ..., "description": ...}
     if request.method == "POST":
         data = json.loads(request.body)
         Supporttickets.objects.create(
@@ -118,10 +110,10 @@ def support_ticket(request):
             description=data["description"]
         )
         return JsonResponse({"message": "Support ticket submitted"})
-    
+    return JsonResponse({"error": "Invalid method"}, status=400)
+
 @csrf_exempt
 def user_support_tickets(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         tickets = Supporttickets.objects.filter(userid_id=userid)
@@ -130,7 +122,6 @@ def user_support_tickets(request):
 
 @csrf_exempt
 def user_notifications(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         notes = Notifications.objects.filter(userid_id=userid).order_by("-datetime")
@@ -139,7 +130,6 @@ def user_notifications(request):
 
 @csrf_exempt
 def user_offers(request):
-    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         offers = Useroffers.objects.filter(userid_id=userid)
@@ -148,16 +138,14 @@ def user_offers(request):
 
 @csrf_exempt
 def search_products(request):
-    # Expects POST with {"query": "..."}
     if request.method == "POST":
         query = json.loads(request.body).get("query", "")
         products = Product.objects.filter(Q(name__icontains=query) | Q(brand__icontains=query))
         serializer = ProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
-    
+
 @csrf_exempt
 def product_details(request):
-    # Expects POST with {"productid": ...}
     if request.method == "POST":
         pid = json.loads(request.body).get("productid")
         try:
@@ -190,7 +178,6 @@ def doctor_feedback(request):
     # Expects POST with {"userid": ..., "orderid": ..., "description": ..., "rating": ...}
     if request.method == "POST":
         data = json.loads(request.body)
-        # create feedback (validation in model ensures order belongs to user)
         Feedback.objects.create(
             userid_id=data["userid"],
             orderid_id=data["orderid"],
@@ -201,7 +188,7 @@ def doctor_feedback(request):
     
 @csrf_exempt
 def health_records(request):
-    # Expects POST with {"userid": ...} (patient id)
+    # Expects POST with {"userid": ...}
     if request.method == "POST":
         userid = json.loads(request.body).get("userid")
         records = Healthrecords.objects.filter(userid_id=userid)
@@ -245,7 +232,6 @@ def get_appointments_by_doctor(request):
 
 @csrf_exempt
 def all_doctors(request):
-    # GET request returns all doctors
     docs = Doctor.objects.all()
     serializer = DoctorSerializer(docs, many=True)
     return JsonResponse(serializer.data, safe=False)
@@ -255,27 +241,34 @@ def filter_doctors_by_specialization(request):
     # Expects POST with {"specialization": ...}
     if request.method == "POST":
         specialization = json.loads(request.body).get("specialization")
-        docs = Doctor.objects.filter(specialization=specialization)
+        docs = Doctor.objects.filter(specialization__iexact=specialization)
         serializer = DoctorSerializer(docs, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
 def sort_doctors_by_rating(request):
-    # GET returns doctors sorted by rating descending
-    docs = Doctor.objects.all().order_by("-rating")
-    serializer = DoctorSerializer(docs, many=True)
+    # GET method, optionally accepts ?specialization=
+    specialization = request.GET.get("specialization")
+    qs = Doctor.objects.all()
+    if specialization:
+        qs = qs.filter(specialization__iexact=specialization)
+    qs = qs.order_by("-rating")
+    serializer = DoctorSerializer(qs, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
 def sort_doctors_by_fee(request):
-    # GET returns doctors sorted by fee ascending
-    docs = Doctor.objects.all().order_by("fee")
-    serializer = DoctorSerializer(docs, many=True)
+    # GET method, optionally accepts ?specialization=
+    specialization = request.GET.get("specialization")
+    qs = Doctor.objects.all()
+    if specialization:
+        qs = qs.filter(specialization__iexact=specialization)
+    qs = qs.order_by("fee")
+    serializer = DoctorSerializer(qs, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
 def get_specialization_values(request):
-    # GET distinct specializations
     specs = Doctor.objects.values_list("specialization", flat=True).distinct()
     return JsonResponse(list(specs), safe=False)
 
@@ -324,7 +317,8 @@ def add_product(request):
             prescriptionneeded=data["prescriptionneeded"]
         )
         return JsonResponse({"message": "Product added", "productid": product.productid})
-    
+    return JsonResponse({"error": "Invalid method"}, status=400)
+
 @csrf_exempt
 def update_product_price(request):
     if request.method == "POST":
@@ -373,7 +367,8 @@ def add_lab_test(request):
         )
         serializer = LabTestSerializer(lab_test)
         return JsonResponse(serializer.data, safe=False)
-    
+    return JsonResponse({"error": "Invalid method"}, status=400)
+
 @csrf_exempt
 def link_report(request):
     if request.method == "POST":
@@ -384,7 +379,8 @@ def link_report(request):
         )
         serializer = ReportSerializer(report)
         return JsonResponse(serializer.data, safe=False)
-    
+    return JsonResponse({"error": "Invalid method"}, status=400)
+
 def all_offers(request):
     offers = Offers.objects.all()
     serializer = OfferSerializer(offers, many=True)
@@ -402,5 +398,4 @@ def send_notification(request):
         )
         serializer = NotificationSerializer(notif)
         return JsonResponse(serializer.data, safe=False)
-
-# Note: We remove an "assign offer" endpoint since offers are applied by the user at payment.
+    return JsonResponse({"error": "Invalid method"}, status=400)

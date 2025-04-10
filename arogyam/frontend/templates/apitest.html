@@ -9,153 +9,190 @@
     h2 { border-bottom: 2px solid #333; padding-bottom: 5px; }
     section { margin-bottom: 40px; border: 1px solid #ccc; padding: 10px; }
     label, input, select, button { margin: 5px; padding: 5px; }
-    pre { background: #f0f0f0; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; }
+    pre { background: #f0f0f0; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
   </style>
   <script>
     const API = '/api/';
-    function outputResponse(data) {
+    function showOutput(data) {
       document.getElementById('output').textContent = JSON.stringify(data, null, 2);
     }
-    function apiCall(endpoint, method = 'POST', payload = {}) {
+    function callAPI(endpoint, method="POST", payload={}) {
       fetch(API + endpoint, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: method === 'GET' ? null : JSON.stringify(payload)
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: method === "GET" ? null : JSON.stringify(payload)
       })
       .then(response => response.json())
-      .then(data => outputResponse(data))
-      .catch(err => outputResponse({error: err}));
+      .then(data => showOutput(data))
+      .catch(err => showOutput({ error: err.toString() }));
     }
-    // ---------- CUSTOMER ----------
+    // ---------- CUSTOMER FUNCTIONS ----------
+    function getPastOrders() {
+      const userid = document.getElementById('cust_userid').value;
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("orders/", "POST", { userid });
+    }
     function getFeedbackByUser() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('feedback-by-user/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("feedback-by-user/", "POST", { userid });
     }
     function getFeedbackByOrder() {
       const orderid = document.getElementById('order_id_feedback').value;
-      apiCall('feedback-by-order/', 'POST', { orderid });
-    }
-    function getUserOrders() {
-      const userid = document.getElementById('cust_userid').value;
-      apiCall('orders/', 'POST', { userid });
+      if (!orderid) { alert("Enter Order ID!"); return; }
+      callAPI("feedback-by-order/", "POST", { orderid });
     }
     function getUserAppointments() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('appointments/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("appointments/", "POST", { userid });
     }
     function getUserPrescriptions() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('prescriptions/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("prescriptions/", "POST", { userid });
     }
     function bookAppointment() {
       const userid = document.getElementById('appt_userid').value;
       const doctorid = document.getElementById('appt_docid').value;
       const date = document.getElementById('appt_date').value;
       const type = document.getElementById('appt_type').value;
-      apiCall('book-appointment/', 'POST', { userid, doctorid, date, type });
+      if (!userid || !doctorid || !date || !type) {
+        alert("Fill all fields for appointment booking.");
+        return;
+      }
+      callAPI("book-appointment/", "POST", { userid, doctorid, date, type });
     }
     function getPaymentHistory() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('payment-history/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("payment-history/", "POST", { userid });
     }
     function browseLabTests() {
       const name = document.getElementById('labtest_query').value;
-      apiCall('labtests/', 'POST', { name });
+      callAPI("labtests/", "POST", { name });
     }
     function viewReports() {
       const testid = document.getElementById('report_testid').value;
-      apiCall('reports/', 'POST', { testid });
+      if (!testid) { alert("Enter Test ID!"); return; }
+      callAPI("reports/", "POST", { testid });
     }
     function submitSupportTicket() {
       const userid = document.getElementById('cust_userid').value;
       const issuetype = document.getElementById('ticket_type').value;
       const description = document.getElementById('ticket_desc').value;
-      apiCall('submit-ticket/', 'POST', { userid, issuetype, description });
+      if (!userid || !issuetype || !description) {
+        alert("Fill all support ticket fields.");
+        return;
+      }
+      callAPI("submit-ticket/", "POST", { userid, issuetype, description });
     }
-    function viewUserSupportTickets() {
+    function viewSupportTickets() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('support-tickets/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("support-tickets/", "POST", { userid });
     }
     function getUserNotifications() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('notifications/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("notifications/", "POST", { userid });
     }
     function getUserOffers() {
       const userid = document.getElementById('cust_userid').value;
-      apiCall('user-offers/', 'POST', { userid });
+      if (!userid) { alert("Enter your User ID!"); return; }
+      callAPI("user-offers/", "POST", { userid });
     }
     function searchProducts() {
       const query = document.getElementById('prod_query').value;
-      apiCall('search-products/', 'POST', { query });
+      callAPI("search-products/", "POST", { query });
     }
     function viewProductDetails() {
       const productid = document.getElementById('prod_id').value;
-      apiCall('product-details/', 'POST', { productid });
+      if (!productid) { alert("Enter Product ID!"); return; }
+      callAPI("product-details/", "POST", { productid });
     }
-    // ---------- DOCTOR ----------
+    // ---------- DOCTOR FUNCTIONS ----------
     function getDoctorSchedule() {
       const doctorid = document.getElementById('doc_id').value;
       const mode = document.getElementById('doc_mode').value;
-      apiCall('doctor-schedule/', 'POST', { doctorid, mode });
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("doctor-schedule/", "POST", { doctorid, mode });
     }
     function submitDoctorFeedback() {
       const userid = document.getElementById('doc_feedback_userid').value;
       const orderid = document.getElementById('doc_feedback_orderid').value;
       const description = document.getElementById('doc_feedback_desc').value;
       const rating = document.getElementById('doc_feedback_rating').value;
-      apiCall('doctor-feedback/', 'POST', { userid, orderid, description, rating });
+      if (!userid || !orderid || !description || !rating) {
+        alert("Fill all doctor feedback fields.");
+        return;
+      }
+      callAPI("doctor-feedback/", "POST", { userid, orderid, description, rating });
     }
-    function getHealthRecords() {
+    function viewHealthRecords() {
       const userid = document.getElementById('health_userid').value;
-      apiCall('health-records/', 'POST', { userid });
+      if (!userid) { alert("Enter Patient ID!"); return; }
+      callAPI("health-records/", "POST", { userid });
     }
     function viewDoctorProfile() {
       const doctorid = document.getElementById('doc_profileid').value;
-      apiCall('doctor-profile/', 'POST', { doctorid });
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("doctor-profile/", "POST", { doctorid });
     }
     function updateDoctorRating() {
       const doctorid = document.getElementById('doc_upd_id').value;
       const new_rating = document.getElementById('doc_new_rating').value;
-      apiCall('update-doctor-rating/', 'POST', { doctorid, new_rating });
+      if (!doctorid || !new_rating) { alert("Fill all fields for updating rating."); return; }
+      callAPI("update-doctor-rating/", "POST", { doctorid, new_rating });
     }
     function getAppointmentsByDoctor() {
       const doctorid = document.getElementById('doc_id').value;
-      apiCall('appointments-by-doctor/', 'POST', { doctorid });
+      if (!doctorid) { alert("Enter Doctor ID!"); return; }
+      callAPI("appointments-by-doctor/", "POST", { doctorid });
     }
     function allDoctors() {
-      apiCall('doctors/', 'GET');
+      callAPI("doctors/", "GET");
     }
-    function filterDoctors() {
+    function filterDoctorsBySpecialization() {
       const specialization = document.getElementById('doc_specialization').value;
-      apiCall('doctors/filter/', 'POST', { specialization });
+      if (!specialization) { alert("Select a specialization!"); return; }
+      callAPI("doctors/filter/", "POST", { specialization });
     }
     function sortDoctorsByRating() {
-      apiCall('doctors/sort/rating/', 'GET');
+      const spec = document.getElementById('doc_specialization').value;
+      let endpoint = "doctors/sort/rating/";
+      if (spec) { endpoint += "?specialization=" + encodeURIComponent(spec); }
+      callAPI(endpoint, "GET");
     }
     function sortDoctorsByFee() {
-      apiCall('doctors/sort/fee/', 'GET');
+      const spec = document.getElementById('doc_specialization').value;
+      let endpoint = "doctors/sort/fee/";
+      if (spec) { endpoint += "?specialization=" + encodeURIComponent(spec); }
+      callAPI(endpoint, "GET");
     }
     function loadDoctorSpecializations() {
-      fetch(API + 'doctor-specializations/')
-         .then(res => res.json())
-         .then(data => {
-           const sel = document.getElementById('doc_specialization');
-           sel.innerHTML = '<option value="">--Select--</option>';
-           data.forEach(spec => { sel.innerHTML += `<option value="${spec}">${spec}</option>`; });
-         });
+      fetch(API + "doctor-specializations/")
+      .then(res => res.json())
+      .then(data => {
+         const sel = document.getElementById('doc_specialization');
+         sel.innerHTML = '<option value="">--Select--</option>';
+         data.forEach(spec => { sel.innerHTML += `<option value="${spec}">${spec}</option>`; });
+      })
+      .catch(err => console.error(err));
     }
-    // ---------- ADMIN ----------
-    function viewAllUsers() { apiCall('all-users/', 'GET'); }
+    // ---------- ADMIN FUNCTIONS ----------
+    function viewAllUsers() { callAPI("all-users/", "GET"); }
     function addUser() {
       const name = document.getElementById('new_user_name').value;
       const email = document.getElementById('new_user_email').value;
       const phonenumber = document.getElementById('new_user_phone').value;
       const password = document.getElementById('new_user_password').value;
-      apiCall('add-user/', 'POST', { name, email, phonenumber, password });
+      callAPI("add-user/", "POST", { name, email, phonenumber, password });
     }
     function deleteUser() {
       const user_id = document.getElementById('adm_userid').value;
-      apiCall('delete-user/' + user_id + '/', 'DELETE');
+      if (!user_id) { alert("Enter User ID to delete."); return; }
+      callAPI("delete-user/" + user_id + "/", "DELETE");
     }
     function addProduct() {
       const name = document.getElementById('new_prod_name').value;
@@ -164,37 +201,38 @@
       const composition = document.getElementById('new_prod_comp').value;
       const type = document.getElementById('new_prod_type').value;
       const prescriptionneeded = document.getElementById('new_prod_pres').checked;
-      apiCall('add-product/', 'POST', { name, brand, price, composition, type, prescriptionneeded });
+      callAPI("add-product/", "POST", { name, brand, price, composition, type, prescriptionneeded });
     }
     function updateProductPrice() {
       const product_id = document.getElementById('upd_prod_id').value;
       const new_price = parseFloat(document.getElementById('upd_prod_price').value);
-      apiCall('update-product-price/', 'POST', { product_id, new_price });
+      callAPI("update-product-price/", "POST", { product_id, new_price });
     }
     function deleteProduct() {
       const product_id = document.getElementById('del_prod_id').value;
-      apiCall('delete-product/' + product_id + '/', 'DELETE');
+      if (!product_id) { alert("Enter Product ID to delete."); return; }
+      callAPI("delete-product/" + product_id + "/", "DELETE");
     }
-    function getSalesByMonth() { apiCall('sales-by-month/', 'GET'); }
-    function getMostOrderedProducts() { apiCall('most-ordered-products/', 'GET'); }
+    function getSalesByMonth() { callAPI("sales-by-month/", "GET"); }
+    function getMostOrderedProducts() { callAPI("most-ordered-products/", "GET"); }
     function addLabTest() {
       const name = document.getElementById('lab_name').value;
       const price = parseFloat(document.getElementById('lab_price').value);
       const status = document.getElementById('lab_status').value;
       const testdetails = document.getElementById('lab_details').value;
-      apiCall('add-lab-test/', 'POST', { name, price, status, testdetails });
+      callAPI("add-lab-test/", "POST", { name, price, status, testdetails });
     }
     function linkReport() {
       const filepath = document.getElementById('rep_filepath').value;
       const test_id = document.getElementById('rep_testid2').value;
-      apiCall('link-report/', 'POST', { filepath, test_id });
+      callAPI("link-report/", "POST", { filepath, test_id });
     }
-    function viewAllOffers() { apiCall('all-offers/', 'GET'); }
+    function viewAllOffers() { callAPI("all-offers/", "GET"); }
     function sendNotification() {
       const user_id = document.getElementById('not_userid').value;
       const message = document.getElementById('not_message').value;
       const type = document.getElementById('not_type').value;
-      apiCall('send-notification/', 'POST', { user_id, message, type });
+      callAPI("send-notification/", "POST", { user_id, message, type });
     }
     // Load doctor specializations on page load.
     window.onload = loadDoctorSpecializations;
@@ -214,16 +252,14 @@
       <button onclick="getPaymentHistory()">Payment History</button>
     </div>
     <div>
-      <label>Order ID (for Feedback):</label>
+      <label>Order ID (Feedback):</label>
       <input type="number" id="order_id_feedback" placeholder="Order ID">
       <button onclick="getFeedbackByOrder()">Feedback by Order</button>
-    </div>
-    <div>
       <button onclick="getFeedbackByUser()">View My Feedback</button>
     </div>
     <div>
-      <label>Search Product (name or brand):</label>
-      <input type="text" id="prod_query" placeholder="Product query">
+      <label>Search Product (name/brand):</label>
+      <input type="text" id="prod_query" placeholder="Search query">
       <button onclick="searchProducts()">Search Products</button>
     </div>
     <div>
@@ -240,22 +276,30 @@
       <label>Date:</label>
       <input type="date" id="appt_date">
       <label>Type:</label>
-      <input type="text" id="appt_type" placeholder="Type">
+      <select id="appt_type">
+          <option value="Routine">Routine</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Consultation">Consultation</option>
+      </select>
       <button onclick="bookAppointment()">Book Appointment</button>
     </div>
     <div>
-      <label>Test ID (for Reports):</label>
+      <label>Test ID (Reports):</label>
       <input type="number" id="report_testid" placeholder="Test ID">
       <button onclick="viewReports()">View Reports</button>
     </div>
     <div>
       <h4>Support Ticket</h4>
       <label>Issue Type:</label>
-      <input type="text" id="ticket_type" placeholder="Issue Type">
+      <select id="ticket_type">
+          <option value="Payment Issue">Payment Issue</option>
+          <option value="Technical Issue">Technical Issue</option>
+          <option value="Other">Other</option>
+      </select>
       <label>Description:</label>
       <input type="text" id="ticket_desc" placeholder="Description">
       <button onclick="submitSupportTicket()">Submit Ticket</button>
-      <button onclick="viewUserSupportTickets()">View My Tickets</button>
+      <button onclick="viewSupportTickets()">View My Tickets</button>
     </div>
     <div>
       <button onclick="getUserNotifications()">View My Notifications</button>
@@ -270,27 +314,27 @@
       <input type="number" id="doc_id" placeholder="Doctor ID">
       <label>Mode:</label>
       <select id="doc_mode">
-        <option value="all">All</option>
-        <option value="upcoming">Upcoming</option>
-        <option value="completed">Completed</option>
+          <option value="all">All</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
       </select>
       <button onclick="getDoctorSchedule()">View My Schedule</button>
       <button onclick="getAppointmentsByDoctor()">View Appointments by Doctor</button>
     </div>
     <div>
-      <h4>Feedback for Doctor</h4>
+      <h4>Doctor Feedback</h4>
       <label>User ID:</label>
       <input type="number" id="doc_feedback_userid" placeholder="User ID">
       <label>Order ID:</label>
       <input type="number" id="doc_feedback_orderid" placeholder="Order ID">
-      <label>Description:</label>
+      <label>Feedback:</label>
       <input type="text" id="doc_feedback_desc" placeholder="Feedback">
       <label>Rating:</label>
       <input type="number" step="0.1" id="doc_feedback_rating" placeholder="Rating">
       <button onclick="submitDoctorFeedback()">Submit Feedback</button>
     </div>
     <div>
-      <label>Patient ID (for Health Records):</label>
+      <label>Patient ID (Health Records):</label>
       <input type="number" id="health_userid" placeholder="Patient ID">
       <button onclick="viewHealthRecords()">View Health Records</button>
     </div>
@@ -300,7 +344,7 @@
       <button onclick="viewDoctorProfile()">View My Profile</button>
     </div>
     <div>
-      <h4>Update Doctor Rating</h4>
+      <h4>Update Doctor Rating (Admin Action)</h4>
       <label>Doctor ID:</label>
       <input type="number" id="doc_upd_id" placeholder="Doctor ID">
       <label>New Rating:</label>
@@ -314,7 +358,7 @@
     <div>
       <label>Specialization:</label>
       <select id="doc_specialization"></select>
-      <button onclick="filterDoctors()">Filter Doctors</button>
+      <button onclick="filterDoctorsBySpecialization()">Filter Doctors</button>
       <button onclick="sortDoctorsByRating()">Sort by Rating</button>
       <button onclick="sortDoctorsByFee()">Sort by Fee</button>
       <button onclick="allDoctors()">Get All Doctors</button>
@@ -364,7 +408,11 @@
       <h4>Add a Lab Test</h4>
       <input type="text" id="lab_name" placeholder="Test Name">
       <input type="number" step="0.01" id="lab_price" placeholder="Price">
-      <input type="text" id="lab_status" placeholder="Status">
+      <label>Status:</label>
+      <select id="lab_status">
+          <option value="Available">Available</option>
+          <option value="Unavailable">Unavailable</option>
+      </select>
       <input type="text" id="lab_details" placeholder="Details">
       <button onclick="addLabTest()">Add Lab Test</button>
     </div>
@@ -381,7 +429,12 @@
       <h4>Send Notification</h4>
       <input type="number" id="not_userid" placeholder="User ID">
       <input type="text" id="not_message" placeholder="Message">
-      <input type="text" id="not_type" placeholder="Type">
+      <label>Type:</label>
+      <select id="not_type">
+          <option value="Lab">Lab</option>
+          <option value="Support">Support</option>
+          <option value="General">General</option>
+      </select>
       <button onclick="sendNotification()">Send Notification</button>
     </div>
   </section>

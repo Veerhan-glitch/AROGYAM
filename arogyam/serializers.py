@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from arogyam.backend.models import *
 
-# Customer serializers
+# CUSTOMER SERIALIZERS
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
@@ -54,13 +54,13 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notifications
         fields = '__all__'
 
-# Doctor serializer
+# DOCTOR SERIALIZER
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
 
-# Admin serializers
+# ADMIN SERIALIZERS
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
