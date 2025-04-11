@@ -72,7 +72,7 @@ class Orderitems(models.Model):
         unique_together = (('orderid', 'productid'),)
 
     def __str__(self):
-        return f"User ID: {self.orderid}, Offer ID: {self.productid}"
+        return f"Order ID: {self.orderid}, Product ID: {self.productid}"
 
 
 class Prescription(models.Model):
@@ -170,7 +170,7 @@ class Supporttickets(models.Model):
 class Feedback(models.Model):
     feedbackid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
-    orderid = models.ForeignKey(Orders, on_delete=models.CASCADE, db_column='orderid')
+    productid = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='productid')
     description = models.TextField()
     rating = models.DecimalField(max_digits=3, decimal_places=2)
 
@@ -178,17 +178,22 @@ class Feedback(models.Model):
         db_table = 'feedback'
 
     def clean(self):
-        """Ensure that the order's user matches the feedback's user."""
-        if self.orderid.userid_id != self.userid_id:
-            raise ValidationError("The user associated with the order does not match the feedback's user.")
+        """
+        Ensure that the product for the feedback is one that the user ordered.
+        """
+        # Check if there exists at least one order for this user that includes this product.
+        if not Orderitems.objects.filter(
+            orderid__in=Orders.objects.filter(userid_id=self.userid_id),
+            productid_id=self.productid_id
+        ).exists():
+            raise ValidationError("The user has not ordered this product.")
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Validate before saving
+        self.full_clean()  # run clean() before saving
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Feedback {self.feedbackid} - User {self.userid_id} - Order {self.orderid_id}"
-
+        return f"Feedback {self.feedbackid} - User {self.userid_id} - Product {self.productid_id}"
 class Notifications(models.Model):
     notificationid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')

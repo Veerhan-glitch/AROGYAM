@@ -1,0 +1,252 @@
+[
+{
+  "model": "backend.labtests",
+  "pk": 1,
+  "fields": {
+    "name": "Complete Blood Count (CBC)",
+    "price": "500.00",
+    "status": "Completed",
+    "testdetails": "Measures different components of the blood"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 2,
+  "fields": {
+    "name": "Lipid Profile",
+    "price": "1200.00",
+    "status": "Pending",
+    "testdetails": "Measures cholesterol levels"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 3,
+  "fields": {
+    "name": "Thyroid Function Test",
+    "price": "800.00",
+    "status": "Completed",
+    "testdetails": "Checks T3, T4, TSH levels"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 4,
+  "fields": {
+    "name": "Liver Function Test (LFT)",
+    "price": "1000.00",
+    "status": "Pending",
+    "testdetails": "Evaluates liver enzymes and proteins"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 5,
+  "fields": {
+    "name": "Kidney Function Test (KFT)",
+    "price": "900.00",
+    "status": "Completed",
+    "testdetails": "Assesses kidney health"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 6,
+  "fields": {
+    "name": "Fasting Blood Sugar (FBS)",
+    "price": "400.00",
+    "status": "Completed",
+    "testdetails": "Measures blood sugar levels after fasting"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 7,
+  "fields": {
+    "name": "Postprandial Blood Sugar (PPBS)",
+    "price": "450.00",
+    "status": "Pending",
+    "testdetails": "Measures blood sugar levels after eating"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 8,
+  "fields": {
+    "name": "HbA1c",
+    "price": "850.00",
+    "status": "Completed",
+    "testdetails": "Long-term blood sugar monitoring"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 9,
+  "fields": {
+    "name": "Vitamin D Test",
+    "price": "1300.00",
+    "status": "Pending",
+    "testdetails": "Measures Vitamin D levels"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 10,
+  "fields": {
+    "name": "Vitamin B12 Test",
+    "price": "1100.00",
+    "status": "Completed",
+    "testdetails": "Checks Vitamin B12 levels"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 11,
+  "fields": {
+    "name": "Iron Studies",
+    "price": "950.00",
+    "status": "Pending",
+    "testdetails": "Assesses iron levels in the blood"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 12,
+  "fields": {
+    "name": "Electrolyte Panel",
+    "price": "700.00",
+    "status": "Completed",
+    "testdetails": "Measures sodium, potassium, and chloride levels"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 13,
+  "fields": {
+    "name": "Urine Routine Examination",
+    "price": "300.00",
+    "status": "Completed",
+    "testdetails": "Basic urine test for health screening"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 14,
+  "fields": {
+    "name": "Stool Test",
+    "price": "400.00",
+    "status": "Pending",
+    "testdetails": "Checks for infections and digestion issues"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 15,
+  "fields": {
+    "name": "ECG (Electrocardiogram)",
+    "price": "1500.00",
+    "status": "Completed",
+    "testdetails": "Records the electrical activity of the heart"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 16,
+  "fields": {
+    "name": "Echocardiography",
+    "price": "2500.00",
+    "status": "Pending",
+    "testdetails": "Ultrasound imaging of the heart"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 17,
+  "fields": {
+    "name": "X-Ray Chest",
+    "price": "600.00",
+    "status": "Completed",
+    "testdetails": "Basic chest X-ray for lung and heart conditions"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 18,
+  "fields": {
+    "name": "MRI Brain",
+    "price": "5000.00",
+    "status": "Pending",
+    "testdetails": "Detailed brain scan using magnetic imaging"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 19,
+  "fields": {
+    "name": "CT Scan Abdomen",
+    "price": "4500.00",
+    "status": "Completed",
+    "testdetails": "Cross-sectional imaging of the abdomen"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 20,
+  "fields": {
+    "name": "PET Scan",
+    "price": "8000.00",
+    "status": "Pending",
+    "testdetails": "Detects cancer and other metabolic diseases"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 21,
+  "fields": {
+    "name": "Allergy Panel Test",
+    "price": "3000.00",
+    "status": "Completed",
+    "testdetails": "Tests for various allergic reactions"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 22,
+  "fields": {
+    "name": "COVID-19 RT-PCR",
+    "price": "1200.00",
+    "status": "Completed",
+    "testdetails": "Detects active COVID-19 infection"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 23,
+  "fields": {
+    "name": "Dengue NS1 Antigen",
+    "price": "1000.00",
+    "status": "Pending",
+    "testdetails": "Early detection of dengue fever"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 24,
+  "fields": {
+    "name": "Malaria Parasite Test",
+    "price": "900.00",
+    "status": "Completed",
+    "testdetails": "Checks for malaria infection"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 25,
+  "fields": {
+    "name": "HIV ELISA Test",
+    "price": "1500.00",
+    "status": "Pending",
+    "testdetails": "Detects HIV antibodies in the blood"
+  }
+}
+]

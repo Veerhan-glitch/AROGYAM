@@ -1,0 +1,252 @@
+[
+{
+  "model": "backend.feedback",
+  "pk": 1,
+  "fields": {
+    "userid": 1,
+    "productid": 3,
+    "description": "Great service and fast delivery!",
+    "rating": "5.00"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 2,
+  "fields": {
+    "userid": 1,
+    "productid": 7,
+    "description": "Product quality is good, but delivery was late.",
+    "rating": "3.50"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 3,
+  "fields": {
+    "userid": 3,
+    "productid": 5,
+    "description": "Very satisfied with the consultation service.",
+    "rating": "4.50"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 4,
+  "fields": {
+    "userid": 7,
+    "productid": 8,
+    "description": "App is easy to use. Had no issues.",
+    "rating": "4.80"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 5,
+  "fields": {
+    "userid": 10,
+    "productid": 9,
+    "description": "Customer support was helpful with my issue.",
+    "rating": "4.00"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 6,
+  "fields": {
+    "userid": 12,
+    "productid": 3,
+    "description": "Received wrong product but replacement was quick.",
+    "rating": "3.90"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 7,
+  "fields": {
+    "userid": 15,
+    "productid": 2,
+    "description": "Payment process was smooth. No issues.",
+    "rating": "5.00"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 8,
+  "fields": {
+    "userid": 18,
+    "productid": 5,
+    "description": "Great variety of products available.",
+    "rating": "4.70"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 9,
+  "fields": {
+    "userid": 19,
+    "productid": 10,
+    "description": "Had trouble with login but support helped.",
+    "rating": "3.80"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 10,
+  "fields": {
+    "userid": 21,
+    "productid": 10,
+    "description": "Order was delayed, but packaging was good.",
+    "rating": "3.60"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 11,
+  "fields": {
+    "userid": 23,
+    "productid": 8,
+    "description": "Love the discounts and offers.",
+    "rating": "4.90"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 12,
+  "fields": {
+    "userid": 25,
+    "productid": 6,
+    "description": "App needs improvement in loading speed.",
+    "rating": "3.50"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 13,
+  "fields": {
+    "userid": 25,
+    "productid": 9,
+    "description": "Doctors are very professional and helpful.",
+    "rating": "5.00"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 14,
+  "fields": {
+    "userid": 3,
+    "productid": 5,
+    "description": "Return process was a bit slow.",
+    "rating": "3.70"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 15,
+  "fields": {
+    "userid": 7,
+    "productid": 6,
+    "description": "Happy with the medicine recommendations.",
+    "rating": "4.60"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 16,
+  "fields": {
+    "userid": 10,
+    "productid": 4,
+    "description": "Prescription upload process was simple.",
+    "rating": "4.40"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 17,
+  "fields": {
+    "userid": 23,
+    "productid": 3,
+    "description": "Wish there were more payment options.",
+    "rating": "3.90"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 18,
+  "fields": {
+    "userid": 21,
+    "productid": 1,
+    "description": "Great experience using the app.",
+    "rating": "4.80"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 19,
+  "fields": {
+    "userid": 18,
+    "productid": 5,
+    "description": "Need better tracking updates for orders.",
+    "rating": "3.60"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 20,
+  "fields": {
+    "userid": 15,
+    "productid": 2,
+    "description": "Live chat support was very helpful.",
+    "rating": "4.50"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 21,
+  "fields": {
+    "userid": 12,
+    "productid": 7,
+    "description": "Good product packaging, but delivery took time.",
+    "rating": "3.80"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 22,
+  "fields": {
+    "userid": 5,
+    "productid": 1,
+    "description": "Easy to book doctor appointments.",
+    "rating": "4.70"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 23,
+  "fields": {
+    "userid": 13,
+    "productid": 7,
+    "description": "Received a damaged product, but got a refund.",
+    "rating": "3.50"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 24,
+  "fields": {
+    "userid": 10,
+    "productid": 3,
+    "description": "Medicine prices are reasonable compared to stores.",
+    "rating": "4.80"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 25,
+  "fields": {
+    "userid": 3,
+    "productid": 10,
+    "description": "Overall a great experience. Will shop again!",
+    "rating": "5.00"
+  }
+}
+]

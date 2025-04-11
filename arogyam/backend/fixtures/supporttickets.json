@@ -1,0 +1,252 @@
+[
+{
+  "model": "backend.supporttickets",
+  "pk": 1,
+  "fields": {
+    "userid": 1,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "User reported a delayed delivery."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 2,
+  "fields": {
+    "userid": 3,
+    "issuetype": "Payment Issue",
+    "status": "Open",
+    "description": "Payment failed, but money was deducted."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 3,
+  "fields": {
+    "userid": 5,
+    "issuetype": "Account Issue",
+    "status": "Open",
+    "description": "User unable to reset password."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 4,
+  "fields": {
+    "userid": 7,
+    "issuetype": "Technical Glitch",
+    "status": "Resolved",
+    "description": "App crashes on order confirmation."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 5,
+  "fields": {
+    "userid": 10,
+    "issuetype": "Order Issue",
+    "status": "Open",
+    "description": "Received wrong product."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 6,
+  "fields": {
+    "userid": 12,
+    "issuetype": "Payment Issue",
+    "status": "Resolved",
+    "description": "Double charge on UPI transaction."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 7,
+  "fields": {
+    "userid": 15,
+    "issuetype": "Account Issue",
+    "status": "Open",
+    "description": "Cannot update profile details."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 8,
+  "fields": {
+    "userid": 17,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "Product damaged on arrival."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 9,
+  "fields": {
+    "userid": 18,
+    "issuetype": "Technical Glitch",
+    "status": "Open",
+    "description": "Error message on login screen."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 10,
+  "fields": {
+    "userid": 21,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "Tracking link not working."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 11,
+  "fields": {
+    "userid": 23,
+    "issuetype": "Payment Issue",
+    "status": "Open",
+    "description": "Refund not received for canceled order."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 12,
+  "fields": {
+    "userid": 25,
+    "issuetype": "Account Issue",
+    "status": "Resolved",
+    "description": "User locked out after multiple attempts."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 13,
+  "fields": {
+    "userid": 2,
+    "issuetype": "Order Issue",
+    "status": "Open",
+    "description": "Item missing from order."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 14,
+  "fields": {
+    "userid": 4,
+    "issuetype": "Technical Glitch",
+    "status": "Resolved",
+    "description": "App logout issue reported."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 15,
+  "fields": {
+    "userid": 6,
+    "issuetype": "Payment Issue",
+    "status": "Open",
+    "description": "UPI payment stuck on processing."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 16,
+  "fields": {
+    "userid": 8,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "Order marked as delivered but not received."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 17,
+  "fields": {
+    "userid": 9,
+    "issuetype": "Technical Glitch",
+    "status": "Open",
+    "description": "Cannot add product to cart."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 18,
+  "fields": {
+    "userid": 11,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "Courier attempted delivery at the wrong address."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 19,
+  "fields": {
+    "userid": 13,
+    "issuetype": "Account Issue",
+    "status": "Open",
+    "description": "Unable to change registered email."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 20,
+  "fields": {
+    "userid": 14,
+    "issuetype": "Payment Issue",
+    "status": "Open",
+    "description": "Credit card payment failed multiple times."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 21,
+  "fields": {
+    "userid": 16,
+    "issuetype": "Technical Glitch",
+    "status": "Resolved",
+    "description": "Images not loading on product page."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 22,
+  "fields": {
+    "userid": 19,
+    "issuetype": "Order Issue",
+    "status": "Open",
+    "description": "Return request not processed."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 23,
+  "fields": {
+    "userid": 20,
+    "issuetype": "Payment Issue",
+    "status": "Resolved",
+    "description": "Discount code not applied at checkout."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 24,
+  "fields": {
+    "userid": 22,
+    "issuetype": "Account Issue",
+    "status": "Open",
+    "description": "Error while updating shipping address."
+  }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 25,
+  "fields": {
+    "userid": 24,
+    "issuetype": "Order Issue",
+    "status": "Resolved",
+    "description": "Incorrect invoice received."
+  }
+}
+]

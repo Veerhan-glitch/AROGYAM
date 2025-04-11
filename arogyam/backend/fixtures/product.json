@@ -1,0 +1,302 @@
+[
+{
+  "model": "backend.product",
+  "pk": 1,
+  "fields": {
+    "name": "Paracetamol 500mg",
+    "brand": "Cipla",
+    "price": "36.00",
+    "composition": "Paracetamol 500mg",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 2,
+  "fields": {
+    "name": "Crocin Advance",
+    "brand": "GSK",
+    "price": "40.00",
+    "composition": "Paracetamol 650mg",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 3,
+  "fields": {
+    "name": "Dolo 650",
+    "brand": "Micro Labs",
+    "price": "50.00",
+    "composition": "Paracetamol 650mg",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 4,
+  "fields": {
+    "name": "Saridon",
+    "brand": "Piramal",
+    "price": "25.00",
+    "composition": "Caffeine + Paracetamol",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 5,
+  "fields": {
+    "name": "Zerodol-P",
+    "brand": "Ipca",
+    "price": "60.00",
+    "composition": "Aceclofenac + Paracetamol",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 6,
+  "fields": {
+    "name": "Augmentin 625 Duo",
+    "brand": "GSK",
+    "price": "120.00",
+    "composition": "Amoxicillin + Clavulanic Acid",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 7,
+  "fields": {
+    "name": "Calpol 650",
+    "brand": "GSK",
+    "price": "45.00",
+    "composition": "Paracetamol 650mg",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 8,
+  "fields": {
+    "name": "Metformin 500mg",
+    "brand": "Sun Pharma",
+    "price": "55.00",
+    "composition": "Metformin Hydrochloride",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 9,
+  "fields": {
+    "name": "Thyronorm 50mcg",
+    "brand": "Abbott",
+    "price": "140.00",
+    "composition": "Thyroxine Sodium",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 10,
+  "fields": {
+    "name": "Azithromycin 500mg",
+    "brand": "Cipla",
+    "price": "80.00",
+    "composition": "Azithromycin",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 11,
+  "fields": {
+    "name": "Atorvastatin 10mg",
+    "brand": "Pfizer",
+    "price": "150.00",
+    "composition": "Atorvastatin Calcium",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 12,
+  "fields": {
+    "name": "Pantop 40",
+    "brand": "Sun Pharma",
+    "price": "90.00",
+    "composition": "Pantoprazole Sodium",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 13,
+  "fields": {
+    "name": "Ibuprofen 400mg",
+    "brand": "Ranbaxy",
+    "price": "30.00",
+    "composition": "Ibuprofen",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 14,
+  "fields": {
+    "name": "Allegra 120mg",
+    "brand": "Sanofi",
+    "price": "160.00",
+    "composition": "Fexofenadine Hydrochloride",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 15,
+  "fields": {
+    "name": "Cetirizine 10mg",
+    "brand": "Dr. Reddy’s",
+    "price": "25.00",
+    "composition": "Cetirizine Hydrochloride",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 16,
+  "fields": {
+    "name": "Aspirin 75mg",
+    "brand": "Bayer",
+    "price": "45.00",
+    "composition": "Acetylsalicylic Acid",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 17,
+  "fields": {
+    "name": "Montelukast 10mg",
+    "brand": "Cipla",
+    "price": "95.00",
+    "composition": "Montelukast Sodium",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 18,
+  "fields": {
+    "name": "Losartan 50mg",
+    "brand": "Torrent Pharma",
+    "price": "85.00",
+    "composition": "Losartan Potassium",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 19,
+  "fields": {
+    "name": "Amlodipine 5mg",
+    "brand": "Pfizer",
+    "price": "75.00",
+    "composition": "Amlodipine Besylate",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 20,
+  "fields": {
+    "name": "Telmisartan 40mg",
+    "brand": "Cipla",
+    "price": "105.00",
+    "composition": "Telmisartan",
+    "type": "Tablet",
+    "prescriptionneeded": true
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 21,
+  "fields": {
+    "name": "Omeprazole 20mg",
+    "brand": "Dr. Reddy’s",
+    "price": "70.00",
+    "composition": "Omeprazole",
+    "type": "Capsule",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 22,
+  "fields": {
+    "name": "Rantac 150",
+    "brand": "J.B. Chemicals",
+    "price": "55.00",
+    "composition": "Ranitidine Hydrochloride",
+    "type": "Tablet",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 23,
+  "fields": {
+    "name": "ORS Powder",
+    "brand": "Electral",
+    "price": "35.00",
+    "composition": "Glucose + Sodium + Potassium",
+    "type": "Powder",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 24,
+  "fields": {
+    "name": "ORS Liquid",
+    "brand": "Pedialyte",
+    "price": "50.00",
+    "composition": "Oral Rehydration Salts",
+    "type": "Liquid",
+    "prescriptionneeded": false
+  }
+},
+{
+  "model": "backend.product",
+  "pk": 25,
+  "fields": {
+    "name": "Betadine Ointment",
+    "brand": "Win Medicare",
+    "price": "110.00",
+    "composition": "Povidone-Iodine",
+    "type": "Ointment",
+    "prescriptionneeded": false
+  }
+}
+]

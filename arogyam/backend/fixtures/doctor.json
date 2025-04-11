@@ -1,0 +1,252 @@
+[
+{
+  "model": "backend.doctor",
+  "pk": 1,
+  "fields": {
+    "name": "Dr. Arvind Gupta",
+    "rating": "4.90",
+    "specialization": "Cardiologist",
+    "fee": "1200.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 2,
+  "fields": {
+    "name": "Dr. Sneha Kapoor",
+    "rating": "4.70",
+    "specialization": "Dermatologist",
+    "fee": "800.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 3,
+  "fields": {
+    "name": "Dr. Ramesh Iyer",
+    "rating": "4.20",
+    "specialization": "Orthopedic",
+    "fee": "1000.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 4,
+  "fields": {
+    "name": "Dr. Meera Sharma",
+    "rating": "4.60",
+    "specialization": "Gynecologist",
+    "fee": "900.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 5,
+  "fields": {
+    "name": "Dr. Tarun Bansal",
+    "rating": "4.80",
+    "specialization": "Neurologist",
+    "fee": "1500.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 6,
+  "fields": {
+    "name": "Dr. Anjali Verma",
+    "rating": "4.30",
+    "specialization": "ENT Specialist",
+    "fee": "700.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 7,
+  "fields": {
+    "name": "Dr. Rajeev Nair",
+    "rating": "4.40",
+    "specialization": "General Physician",
+    "fee": "600.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 8,
+  "fields": {
+    "name": "Dr. Pooja Desai",
+    "rating": "4.90",
+    "specialization": "Endocrinologist",
+    "fee": "1400.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 9,
+  "fields": {
+    "name": "Dr. Nitin Choudhary",
+    "rating": "4.10",
+    "specialization": "Pediatrician",
+    "fee": "750.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 10,
+  "fields": {
+    "name": "Dr. Kavita Malhotra",
+    "rating": "4.50",
+    "specialization": "Psychiatrist",
+    "fee": "1300.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 11,
+  "fields": {
+    "name": "Dr. Gaurav Saxena",
+    "rating": "4.20",
+    "specialization": "Ophthalmologist",
+    "fee": "1100.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 12,
+  "fields": {
+    "name": "Dr. Radhika Menon",
+    "rating": "4.60",
+    "specialization": "Oncologist",
+    "fee": "1800.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 13,
+  "fields": {
+    "name": "Dr. Vivek Yadav",
+    "rating": "4.30",
+    "specialization": "Nephrologist",
+    "fee": "1600.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 14,
+  "fields": {
+    "name": "Dr. Sonal Pillai",
+    "rating": "4.70",
+    "specialization": "Gastroenterologist",
+    "fee": "1250.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 15,
+  "fields": {
+    "name": "Dr. Ankur Tiwari",
+    "rating": "4.80",
+    "specialization": "Pulmonologist",
+    "fee": "1350.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 16,
+  "fields": {
+    "name": "Dr. Neha Joshi",
+    "rating": "4.40",
+    "specialization": "Dentist",
+    "fee": "500.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 17,
+  "fields": {
+    "name": "Dr. Sameer Shah",
+    "rating": "4.90",
+    "specialization": "Rheumatologist",
+    "fee": "1550.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 18,
+  "fields": {
+    "name": "Dr. Priya Kulkarni",
+    "rating": "4.20",
+    "specialization": "Urologist",
+    "fee": "1450.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 19,
+  "fields": {
+    "name": "Dr. Rohit Reddy",
+    "rating": "4.60",
+    "specialization": "Hematologist",
+    "fee": "1750.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 20,
+  "fields": {
+    "name": "Dr. Sanya Agrawal",
+    "rating": "4.50",
+    "specialization": "Allergist",
+    "fee": "900.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 21,
+  "fields": {
+    "name": "Dr. Vikram Patil",
+    "rating": "4.30",
+    "specialization": "Surgeon",
+    "fee": "2000.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 22,
+  "fields": {
+    "name": "Dr. Shalini Nanda",
+    "rating": "4.70",
+    "specialization": "Dermatologist",
+    "fee": "850.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 23,
+  "fields": {
+    "name": "Dr. Mohit Sen",
+    "rating": "4.50",
+    "specialization": "General Physician",
+    "fee": "650.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 24,
+  "fields": {
+    "name": "Dr. Ruchi Thakur",
+    "rating": "4.80",
+    "specialization": "Cardiologist",
+    "fee": "1900.00"
+  }
+},
+{
+  "model": "backend.doctor",
+  "pk": 25,
+  "fields": {
+    "name": "Dr. Aditya Mehta",
+    "rating": "4.60",
+    "specialization": "Endocrinologist",
+    "fee": "1300.00"
+  }
+}
+]

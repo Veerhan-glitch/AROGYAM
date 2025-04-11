@@ -1,0 +1,202 @@
+[
+{
+  "model": "backend.offers",
+  "pk": 1,
+  "fields": {
+    "discount": "10.00",
+    "validuntil": "2024-03-10"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 2,
+  "fields": {
+    "discount": "15.00",
+    "validuntil": "2024-03-15"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 3,
+  "fields": {
+    "discount": "20.00",
+    "validuntil": "2024-03-20"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 4,
+  "fields": {
+    "discount": "5.00",
+    "validuntil": "2024-03-25"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 5,
+  "fields": {
+    "discount": "12.50",
+    "validuntil": "2024-03-30"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 6,
+  "fields": {
+    "discount": "18.00",
+    "validuntil": "2024-04-05"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 7,
+  "fields": {
+    "discount": "25.00",
+    "validuntil": "2024-04-10"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 8,
+  "fields": {
+    "discount": "7.00",
+    "validuntil": "2024-04-15"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 9,
+  "fields": {
+    "discount": "30.00",
+    "validuntil": "2024-04-20"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 10,
+  "fields": {
+    "discount": "22.00",
+    "validuntil": "2024-04-25"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 11,
+  "fields": {
+    "discount": "8.00",
+    "validuntil": "2024-05-01"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 12,
+  "fields": {
+    "discount": "14.00",
+    "validuntil": "2024-05-05"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 13,
+  "fields": {
+    "discount": "16.50",
+    "validuntil": "2024-05-10"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 14,
+  "fields": {
+    "discount": "28.00",
+    "validuntil": "2024-05-15"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 15,
+  "fields": {
+    "discount": "9.00",
+    "validuntil": "2024-05-20"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 16,
+  "fields": {
+    "discount": "11.00",
+    "validuntil": "2024-05-25"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 17,
+  "fields": {
+    "discount": "35.00",
+    "validuntil": "2024-05-30"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 18,
+  "fields": {
+    "discount": "6.00",
+    "validuntil": "2024-06-05"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 19,
+  "fields": {
+    "discount": "17.00",
+    "validuntil": "2024-06-10"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 20,
+  "fields": {
+    "discount": "23.50",
+    "validuntil": "2024-06-15"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 21,
+  "fields": {
+    "discount": "19.00",
+    "validuntil": "2024-06-20"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 22,
+  "fields": {
+    "discount": "13.00",
+    "validuntil": "2024-06-25"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 23,
+  "fields": {
+    "discount": "21.00",
+    "validuntil": "2024-06-30"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 24,
+  "fields": {
+    "discount": "26.00",
+    "validuntil": "2024-07-05"
+  }
+},
+{
+  "model": "backend.offers",
+  "pk": 25,
+  "fields": {
+    "discount": "32.00",
+    "validuntil": "2024-07-10"
+  }
+}
+]

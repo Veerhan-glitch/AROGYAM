@@ -24,10 +24,12 @@ def feedback_by_user(request):
         return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
-def feedback_by_order(request):
+def feedback_by_product(request):
+    # Updated view: Instead of filtering by orderid, filter by productid.
+    # This returns all feedback for a given product.
     if request.method == "POST":
         data = json.loads(request.body)
-        fb = Feedback.objects.filter(orderid_id=data.get("orderid"))
+        fb = Feedback.objects.filter(productid_id=data.get("productid"))
         serializer = FeedbackSerializer(fb, many=True)
         return JsonResponse(serializer.data, safe=False)
 

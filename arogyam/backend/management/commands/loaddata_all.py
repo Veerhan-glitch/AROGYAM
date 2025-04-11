@@ -6,7 +6,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         fixture_path = 'arogyam/backend/fixtures/'
-        fixtures = []
+        fixtures = [
+            'users.json',
+            'doctor.json',
+            'product.json',
+            'orders.json',
+            'orderitems.json',
+            'prescription.json',
+            'booksappointment.json',
+            'healthrecords.json',
+            'payments.json',
+            'labtests.json',
+            'reports.json',
+            'supporttickets.json',
+            'feedback.json',
+            'notifications.json',
+            'offers.json',
+            'useroffers.json',
+        ]
 
         for fixture in fixtures:
             full_path = f'{fixture_path}{fixture}'
