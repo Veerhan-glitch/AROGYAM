@@ -37,13 +37,33 @@ def user_orders(request):
         userid = json.loads(request.body).get("userid")
         orders = Orders.objects.filter(userid_id=userid)
         response = []
+
         for order in orders:
+            # Get items in the order
             items = Orderitems.objects.filter(orderid=order.orderid)
-            total = sum(i.productid.price * i.quantity for i in items)
+            item_list = []
+            total = 0
+
+            for item in items:
+                product = item.productid
+                subtotal = product.price * item.quantity
+                total += subtotal
+                item_list.append({
+                    "product_id": product.productid,
+                    "product_name": product.name,
+                    "brand": product.brand,
+                    "quantity": item.quantity,
+                    "price_per_unit": float(product.price),
+                    "subtotal": float(subtotal)
+                })
+
             order_data = OrderSerializer(order).data
-            order_data["total_cost"] = total
+            order_data["total_cost"] = float(total)
+            order_data["items"] = item_list
             response.append(order_data)
+
         return JsonResponse(response, safe=False)
+
 
 @csrf_exempt
 def user_appointments(request):
