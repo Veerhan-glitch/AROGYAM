@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arogyam - Register</title>
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- Register Page -->
+<div class="register-section">
+  <div class="login-box">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" id="regName" placeholder="Name" required><br>
+      <input type="email" id="regEmail" placeholder="Email ID" required><br>
+      <input type="tel" id="regPhone" placeholder="Phone Number" required><br>
+      <select id="regType" required>
+        <option value="" disabled selected>Register as</option>
+        <option value="user">User</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
+      </select><br>
+      <button type="submit">Register</button>
+    </form>
+    <p class="link-text">Already have an account? <a href="index.html">Login</a></p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    alert("Registered Successfully!");
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

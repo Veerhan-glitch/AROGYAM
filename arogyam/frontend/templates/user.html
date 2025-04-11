@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arogyam</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div class="splash" id="splash">
+  <div class="splash-content">
+    <div class="app-title">Arogyam</div>
+    <div class="slogan">Your Digital Health Partner</div>
+  </div>
+</div>
+
+<!-- Login Page -->
+<div class="login-section" id="loginSection">
+  <div class="login-box">
+    <h2>Welcome</h2>
+    <form onsubmit="handleLogin(event)">
+      <input type="text" placeholder="Username" required><br>
+      <input type="password" placeholder="Password" required><br>
+      <select id="usertype" required>
+        <option value="" disabled selected>Login as</option>
+        <option value="user">User</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
+      </select><br>
+      <button type="submit">Login</button>
+    </form>
+    <p class="link-text">Don’t have an account? <a href="#" onclick="showRegister()">Register</a></p>
+  </div>
+</div>
+
+<!-- Register Page -->
+<div class="register-section" id="registerSection" style="display:none;">
+  <div class="login-box">
+    <h2>Register</h2>
+    <form onsubmit="handleRegister(event)">
+      <input type="text" id="regName" placeholder="Name" required><br>
+      <input type="email" id="regEmail" placeholder="Email ID" required><br>
+      <input type="tel" id="regPhone" placeholder="Phone Number" required><br>
+      <select id="regType" required>
+        <option value="" disabled selected>Register as</option>
+        <option value="user">User</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
+      </select><br>
+      <button type="submit">Register</button>
+    </form>
+    <p class="link-text">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+  </div>
+</div>
+
+<!-- User Dashboard -->
+<div class="dashboard" id="dashboardSection">
+  <button class="logoutBtn">Logout</button>
+  <div class="dashboard-header">
+    <h2>User Dashboard</h2>
+    <div class="notification" onclick="toggleNotifications()">
+      <i class="fas fa-bell"></i>
+      <span class="notif-count">3</span>
+      <div class="notif-dropdown" id="notifDropdown">
+        <p><strong>Notifications</strong></p>
+        <ul>
+          <li>Order #1234 has been shipped</li>
+          <li>Appointment confirmed for 12 Apr</li>
+          <li>New offer on medicines!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="menu">
+    <a href="#" class="profileBtn" onclick="showProfile('user')">Profile</a>
+    <a href="#"><i class="fas fa-vials"></i> Lab Tests</a>
+    <a href="#"><i class="fas fa-fire"></i> Trending Products</a>
+    <a href="#"><i class="fas fa-box-open"></i> View All Products</a>
+    <a href="#"><i class="fas fa-star-half-alt"></i> Doctors by Ratings</a>
+    <a href="#"><i class="fas fa-user-md"></i> Top Rated Doctors</a>
+    <a href="#"><i class="fas fa-users"></i> Doctor Visit Counts</a>
+    <a href="#"><i class="fas fa-calendar-plus"></i> Book Appointments</a>
+    <a href="#"><i class="fas fa-pills"></i> Order Medicine</a>
+    <a href="#"><i class="fas fa-file-upload"></i> Upload Prescriptions</a>
+    <a href="#"><i class="fas fa-notes-medical"></i> View Health Records</a>
+    <a href="#"><i class="fas fa-calendar-check"></i> Upcoming Appointments</a>
+    <a href="#"><i class="fas fa-history"></i> Order History</a>
+    <a href="#"><i class="fas fa-tags"></i> Available Offers</a>
+  </div>
+  <div class="profile-details" id="userProfile">
+    <h3>User Profile</h3>
+    <p>Name: Rahul Sharma</p>
+    <p>Email: rahul@example.com</p>
+    <p>BP: 120/80</p>
+    <p>Sugar: 90 mg/dL</p>
+  </div>
+</div>
+
+<!-- Doctor Dashboard -->
+<div class="dashboard" id="doctorSection">
+  <button class="logoutBtn">Logout</button>
+  <div class="dashboard-header">
+    <h2>Doctor Dashboard</h2>
+  </div>
+  <div class="menu">
+    <a href="#" class="profileBtn" onclick="showProfile('doctor')">Profile</a>
+    <a href="#">→ Upload prescriptions</a>
+    <a href="#">→ View today's appointments</a>
+    <a href="#">→ Upload prescriptions for appointments</a>
+  </div>
+  <div class="profile-details" id="doctorProfile">
+    <h3>Doctor Profile</h3>
+    <p>Name: Dr. Anjali Mehta</p>
+    <p>Email: anjali@example.com</p>
+    <p>Experience: 12 years</p>
+    <p>Degrees: MBBS, MD</p>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div class="dashboard" id="adminSection">
+  <button class="logoutBtn">Logout</button>
+  <div class="dashboard-header">
+    <h2>Admin Dashboard</h2>
+  </div>
+  <div class="menu">
+    <a href="#" class="profileBtn" onclick="showProfile('admin')">Profile</a>
+    <a href="#">→ View high-value customers</a>
+    <a href="#">→ Users with feedback on orders</a>
+    <a href="#">→ Top 5 revenue-generating products</a>
+    <a href="#">→ Patient medical summary</a>
+    <a href="#">→ User order history</a>
+    <a href="#">→ User spending with offer usage</a>
+  </div>
+  <div class="profile-details" id="adminProfile">
+    <h3>Admin Profile</h3>
+    <p>Name: Admin Kumar</p>
+    <p>Email: admin@example.com</p>
+  </div>
+</div>
+
+<script src="../static/js/script.js"></script>
+</body>
+</html>

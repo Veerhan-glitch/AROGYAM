@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'arogyam.backend'
+    'arogyam.backend',
+    "arogyam.frontend",
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,9 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [str(os.path.join(BASE_DIR, 'arogyam/frontend/static'))]
-
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'static',
+]
 
 WSGI_APPLICATION = 'arogyam.wsgi.application'
 
