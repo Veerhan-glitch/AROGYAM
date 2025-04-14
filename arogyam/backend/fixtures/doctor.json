@@ -8,7 +8,9 @@
     "specialization": "Cardiologist",
     "email": "ArvindGupta@gmail.com",
     "fee": "1200.00",
-    "password": "Arvind"
+    "password": "Arvind",
+    "degree": "MD",
+    "experience": "16 yrs"
   }
 },
 {
@@ -20,7 +22,9 @@
     "specialization": "Dermatologist",
     "email": "SnehaKapoor@gmail.com",
     "fee": "800.00",
-    "password":"Sneha"
+    "password": "Sneha",
+    "degree": "MD",
+    "experience": "15 yrs"
   }
 },
 {
@@ -32,7 +36,9 @@
     "specialization": "Orthopedic",
     "email": "RameshIyer@gmail.com",
     "fee": "1000.00",
-    "password": "Ramesh"
+    "password": "Ramesh",
+    "degree": "MD",
+    "experience": "12 yrs"
   }
 },
 {
@@ -44,7 +50,9 @@
     "specialization": "Gynecologist",
     "email": "MeeraSharma@gmail.com",
     "fee": "900.00",
-    "password":"Meera"
+    "password": "Meera",
+    "degree": "MD",
+    "experience": "11 yrs"
   }
 },
 {
@@ -56,7 +64,9 @@
     "specialization": "Neurologist",
     "email": "TarunBansal@gmail.com",
     "fee": "1500.00",
-    "password":"Tarun"
+    "password": "Tarun",
+    "degree": "MD",
+    "experience": "25 yrs"
   }
 },
 {
@@ -68,7 +78,9 @@
     "specialization": "ENT Specialist",
     "email": "AnjaliVerma@gmail.com",
     "fee": "700.00",
-    "password": "Anjali"
+    "password": "Anjali",
+    "degree": "MD",
+    "experience": "15 yrs"
   }
 },
 {
@@ -80,7 +92,9 @@
     "specialization": "General Physician",
     "email": "RajeevNair@gmail.com",
     "fee": "600.00",
-    "password": "Rajeev"
+    "password": "Rajeev",
+    "degree": "MD",
+    "experience": "25 yrs"
   }
 },
 {
@@ -92,7 +106,9 @@
     "specialization": "Endocrinologist",
     "email": "PoojaDesai@gmail.com",
     "fee": "1400.00",
-    "password":"Pooja"
+    "password": "Pooja",
+    "degree": "MD",
+    "experience": "16 yrs"
   }
 },
 {
@@ -104,7 +120,9 @@
     "specialization": "Pediatrician",
     "email": "NitinChoudhary@gmail.com",
     "fee": "750.00",
-    "password":"Nitin"
+    "password": "Nitin",
+    "degree": "MD",
+    "experience": "15 yrs"
   }
 },
 {
@@ -116,7 +134,9 @@
     "specialization": "Psychiatrist",
     "email": "KavitaMalhotra@gmail.com",
     "fee": "1300.00",
-    "password": "Kavita"
+    "password": "Kavita",
+    "degree": "MD",
+    "experience": "14 yrs"
   }
 },
 {
@@ -128,7 +148,9 @@
     "specialization": "Ophthalmologist",
     "email": "GauravSaxena@gmail.com",
     "fee": "1100.00",
-    "password": "Gaurav"
+    "password": "Gaurav",
+    "degree": "MD",
+    "experience": "11 yrs"
   }
 },
 {
@@ -140,7 +162,9 @@
     "specialization": "Oncologist",
     "email": "RadhikaMenon@gmail.com",
     "fee": "1800.00",
-    "password": "Radhika"
+    "password": "Radhika",
+    "degree": "MD",
+    "experience": "13 yrs"
   }
 },
 {
@@ -152,7 +176,9 @@
     "specialization": "Nephrologist",
     "email": "VivekYadav@gmail.com",
     "fee": "1600.00",
-    "password": "Vivek"
+    "password": "Vivek",
+    "degree": "MD",
+    "experience": "12 yrs"
   }
 },
 {
@@ -164,7 +190,9 @@
     "specialization": "Gastroenterologist",
     "email": "SonalPillai@gmail.com",
     "fee": "1250.00",
-    "password": "Sonal"
+    "password": "Sonal",
+    "degree": "MD",
+    "experience": "20 yrs"
   }
 },
 {
@@ -176,7 +204,9 @@
     "specialization": "Pulmonologist",
     "email": "AnkurTiwari@gmail.com",
     "fee": "1350.00",
-    "password": "Ankur"
+    "password": "Ankur",
+    "degree": "MD",
+    "experience": "15 yrs"
   }
 },
 {
@@ -188,7 +218,9 @@
     "specialization": "Dentist",
     "email": "NehaJoshi@gmail.com",
     "fee": "500.00",
-    "password": "Neha"
+    "password": "Neha",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -200,7 +232,9 @@
     "specialization": "Rheumatologist",
     "email": "SameerShah@gmail.com",
     "fee": "1550.00",
-    "password": "Sameer"
+    "password": "Sameer",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -212,7 +246,9 @@
     "specialization": "Urologist",
     "email": "PriyaKulkarni@gmail.com",
     "fee": "1450.00",
-    "password": "Priya"
+    "password": "Priya",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -224,7 +260,9 @@
     "specialization": "Hematologist",
     "email": "RohitReddy@gmail.com",
     "fee": "1750.00",
-    "password": "Rohit"
+    "password": "Rohit",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -236,7 +274,9 @@
     "specialization": "Allergist",
     "email": "SanyaAgrawal@gmail.com",
     "fee": "900.00",
-    "password": "Sanya"
+    "password": "Sanya",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -248,7 +288,9 @@
     "specialization": "Surgeon",
     "email": "VikramPatil@gmail.com",
     "fee": "2000.00",
-    "password": "Vikram"
+    "password": "Vikram",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -260,7 +302,9 @@
     "specialization": "Dermatologist",
     "email": "ShaliniNanda@gmail.com",
     "fee": "850.00",
-    "password": "Shalini"
+    "password": "Shalini",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -272,7 +316,9 @@
     "specialization": "General Physician",
     "email": "MohitSen@gmail.com",
     "fee": "650.00",
-    "password": "Mohit"
+    "password": "Mohit",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -284,7 +330,9 @@
     "specialization": "Cardiologist",
     "email": "RuchiThakur@gmail.com",
     "fee": "1900.00",
-    "password": "Ruchi"
+    "password": "Ruchi",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 },
 {
@@ -296,7 +344,9 @@
     "specialization": "Endocrinologist",
     "email": "AdityaMehta@gmail.com",
     "fee": "1300.00",
-    "password": "Aditya"
+    "password": "Aditya",
+    "degree": "MD",
+    "experience": "10 yrs"
   }
 }
 ]

@@ -172,7 +172,7 @@
   "pk": 15,
   "fields": {
     "name": "Cetirizine 10mg",
-    "brand": "Dr. Reddy’s",
+    "brand": "Dr. Reddyâ€™s",
     "price": "25.00",
     "composition": "Cetirizine Hydrochloride",
     "type": "Tablet",
@@ -244,7 +244,7 @@
   "pk": 21,
   "fields": {
     "name": "Omeprazole 20mg",
-    "brand": "Dr. Reddy’s",
+    "brand": "Dr. Reddyâ€™s",
     "price": "70.00",
     "composition": "Omeprazole",
     "type": "Capsule",

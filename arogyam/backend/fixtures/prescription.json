@@ -4,7 +4,9 @@
   "pk": 1,
   "fields": {
     "userid": 1,
-    "filepath": "/prescriptions/prescription_1.pdf"
+    "filepath": "/prescriptions/prescription_1.pdf",
+    "date": "2024-02-10",
+    "doctorid": 1
   }
 },
 {
@@ -12,7 +14,9 @@
   "pk": 2,
   "fields": {
     "userid": 3,
-    "filepath": "/prescriptions/prescription_2.pdf"
+    "filepath": "/prescriptions/prescription_2.pdf",
+    "date": "2024-03-10",
+    "doctorid": 2
   }
 },
 {
@@ -20,7 +24,9 @@
   "pk": 3,
   "fields": {
     "userid": 5,
-    "filepath": "/prescriptions/prescription_3.pdf"
+    "filepath": "/prescriptions/prescription_3.pdf",
+    "date": "2024-04-10",
+    "doctorid": 3
   }
 },
 {
@@ -28,7 +34,9 @@
   "pk": 4,
   "fields": {
     "userid": 7,
-    "filepath": "/prescriptions/prescription_4.pdf"
+    "filepath": "/prescriptions/prescription_4.pdf",
+    "date": "2024-02-10",
+    "doctorid": 4
   }
 },
 {
@@ -36,7 +44,9 @@
   "pk": 5,
   "fields": {
     "userid": 10,
-    "filepath": "/prescriptions/prescription_5.pdf"
+    "filepath": "/prescriptions/prescription_5.pdf",
+    "date": "2024-02-10",
+    "doctorid": 5
   }
 },
 {
@@ -44,7 +54,9 @@
   "pk": 6,
   "fields": {
     "userid": 12,
-    "filepath": "/prescriptions/prescription_6.pdf"
+    "filepath": "/prescriptions/prescription_6.pdf",
+    "date": "2024-02-10",
+    "doctorid": 6
   }
 },
 {
@@ -52,7 +64,9 @@
   "pk": 7,
   "fields": {
     "userid": 15,
-    "filepath": "/prescriptions/prescription_7.pdf"
+    "filepath": "/prescriptions/prescription_7.pdf",
+    "date": "2024-02-10",
+    "doctorid": 7
   }
 },
 {
@@ -60,7 +74,9 @@
   "pk": 8,
   "fields": {
     "userid": 17,
-    "filepath": "/prescriptions/prescription_8.pdf"
+    "filepath": "/prescriptions/prescription_8.pdf",
+    "date": "2024-02-10",
+    "doctorid": 8
   }
 },
 {
@@ -68,7 +84,9 @@
   "pk": 9,
   "fields": {
     "userid": 18,
-    "filepath": "/prescriptions/prescription_9.pdf"
+    "filepath": "/prescriptions/prescription_9.pdf",
+    "date": "2024-02-10",
+    "doctorid": 9
   }
 },
 {
@@ -76,7 +94,9 @@
   "pk": 10,
   "fields": {
     "userid": 21,
-    "filepath": "/prescriptions/prescription_10.pdf"
+    "filepath": "/prescriptions/prescription_10.pdf",
+    "date": "2024-02-10",
+    "doctorid": 10
   }
 },
 {
@@ -84,7 +104,9 @@
   "pk": 11,
   "fields": {
     "userid": 23,
-    "filepath": "/prescriptions/prescription_11.pdf"
+    "filepath": "/prescriptions/prescription_11.pdf",
+    "date": "2024-02-10",
+    "doctorid": 11
   }
 },
 {
@@ -92,7 +114,9 @@
   "pk": 12,
   "fields": {
     "userid": 25,
-    "filepath": "/prescriptions/prescription_12.pdf"
+    "filepath": "/prescriptions/prescription_12.pdf",
+    "date": "2024-02-10",
+    "doctorid": 12
   }
 },
 {
@@ -100,7 +124,9 @@
   "pk": 13,
   "fields": {
     "userid": 1,
-    "filepath": "/prescriptions/prescription_13.pdf"
+    "filepath": "/prescriptions/prescription_13.pdf",
+    "date": "2024-02-10",
+    "doctorid": 13
   }
 },
 {
@@ -108,7 +134,9 @@
   "pk": 14,
   "fields": {
     "userid": 3,
-    "filepath": "/prescriptions/prescription_14.pdf"
+    "filepath": "/prescriptions/prescription_14.pdf",
+    "date": "2024-02-10",
+    "doctorid": 14
   }
 },
 {
@@ -116,7 +144,9 @@
   "pk": 15,
   "fields": {
     "userid": 5,
-    "filepath": "/prescriptions/prescription_15.pdf"
+    "filepath": "/prescriptions/prescription_15.pdf",
+    "date": "2024-02-10",
+    "doctorid": 5
   }
 },
 {
@@ -124,7 +154,9 @@
   "pk": 16,
   "fields": {
     "userid": 8,
-    "filepath": "/prescriptions/prescription_16.pdf"
+    "filepath": "/prescriptions/prescription_16.pdf",
+    "date": "2024-02-10",
+    "doctorid": 8
   }
 },
 {
@@ -132,7 +164,9 @@
   "pk": 17,
   "fields": {
     "userid": 10,
-    "filepath": "/prescriptions/prescription_17.pdf"
+    "filepath": "/prescriptions/prescription_17.pdf",
+    "date": "2024-02-10",
+    "doctorid": 10
   }
 },
 {
@@ -140,7 +174,9 @@
   "pk": 18,
   "fields": {
     "userid": 12,
-    "filepath": "/prescriptions/prescription_18.pdf"
+    "filepath": "/prescriptions/prescription_18.pdf",
+    "date": "2024-02-10",
+    "doctorid": 12
   }
 },
 {
@@ -148,7 +184,9 @@
   "pk": 19,
   "fields": {
     "userid": 15,
-    "filepath": "/prescriptions/prescription_19.pdf"
+    "filepath": "/prescriptions/prescription_19.pdf",
+    "date": "2024-02-10",
+    "doctorid": 15
   }
 },
 {
@@ -156,7 +194,9 @@
   "pk": 20,
   "fields": {
     "userid": 17,
-    "filepath": "/prescriptions/prescription_20.pdf"
+    "filepath": "/prescriptions/prescription_20.pdf",
+    "date": "2024-02-10",
+    "doctorid": 17
   }
 },
 {
@@ -164,7 +204,9 @@
   "pk": 21,
   "fields": {
     "userid": 18,
-    "filepath": "/prescriptions/prescription_21.pdf"
+    "filepath": "/prescriptions/prescription_21.pdf",
+    "date": "2024-02-10",
+    "doctorid": 18
   }
 },
 {
@@ -172,7 +214,9 @@
   "pk": 22,
   "fields": {
     "userid": 21,
-    "filepath": "/prescriptions/prescription_22.pdf"
+    "filepath": "/prescriptions/prescription_22.pdf",
+    "date": "2024-02-10",
+    "doctorid": 21
   }
 },
 {
@@ -180,7 +224,9 @@
   "pk": 23,
   "fields": {
     "userid": 23,
-    "filepath": "/prescriptions/prescription_23.pdf"
+    "filepath": "/prescriptions/prescription_23.pdf",
+    "date": "2024-02-10",
+    "doctorid": 23
   }
 },
 {
@@ -188,7 +234,9 @@
   "pk": 24,
   "fields": {
     "userid": 24,
-    "filepath": "/prescriptions/prescription_24.pdf"
+    "filepath": "/prescriptions/prescription_24.pdf",
+    "date": "2024-02-10",
+    "doctorid": 24
   }
 },
 {
@@ -196,7 +244,9 @@
   "pk": 25,
   "fields": {
     "userid": 25,
-    "filepath": "/prescriptions/prescription_25.pdf"
+    "filepath": "/prescriptions/prescription_25.pdf",
+    "date": "2024-02-10",
+    "doctorid": 25
   }
 }
 ]

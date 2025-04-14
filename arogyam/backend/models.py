@@ -25,7 +25,8 @@ class Doctor(models.Model):
     email = models.CharField(unique=True, max_length=100)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
     password = models.CharField(max_length=255)
-
+    degree = models.CharField(max_length=100)
+    experience = models.CharField()
     class Meta:
         db_table = 'doctor'
 
@@ -81,7 +82,8 @@ class Prescription(models.Model):
     prescriptionid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
     filepath = models.TextField()
-
+    date = models.DateField()
+    doctorid = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='doctorid')
     class Meta:
         db_table = 'prescription'
 
