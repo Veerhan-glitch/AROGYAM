@@ -5,7 +5,7 @@
   "fields": {
     "userid": 1,
     "message": "Your order has been shipped.",
-    "datetime": "2024-02-10T10:30:00",
+    "datetime": "2024-02-10T10:30:00Z",
     "type": "Order Update"
   }
 },
@@ -15,7 +15,7 @@
   "fields": {
     "userid": 3,
     "message": "Your appointment with Dr. Sneha Kapoor is confirmed.",
-    "datetime": "2024-02-11T14:00:00",
+    "datetime": "2024-02-11T14:00:00Z",
     "type": "Appointment"
   }
 },
@@ -25,7 +25,7 @@
   "fields": {
     "userid": 5,
     "message": "Payment received successfully.",
-    "datetime": "2024-02-12T09:15:00",
+    "datetime": "2024-02-12T09:15:00Z",
     "type": "Payment"
   }
 },
@@ -35,7 +35,7 @@
   "fields": {
     "userid": 7,
     "message": "Prescription uploaded successfully.",
-    "datetime": "2024-02-13T16:45:00",
+    "datetime": "2024-02-13T16:45:00Z",
     "type": "Prescription"
   }
 },
@@ -45,7 +45,7 @@
   "fields": {
     "userid": 10,
     "message": "Your order has been delivered.",
-    "datetime": "2024-02-14T18:20:00",
+    "datetime": "2024-02-14T18:20:00Z",
     "type": "Order Update"
   }
 },
@@ -55,7 +55,7 @@
   "fields": {
     "userid": 12,
     "message": "New discount offers are available for you.",
-    "datetime": "2024-02-15T12:00:00",
+    "datetime": "2024-02-15T12:00:00Z",
     "type": "Offer"
   }
 },
@@ -65,7 +65,7 @@
   "fields": {
     "userid": 15,
     "message": "Reminder: Your lab test results are ready.",
-    "datetime": "2024-02-16T08:30:00",
+    "datetime": "2024-02-16T08:30:00Z",
     "type": "Lab Test"
   }
 },
@@ -75,7 +75,7 @@
   "fields": {
     "userid": 17,
     "message": "Your support ticket has been resolved.",
-    "datetime": "2024-02-17T11:10:00",
+    "datetime": "2024-02-17T11:10:00Z",
     "type": "Support"
   }
 },
@@ -85,7 +85,7 @@
   "fields": {
     "userid": 18,
     "message": "Upcoming appointment reminder.",
-    "datetime": "2024-02-18T17:50:00",
+    "datetime": "2024-02-18T17:50:00Z",
     "type": "Appointment"
   }
 },
@@ -95,7 +95,7 @@
   "fields": {
     "userid": 21,
     "message": "Payment for your recent order failed.",
-    "datetime": "2024-02-19T13:25:00",
+    "datetime": "2024-02-19T13:25:00Z",
     "type": "Payment"
   }
 },
@@ -105,7 +105,7 @@
   "fields": {
     "userid": 23,
     "message": "Your medicine subscription is expiring soon.",
-    "datetime": "2024-02-20T09:40:00",
+    "datetime": "2024-02-20T09:40:00Z",
     "type": "Reminder"
   }
 },
@@ -115,7 +115,7 @@
   "fields": {
     "userid": 25,
     "message": "Flash sale! Get up to 20% off on medicines.",
-    "datetime": "2024-02-21T15:30:00",
+    "datetime": "2024-02-21T15:30:00Z",
     "type": "Offer"
   }
 },
@@ -125,7 +125,7 @@
   "fields": {
     "userid": 2,
     "message": "Your refund has been processed.",
-    "datetime": "2024-02-22T10:05:00",
+    "datetime": "2024-02-22T10:05:00Z",
     "type": "Payment"
   }
 },
@@ -135,7 +135,7 @@
   "fields": {
     "userid": 4,
     "message": "Your doctor consultation report is ready.",
-    "datetime": "2024-02-23T14:20:00",
+    "datetime": "2024-02-23T14:20:00Z",
     "type": "Health Record"
   }
 },
@@ -145,7 +145,7 @@
   "fields": {
     "userid": 6,
     "message": "Your order is out for delivery.",
-    "datetime": "2024-02-24T18:00:00",
+    "datetime": "2024-02-24T18:00:00Z",
     "type": "Order Update"
   }
 },
@@ -155,7 +155,7 @@
   "fields": {
     "userid": 8,
     "message": "Exclusive deal: Buy one get one free on vitamins.",
-    "datetime": "2024-02-25T07:30:00",
+    "datetime": "2024-02-25T07:30:00Z",
     "type": "Offer"
   }
 },
@@ -165,7 +165,7 @@
   "fields": {
     "userid": 9,
     "message": "Check your test results now.",
-    "datetime": "2024-02-26T16:10:00",
+    "datetime": "2024-02-26T16:10:00Z",
     "type": "Lab Test"
   }
 },
@@ -174,8 +174,8 @@
   "pk": 18,
   "fields": {
     "userid": 11,
-    "message": "Weâ€™ve added new products to our store.",
-    "datetime": "2024-02-27T08:45:00",
+    "message": "We’ve added new products to our store.",
+    "datetime": "2024-02-27T08:45:00Z",
     "type": "General"
   }
 },
@@ -185,7 +185,7 @@
   "fields": {
     "userid": 13,
     "message": "Rate your last purchase experience.",
-    "datetime": "2024-02-28T12:55:00",
+    "datetime": "2024-02-28T12:55:00Z",
     "type": "Feedback"
   }
 },
@@ -195,7 +195,7 @@
   "fields": {
     "userid": 14,
     "message": "New feature: Track your prescriptions easily.",
-    "datetime": "2024-02-29T11:20:00",
+    "datetime": "2024-02-29T11:20:00Z",
     "type": "General"
   }
 },
@@ -205,7 +205,7 @@
   "fields": {
     "userid": 16,
     "message": "Reminder: Your next dose is due.",
-    "datetime": "2024-03-01T07:00:00",
+    "datetime": "2024-03-01T07:00:00Z",
     "type": "Reminder"
   }
 },
@@ -215,7 +215,7 @@
   "fields": {
     "userid": 19,
     "message": "Your cashback has been credited.",
-    "datetime": "2024-03-02T15:40:00",
+    "datetime": "2024-03-02T15:40:00Z",
     "type": "Payment"
   }
 },
@@ -225,7 +225,7 @@
   "fields": {
     "userid": 20,
     "message": "Thank you for your feedback!",
-    "datetime": "2024-03-03T09:35:00",
+    "datetime": "2024-03-03T09:35:00Z",
     "type": "Feedback"
   }
 },
@@ -235,7 +235,7 @@
   "fields": {
     "userid": 22,
     "message": "A doctor is available for your requested consultation.",
-    "datetime": "2024-03-04T17:10:00",
+    "datetime": "2024-03-04T17:10:00Z",
     "type": "Appointment"
   }
 },
@@ -245,7 +245,7 @@
   "fields": {
     "userid": 24,
     "message": "Limited time offer: Get 15% off on lab tests.",
-    "datetime": "2024-03-05T14:50:00",
+    "datetime": "2024-03-05T14:50:00Z",
     "type": "Offer"
   }
 }

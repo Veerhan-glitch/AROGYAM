@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q
 from django.utils.dateparse import parse_date
@@ -167,7 +168,6 @@ def search_products(request):
         serializer = ProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-@csrf_exempt
 def product_details(request):
     if request.method == "POST":
         pid = json.loads(request.body).get("productid")
@@ -177,3 +177,8 @@ def product_details(request):
             return JsonResponse(serializer.data, safe=False)
         except Product.DoesNotExist:
             return JsonResponse({"error": "Product not found"}, status=404)
+
+
+def order_history(request):
+    orders = Orders.objects.filter(user=request.user).prefetch_related('orderitems')
+    return render(request, 'customer/orders.html', {'orders': orders})

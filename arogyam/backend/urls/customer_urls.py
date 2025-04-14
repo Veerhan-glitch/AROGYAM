@@ -1,7 +1,10 @@
 from django.urls import path
 from arogyam.backend import views
+from django.urls import path
+
 
 urlpatterns = [
+    path('home/', views.home, name='home'),
     path('feedback-by-user/', views.feedback_by_user, name='feedback_by_user'),
     path('feedback-by-order/', views.feedback_by_product, name='feedback_by_order'),
     path('orders/', views.user_orders, name='user_orders'),

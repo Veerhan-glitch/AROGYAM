@@ -6,7 +6,9 @@
     "name": "Dr. Arvind Gupta",
     "rating": "4.90",
     "specialization": "Cardiologist",
-    "fee": "1200.00"
+    "email": null,
+    "fee": "1200.00",
+    "password": null
   }
 },
 {
@@ -16,7 +18,9 @@
     "name": "Dr. Sneha Kapoor",
     "rating": "4.70",
     "specialization": "Dermatologist",
-    "fee": "800.00"
+    "email": null,
+    "fee": "800.00",
+    "password": null
   }
 },
 {
@@ -26,7 +30,9 @@
     "name": "Dr. Ramesh Iyer",
     "rating": "4.20",
     "specialization": "Orthopedic",
-    "fee": "1000.00"
+    "email": null,
+    "fee": "1000.00",
+    "password": null
   }
 },
 {
@@ -36,7 +42,9 @@
     "name": "Dr. Meera Sharma",
     "rating": "4.60",
     "specialization": "Gynecologist",
-    "fee": "900.00"
+    "email": null,
+    "fee": "900.00",
+    "password": null
   }
 },
 {
@@ -46,7 +54,9 @@
     "name": "Dr. Tarun Bansal",
     "rating": "4.80",
     "specialization": "Neurologist",
-    "fee": "1500.00"
+    "email": null,
+    "fee": "1500.00",
+    "password": null
   }
 },
 {
@@ -56,7 +66,9 @@
     "name": "Dr. Anjali Verma",
     "rating": "4.30",
     "specialization": "ENT Specialist",
-    "fee": "700.00"
+    "email": null,
+    "fee": "700.00",
+    "password": null
   }
 },
 {
@@ -66,7 +78,9 @@
     "name": "Dr. Rajeev Nair",
     "rating": "4.40",
     "specialization": "General Physician",
-    "fee": "600.00"
+    "email": null,
+    "fee": "600.00",
+    "password": null
   }
 },
 {
@@ -76,7 +90,9 @@
     "name": "Dr. Pooja Desai",
     "rating": "4.90",
     "specialization": "Endocrinologist",
-    "fee": "1400.00"
+    "email": null,
+    "fee": "1400.00",
+    "password": null
   }
 },
 {
@@ -86,7 +102,9 @@
     "name": "Dr. Nitin Choudhary",
     "rating": "4.10",
     "specialization": "Pediatrician",
-    "fee": "750.00"
+    "email": null,
+    "fee": "750.00",
+    "password": null
   }
 },
 {
@@ -96,7 +114,9 @@
     "name": "Dr. Kavita Malhotra",
     "rating": "4.50",
     "specialization": "Psychiatrist",
-    "fee": "1300.00"
+    "email": null,
+    "fee": "1300.00",
+    "password": null
   }
 },
 {
@@ -106,7 +126,9 @@
     "name": "Dr. Gaurav Saxena",
     "rating": "4.20",
     "specialization": "Ophthalmologist",
-    "fee": "1100.00"
+    "email": null,
+    "fee": "1100.00",
+    "password": null
   }
 },
 {
@@ -116,7 +138,9 @@
     "name": "Dr. Radhika Menon",
     "rating": "4.60",
     "specialization": "Oncologist",
-    "fee": "1800.00"
+    "email": null,
+    "fee": "1800.00",
+    "password": null
   }
 },
 {
@@ -126,7 +150,9 @@
     "name": "Dr. Vivek Yadav",
     "rating": "4.30",
     "specialization": "Nephrologist",
-    "fee": "1600.00"
+    "email": null,
+    "fee": "1600.00",
+    "password": null
   }
 },
 {
@@ -136,7 +162,9 @@
     "name": "Dr. Sonal Pillai",
     "rating": "4.70",
     "specialization": "Gastroenterologist",
-    "fee": "1250.00"
+    "email": null,
+    "fee": "1250.00",
+    "password": null
   }
 },
 {
@@ -146,7 +174,9 @@
     "name": "Dr. Ankur Tiwari",
     "rating": "4.80",
     "specialization": "Pulmonologist",
-    "fee": "1350.00"
+    "email": null,
+    "fee": "1350.00",
+    "password": null
   }
 },
 {
@@ -156,7 +186,9 @@
     "name": "Dr. Neha Joshi",
     "rating": "4.40",
     "specialization": "Dentist",
-    "fee": "500.00"
+    "email": null,
+    "fee": "500.00",
+    "password": null
   }
 },
 {
@@ -166,7 +198,9 @@
     "name": "Dr. Sameer Shah",
     "rating": "4.90",
     "specialization": "Rheumatologist",
-    "fee": "1550.00"
+    "email": null,
+    "fee": "1550.00",
+    "password": null
   }
 },
 {
@@ -176,7 +210,9 @@
     "name": "Dr. Priya Kulkarni",
     "rating": "4.20",
     "specialization": "Urologist",
-    "fee": "1450.00"
+    "email": null,
+    "fee": "1450.00",
+    "password": null
   }
 },
 {
@@ -186,7 +222,9 @@
     "name": "Dr. Rohit Reddy",
     "rating": "4.60",
     "specialization": "Hematologist",
-    "fee": "1750.00"
+    "email": null,
+    "fee": "1750.00",
+    "password": null
   }
 },
 {
@@ -196,7 +234,9 @@
     "name": "Dr. Sanya Agrawal",
     "rating": "4.50",
     "specialization": "Allergist",
-    "fee": "900.00"
+    "email": null,
+    "fee": "900.00",
+    "password": null
   }
 },
 {
@@ -206,7 +246,9 @@
     "name": "Dr. Vikram Patil",
     "rating": "4.30",
     "specialization": "Surgeon",
-    "fee": "2000.00"
+    "email": null,
+    "fee": "2000.00",
+    "password": null
   }
 },
 {
@@ -216,7 +258,9 @@
     "name": "Dr. Shalini Nanda",
     "rating": "4.70",
     "specialization": "Dermatologist",
-    "fee": "850.00"
+    "email": null,
+    "fee": "850.00",
+    "password": null
   }
 },
 {
@@ -226,7 +270,9 @@
     "name": "Dr. Mohit Sen",
     "rating": "4.50",
     "specialization": "General Physician",
-    "fee": "650.00"
+    "email": null,
+    "fee": "650.00",
+    "password": null
   }
 },
 {
@@ -236,7 +282,9 @@
     "name": "Dr. Ruchi Thakur",
     "rating": "4.80",
     "specialization": "Cardiologist",
-    "fee": "1900.00"
+    "email": null,
+    "fee": "1900.00",
+    "password": null
   }
 },
 {
@@ -246,7 +294,9 @@
     "name": "Dr. Aditya Mehta",
     "rating": "4.60",
     "specialization": "Endocrinologist",
-    "fee": "1300.00"
+    "email": null,
+    "fee": "1300.00",
+    "password": null
   }
 }
 ]

@@ -22,7 +22,9 @@ class Doctor(models.Model):
     name = models.CharField(max_length=100)
     rating = models.DecimalField(max_digits=3, decimal_places=2)
     specialization = models.CharField(max_length=100)
+    email = models.CharField(unique=True, max_length=100)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
+    password = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'doctor'
@@ -231,3 +233,4 @@ class Useroffers(models.Model):
         
     def __str__(self):
         return f"User ID: {self.userid}, Offer ID: {self.offerid}"
+
