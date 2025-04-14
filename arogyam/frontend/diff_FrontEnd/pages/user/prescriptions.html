@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescriptions - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Prescriptions</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="tabs">
+        <button class="tab-btn" data-tab="active">Active Prescriptions</button>
+        <button class="tab-btn" data-tab="all">All Prescriptions</button>
+        <button class="tab-btn" data-tab="upload">Upload Prescription</button>
+      </div>
+      
+      <div class="tab-content" id="active-tab">
+        <div class="prescriptions-grid" id="activePrescriptions">
+          <!-- Active prescriptions will be loaded here -->
+          <p class="empty-state">Loading active prescriptions...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="all-tab">
+        <div class="prescription-search">
+          <input type="text" id="searchPrescription" placeholder="Search prescriptions...">
+          <button class="action-btn" onclick="searchPrescriptions()"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="prescriptions-grid" id="allPrescriptions">
+          <!-- All prescriptions will be loaded here -->
+          <p class="empty-state">Loading all prescriptions...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="upload-tab">
+        <div class="upload-form">
+          <h3>Upload New Prescription</h3>
+          
+          <div class="form-group">
+            <label for="prescriptionType">Prescription Type:</label>
+            <select id="prescriptionType" required>
+              <option value="" disabled selected>Select Type</option>
+              <option value="medication">Medication</option>
+              <option value="labTest">Lab Test</option>
+              <option value="referral">Specialist Referral</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Upload Files:</label>
+            <div class="file-upload">
+              <input type="file" id="prescriptionFile" accept=".pdf,.jpg,.jpeg,.png" multiple>
+              <label for="prescriptionFile" class="file-label">
+                <i class="fas fa-cloud-upload-alt"></i> Choose Files
+              </label>
+              <span id="fileNames">No files chosen</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="prescriptionNotes">Notes:</label>
+            <textarea id="prescriptionNotes" rows="4" placeholder="Add any notes about this prescription"></textarea>
+          </div>
+          
+          <button class="action-btn" onclick="uploadPrescriptionSubmit()">Upload Prescription</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+      
+      // Set up tab navigation
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      // Check if URL has hash for specific tab
+      const hash = window.location.hash.replace('#', '');
+      let activeTab = 'active'; // Default tab
+      
+      if (hash && ['active', 'all', 'upload'].includes(hash)) {
+        activeTab = hash;
+      }
+      
+      // Set the active tab
+      tabButtons.forEach(btn => {
+        if (btn.dataset.tab === activeTab) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+        
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          btn.classList.add('active');
+          document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
+          
+          // Update URL hash without page reload
+          window.location.hash = btn.dataset.tab;
+        });
+      });
+      
+      // Set the active content
+      tabContents.forEach(content => {
+        if (content.id === `${activeTab}-tab`) {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+      
+      // File upload display
+      document.getElementById('prescriptionFile').addEventListener('change', function(e) {
+        const fileNames = Array.from(this.files).map(file => file.name).join(', ');
+        document.getElementById('fileNames').textContent = fileNames || 'No files chosen';
+      });
+      
+      // Load prescriptions
+      loadAllPrescriptions();
+      loadActivePrescriptions();
+    });
+
+    function loadActivePrescriptions() {
+      // Get active prescriptions from localStorage
+      const prescriptions = JSON.parse(localStorage.getItem('prescriptions')) || [];
+      const activePrescriptions = prescriptions.filter(p => p.status === 'active');
+      
+      // If no active prescriptions in storage, add demo data
+      if (activePrescriptions.length === 0) {
+        // For demo, we'll create some active prescriptions
+        const demoActivePrescriptions = [
+          {
+            id: 'p1',
+            type: 'medication',
+            doctor: 'Dr. Smith',
+            date: '2023-09-10',
+            validUntil: '2023-10-10',
+            status: 'active',
+            fileName: 'prescription_smith.pdf'
+          },
+          {
+            id: 'p2',
+            type: 'labTest',
+            doctor: 'Dr. Johnson',
+            date: '2023-09-15',
+            validUntil: '2023-09-30',
+            status: 'active',
+            fileName: 'blood_test.pdf'
+          }
+        ];
+        
+        renderPrescriptions(demoActivePrescriptions, 'activePrescriptions');
+      } else {
+        renderPrescriptions(activePrescriptions, 'activePrescriptions');
+      }
+    }
+
+    function loadAllPrescriptions() {
+      const storedPrescriptions = JSON.parse(localStorage.getItem('prescriptions')) || [];
+      
+      // For demo, we'll add some past prescriptions to the stored ones
+      const pastPrescriptions = [
+        {
+          id: 'p3',
+          type: 'medication',
+          doctor: 'Dr. Williams',
+          date: '2023-07-05',
+          validUntil: '2023-08-05',
+          status: 'expired',
+          fileName: 'old_prescription.pdf'
+        },
+        {
+          id: 'p4',
+          type: 'referral',
+          doctor: 'Dr. Davis',
+          date: '2023-08-12',
+          validUntil: '2023-11-12',
+          status: 'active',
+          fileName: 'specialist_referral.pdf'
+        }
+      ];
+      
+      const allPrescriptions = [...storedPrescriptions, ...pastPrescriptions];
+      renderPrescriptions(allPrescriptions, 'allPrescriptions');
+    }
+
+    function renderPrescriptions(prescriptions, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (prescriptions.length === 0) {
+        container.innerHTML = '<p class="empty-state">No prescriptions found</p>';
+        return;
+      }
+      
+      container.innerHTML = prescriptions.map(prescription => `
+        <div class="prescription-card ${prescription.status}">
+          <div class="prescription-header">
+            <div class="prescription-type">
+              <i class="fas ${getPrescriptionIcon(prescription.type)}"></i>
+              <span>${prescription.type || 'Medication'}</span>
+            </div>
+            <span class="status ${prescription.status || 'active'}">${prescription.status || 'Active'}</span>
+          </div>
+          
+          <div class="prescription-details">
+            <p><strong>Doctor:</strong> ${prescription.doctor || 'Unknown'}</p>
+            <p><strong>Date:</strong> ${new Date(prescription.date).toLocaleDateString()}</p>
+            <p><strong>Valid Until:</strong> ${prescription.validUntil ? new Date(prescription.validUntil).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>File:</strong> ${prescription.fileName || 'N/A'}</p>
+          </div>
+          
+          <div class="prescription-actions">
+            <button class="action-btn" onclick="viewPrescription('${prescription.id}')">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="action-btn" onclick="orderMedicines('${prescription.id}')">
+              <i class="fas fa-shopping-cart"></i> Order Medicines
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getPrescriptionIcon(type) {
+      switch(type) {
+        case 'medication':
+          return 'fa-pills';
+        case 'labTest':
+          return 'fa-vial';
+        case 'referral':
+          return 'fa-user-md';
+        default:
+          return 'fa-file-medical';
+      }
+    }
+
+    function searchPrescriptions() {
+      const searchTerm = document.getElementById('searchPrescription').value.toLowerCase();
+      const allPrescriptions = document.getElementById('allPrescriptions');
+      const prescriptionCards = allPrescriptions.querySelectorAll('.prescription-card');
+      
+      prescriptionCards.forEach(card => {
+        const prescriptionText = card.textContent.toLowerCase();
+        if (prescriptionText.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function uploadPrescriptionSubmit() {
+      const type = document.getElementById('prescriptionType').value;
+      const fileInput = document.getElementById('prescriptionFile');
+      const notes = document.getElementById('prescriptionNotes').value;
+      
+      if (!type || fileInput.files.length === 0) {
+        alert('Please select prescription type and upload at least one file');
+        return;
+      }
+      
+      // In a real app, this would upload the file to a server
+      // Here we'll simulate file upload with localStorage
+      const file = {
+        name: fileInput.files[0].name,
+        type: fileInput.files[0].type,
+        size: fileInput.files[0].size
+      };
+      
+      const result = uploadPrescription(file, type, notes);
+      
+      if (result.success) {
+        alert('Prescription uploaded successfully!');
+        // Reset form
+        document.getElementById('prescriptionType').selectedIndex = 0;
+        document.getElementById('prescriptionFile').value = '';
+        document.getElementById('fileNames').textContent = 'No files chosen';
+        document.getElementById('prescriptionNotes').value = '';
+        
+        // Reload prescriptions
+        loadAllPrescriptions();
+        loadActivePrescriptions();
+        
+        // Show active tab
+        document.querySelector('[data-tab="active"]').click();
+      } else {
+        alert('Error uploading prescription');
+      }
+    }
+
+    function viewPrescription(prescriptionId) {
+      // In a real app, this would open a viewer or download the file
+      alert('Prescription viewer will be implemented soon!');
+    }
+
+    function orderMedicines(prescriptionId) {
+      // In a real app, this would navigate to a medicine ordering page
+      alert('Medicine ordering will be implemented soon!');
+    }
+  </script>
+</body>
+</html> 

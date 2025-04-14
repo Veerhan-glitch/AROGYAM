@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .profile-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 20px;
+    }
+    
+    .profile-sidebar {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-avatar {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      color: var(--primary-color);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-edit {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    
+    .avatar-edit:hover {
+      background: rgba(0,0,0,0.7);
+    }
+    
+    .profile-menu {
+      margin-top: 30px;
+    }
+    
+    .profile-menu-item {
+      padding: 12px 15px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+    }
+    
+    .profile-menu-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .profile-menu-item.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .profile-menu-item i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .profile-content {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-section {
+      display: none;
+    }
+    
+    .profile-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .profile-section h3 {
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .divider {
+      margin: 25px 0;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .preference-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .preference-item:last-child {
+      border-bottom: none;
+    }
+    
+    .preference-title {
+      font-weight: 500;
+    }
+    
+    .preference-desc {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .switch-slider {
+      background-color: var(--primary-color);
+    }
+    
+    input:focus + .switch-slider {
+      box-shadow: 0 0 1px var(--primary-color);
+    }
+    
+    input:checked + .switch-slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+    
+    @media (max-width: 768px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:history.back()" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+      <h2>My Profile</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="profile-container">
+        <!-- Profile Sidebar -->
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div id="avatarImage"><i class="fas fa-user"></i></div>
+            <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">
+              <i class="fas fa-camera"></i> Change
+            </div>
+            <input type="file" id="avatarInput" style="display:none" accept="image/*" onchange="updateAvatar(this)">
+          </div>
+          
+          <h3 id="profile-name" style="text-align: center; margin-top: 10px;">User Name</h3>
+          <p id="profile-email" style="text-align: center; color: var(--text-light);">user@example.com</p>
+          
+          <div class="profile-menu">
+            <div class="profile-menu-item active" data-target="personal-info">
+              <i class="fas fa-user"></i> Personal Info
+            </div>
+            <div class="profile-menu-item" data-target="security">
+              <i class="fas fa-lock"></i> Security
+            </div>
+            <div class="profile-menu-item" data-target="preferences">
+              <i class="fas fa-cog"></i> Preferences
+            </div>
+            <div class="profile-menu-item" data-target="account">
+              <i class="fas fa-user-cog"></i> Account
+            </div>
+          </div>
+        </div>
+        
+        <!-- Profile Content -->
+        <div class="profile-content">
+          <!-- Personal Info Section -->
+          <div class="profile-section active" id="personal-info">
+            <h3>Personal Information</h3>
+            <form id="personal-info-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="fullName">Full Name</label>
+                  <input type="text" id="fullName" class="form-input" placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" class="form-input" placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input type="tel" id="phone" class="form-input" placeholder="Your phone number">
+                </div>
+                <div class="form-group">
+                  <label for="dateOfBirth">Date of Birth</label>
+                  <input type="date" id="dateOfBirth" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="gender">Gender</label>
+                  <select id="gender" class="form-input">
+                    <option value=""></option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-say">Prefer not to say</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="bloodGroup">Blood Group</label>
+                  <select id="bloodGroup" class="form-input">
+                    <option value=""></option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="divider"></div>
+              
+              <h4>Address Information</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" id="address" class="form-input" placeholder="Your address">
+                </div>
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input type="text" id="city" class="form-input" placeholder="Your city">
+                </div>
+                <div class="form-group">
+                  <label for="state">State</label>
+                  <input type="text" id="state" class="form-input" placeholder="Your state">
+                </div>
+                <div class="form-group">
+                  <label for="pincode">Pincode</label>
+                  <input type="text" id="pincode" class="form-input" placeholder="Your pincode">
+                </div>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="button" class="action-btn secondary" onclick="resetForm('personal-info-form')">Reset</button>
+                <button type="submit" class="action-btn">Save Changes</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Security Section -->
+          <div class="profile-section" id="security">
+            <h3>Security Settings</h3>
+            <form id="security-form">
+              <h4>Change Password</h4>
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" class="form-input" placeholder="Enter your current password">
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input type="password" id="newPassword" class="form-input" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm New Password</label>
+                  <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm new password">
+                </div>
+              </div>
+              
+              <div class="divider"></div>
+              
+              <h4>Two-Factor Authentication</h4>
+              <div class="preference-item">
+                <div>
+                  <div class="preference-title">Enable Two-Factor Authentication</div>
+                  <div class="preference-desc">Add an extra layer of security to your account</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="twoFactorAuth">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Update Security Settings</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Preferences Section -->
+          <div class="profile-section" id="preferences">
+            <h3>Preferences</h3>
+            <form id="preferences-form">
+              <h4>Notifications</h4>
+              <div class="preference-item">
+                <div>
+                  <div class="preference-title">Email Notifications</div>
+                  <div class="preference-desc">Receive notifications about appointments, orders, and offers via email</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="emailNotif" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              
+              <div class="preference-item">
+                <div>
+                  <div class="preference-title">SMS Notifications</div>
+                  <div class="preference-desc">Receive notifications about appointments, orders, and offers via SMS</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="smsNotif" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              
+              <div class="preference-item">
+                <div>
+                  <div class="preference-title">Appointment Reminders</div>
+                  <div class="preference-desc">Receive reminders before your scheduled appointments</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="appointmentReminder" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              
+              <div class="divider"></div>
+              
+              <h4>Privacy</h4>
+              <div class="preference-item">
+                <div>
+                  <div class="preference-title">Share Medical History with Doctors</div>
+                  <div class="preference-desc">Allow doctors to view your medical history for better diagnosis</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="shareMedicalHistory" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save Preferences</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Account Section -->
+          <div class="profile-section" id="account">
+            <h3>Account Settings</h3>
+            <form id="account-form">
+              <div class="form-group">
+                <label for="language">Language</label>
+                <select id="language" class="form-input">
+                  <option value="en">English</option>
+                  <option value="hi">Hindi</option>
+                  <option value="bn">Bengali</option>
+                  <option value="ta">Tamil</option>
+                  <option value="te">Telugu</option>
+                </select>
+              </div>
+              
+              <div class="divider"></div>
+              
+              <div class="danger-zone" style="background-color: rgba(220, 53, 69, 0.1); padding: 20px; border-radius: var(--radius-sm);">
+                <h4 style="color: #dc3545;">Danger Zone</h4>
+                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                <button type="button" class="action-btn danger" onclick="confirmDeleteAccount()">Delete My Account</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Set user information in the sidebar
+      document.getElementById('profile-name').textContent = currentUser.name;
+      document.getElementById('profile-email').textContent = currentUser.email;
+      
+      // Load profile data
+      loadProfileData();
+      
+      // Setup menu navigation
+      document.querySelectorAll('.profile-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          // Remove active class from all menu items and sections
+          document.querySelectorAll('.profile-menu-item').forEach(i => i.classList.remove('active'));
+          document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+          
+          // Add active class to clicked menu item and corresponding section
+          item.classList.add('active');
+          document.getElementById(item.dataset.target).classList.add('active');
+        });
+      });
+      
+      // Setup form submissions
+      document.getElementById('personal-info-form').addEventListener('submit', savePersonalInfo);
+      document.getElementById('security-form').addEventListener('submit', saveSecuritySettings);
+      document.getElementById('preferences-form').addEventListener('submit', savePreferences);
+      document.getElementById('account-form').addEventListener('submit', saveAccountSettings);
+    });
+    
+    function loadProfileData() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Load profile picture if exists
+      if (currentUser.avatar) {
+        document.getElementById('avatarImage').innerHTML = `<img src="${currentUser.avatar}" alt="Profile Picture">`;
+      }
+      
+      // Populate personal info form
+      document.getElementById('fullName').value = currentUser.name || '';
+      document.getElementById('email').value = currentUser.email || '';
+      document.getElementById('phone').value = currentUser.phone || '';
+      document.getElementById('dateOfBirth').value = currentUser.dateOfBirth || '';
+      document.getElementById('gender').value = currentUser.gender || '';
+      document.getElementById('bloodGroup').value = currentUser.bloodGroup || '';
+      document.getElementById('address').value = currentUser.address || '';
+      document.getElementById('city').value = currentUser.city || '';
+      document.getElementById('state').value = currentUser.state || '';
+      document.getElementById('pincode').value = currentUser.pincode || '';
+      
+      // Populate preferences
+      document.getElementById('emailNotif').checked = currentUser.preferences?.emailNotif !== false;
+      document.getElementById('smsNotif').checked = currentUser.preferences?.smsNotif !== false;
+      document.getElementById('appointmentReminder').checked = currentUser.preferences?.appointmentReminder !== false;
+      document.getElementById('shareMedicalHistory').checked = currentUser.preferences?.shareMedicalHistory !== false;
+      document.getElementById('twoFactorAuth').checked = currentUser.security?.twoFactorAuth === true;
+      document.getElementById('language').value = currentUser.language || 'en';
+    }
+    
+    function savePersonalInfo(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update user object with form values
+      currentUser.name = document.getElementById('fullName').value;
+      currentUser.email = document.getElementById('email').value;
+      currentUser.phone = document.getElementById('phone').value;
+      currentUser.dateOfBirth = document.getElementById('dateOfBirth').value;
+      currentUser.gender = document.getElementById('gender').value;
+      currentUser.bloodGroup = document.getElementById('bloodGroup').value;
+      currentUser.address = document.getElementById('address').value;
+      currentUser.city = document.getElementById('city').value;
+      currentUser.state = document.getElementById('state').value;
+      currentUser.pincode = document.getElementById('pincode').value;
+      
+      // Update sidebar profile info
+      document.getElementById('profile-name').textContent = currentUser.name;
+      document.getElementById('profile-email').textContent = currentUser.email;
+      
+      // Save updated user to localStorage
+      saveUserData(currentUser);
+      
+      alert('Personal information updated successfully');
+    }
+    
+    function saveSecuritySettings(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Check if user wants to change password
+      if (currentPassword && newPassword && confirmPassword) {
+        // Verify current password
+        if (currentPassword !== currentUser.password) {
+          alert('Current password is incorrect');
+          return;
+        }
+        
+        // Verify new passwords match
+        if (newPassword !== confirmPassword) {
+          alert('New passwords do not match');
+          return;
+        }
+        
+        // Update password
+        currentUser.password = newPassword;
+      }
+      
+      // Update 2FA setting
+      if (!currentUser.security) currentUser.security = {};
+      currentUser.security.twoFactorAuth = document.getElementById('twoFactorAuth').checked;
+      
+      // Save updated user to localStorage
+      saveUserData(currentUser);
+      
+      // Reset password fields
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      
+      alert('Security settings updated successfully');
+    }
+    
+    function savePreferences(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update preferences
+      if (!currentUser.preferences) currentUser.preferences = {};
+      currentUser.preferences.emailNotif = document.getElementById('emailNotif').checked;
+      currentUser.preferences.smsNotif = document.getElementById('smsNotif').checked;
+      currentUser.preferences.appointmentReminder = document.getElementById('appointmentReminder').checked;
+      currentUser.preferences.shareMedicalHistory = document.getElementById('shareMedicalHistory').checked;
+      
+      // Save updated user to localStorage
+      saveUserData(currentUser);
+      
+      alert('Preferences updated successfully');
+    }
+    
+    function saveAccountSettings(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update language preference
+      currentUser.language = document.getElementById('language').value;
+      
+      // Save updated user to localStorage
+      saveUserData(currentUser);
+      
+      alert('Account settings updated successfully');
+    }
+    
+    function updateAvatar(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          // Display the image
+          document.getElementById('avatarImage').innerHTML = `<img src="${e.target.result}" alt="Profile Picture">`;
+          
+          // Save avatar to user data
+          const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+          if (currentUser) {
+            currentUser.avatar = e.target.result;
+            saveUserData(currentUser);
+          }
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    
+    function resetForm(formId) {
+      document.getElementById(formId).reset();
+      loadProfileData();
+    }
+    
+    function confirmDeleteAccount() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) return;
+        
+        // Get all users
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Remove current user
+        const updatedUsers = users.filter(user => user.id !== currentUser.id);
+        
+        // Save updated users list
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+        
+        // Clear current user
+        localStorage.removeItem('currentUser');
+        
+        // Redirect to login page
+        window.location.href = '../../index.html';
+      }
+    }
+    
+    function saveUserData(userData) {
+      // Save to currentUser in localStorage
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      
+      // Update user in users array
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const userIndex = users.findIndex(user => user.id === userData.id);
+      
+      if (userIndex !== -1) {
+        users[userIndex] = userData;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+  </script>
+</body>
+</html> 

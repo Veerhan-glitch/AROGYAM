@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Fees - Arogyam Admin</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+    
+    .appointment-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .appointment-table th, 
+    .appointment-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .appointment-table th {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .appointment-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .appointment-table tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .fee-distribution {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .chart-placeholder {
+      background-color: var(--primary-light);
+      height: 300px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-style: italic;
+    }
+    
+    .filter-section {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .status-completed {
+      background-color: rgba(46, 204, 113, 0.15);
+      color: #27ae60;
+    }
+    
+    .status-scheduled {
+      background-color: rgba(52, 152, 219, 0.15);
+      color: #2980b9;
+    }
+    
+    .status-cancelled {
+      background-color: rgba(231, 76, 60, 0.15);
+      color: #c0392b;
+    }
+    
+    .status-pending {
+      background-color: rgba(241, 196, 15, 0.15);
+      color: #f39c12;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Recent Doctor Appointments & Fee Analysis</h2>
+    </div>
+
+    <div class="subpage-content">
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-value" id="totalAppointmentsValue">0</div>
+          <div class="stat-label">Total Appointments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="avgFeeValue">₹0</div>
+          <div class="stat-label">Average Fee</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="completedAppointmentsValue">0</div>
+          <div class="stat-label">Completed Appointments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="doctorCountValue">0</div>
+          <div class="stat-label">Doctors with Appointments</div>
+        </div>
+      </div>
+
+      <div class="fee-distribution">
+        <h3>Fee Distribution by Specialization</h3>
+        <div class="chart-placeholder">
+          <p>Fee distribution chart would be displayed here in a real application</p>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-group">
+          <label for="dateRangeFilter">Time Period:</label>
+          <select id="dateRangeFilter" onchange="applyFilters()">
+            <option value="all">All Time</option>
+            <option value="week" selected>Last Week</option>
+            <option value="month">Last Month</option>
+            <option value="quarter">Last Quarter</option>
+            <option value="year">Last Year</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="statusFilter">Status:</label>
+          <select id="statusFilter" onchange="applyFilters()">
+            <option value="all">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="specializationFilter">Specialization:</label>
+          <select id="specializationFilter" onchange="applyFilters()">
+            <option value="all">All Specializations</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Neurology">Neurology</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>Recent Appointments</h3>
+      <div id="appointmentsTableContainer">
+        <table class="appointment-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Specialization</th>
+              <th>Fee (₹)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="appointmentsTableBody">
+            <!-- Appointments will be loaded here -->
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                Loading appointments...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load appointments data
+      loadAppointmentsData();
+    });
+
+    function loadAppointmentsData() {
+      // Get appointments
+      const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      
+      // Get users and doctors for name lookups
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      
+      // Apply filters
+      const dateRange = document.getElementById('dateRangeFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const specialization = document.getElementById('specializationFilter').value;
+      
+      let filteredAppointments = [...appointments];
+      
+      // Apply date filter
+      if (dateRange !== 'all') {
+        const now = new Date();
+        let cutoffDate = new Date();
+        
+        switch (dateRange) {
+          case 'week':
+            cutoffDate.setDate(now.getDate() - 7);
+            break;
+          case 'month':
+            cutoffDate.setMonth(now.getMonth() - 1);
+            break;
+          case 'quarter':
+            cutoffDate.setMonth(now.getMonth() - 3);
+            break;
+          case 'year':
+            cutoffDate.setFullYear(now.getFullYear() - 1);
+            break;
+        }
+        
+        filteredAppointments = filteredAppointments.filter(appointment => {
+          return new Date(appointment.date) >= cutoffDate;
+        });
+      }
+      
+      // Apply status filter
+      if (status !== 'all') {
+        filteredAppointments = filteredAppointments.filter(appointment => 
+          appointment.status && appointment.status.toLowerCase() === status.toLowerCase()
+        );
+      }
+      
+      // Apply specialization filter
+      if (specialization !== 'all') {
+        filteredAppointments = filteredAppointments.filter(appointment => {
+          const doctor = doctors.find(d => d.id === appointment.doctorId);
+          return doctor && doctor.specialization === specialization;
+        });
+      }
+      
+      // Sort by date (newest first)
+      filteredAppointments.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      // Calculate statistics
+      const totalAppointments = filteredAppointments.length;
+      
+      // Calculate fee stats
+      let totalFees = 0;
+      let completedCount = 0;
+      const doctorsWithAppointments = new Set();
+      
+      filteredAppointments.forEach(appointment => {
+        const fee = appointment.fee ? parseFloat(appointment.fee) : 0;
+        totalFees += fee;
+        
+        if (appointment.status && appointment.status.toLowerCase() === 'completed') {
+          completedCount++;
+        }
+        
+        if (appointment.doctorId) {
+          doctorsWithAppointments.add(appointment.doctorId);
+        }
+      });
+      
+      const avgFee = totalAppointments > 0 ? totalFees / totalAppointments : 0;
+      
+      // Update stats
+      document.getElementById('totalAppointmentsValue').textContent = totalAppointments;
+      document.getElementById('avgFeeValue').textContent = '₹' + avgFee.toLocaleString(undefined, {maximumFractionDigits: 0});
+      document.getElementById('completedAppointmentsValue').textContent = completedCount;
+      document.getElementById('doctorCountValue').textContent = doctorsWithAppointments.size;
+      
+      // Display appointments (limited to the most recent 20)
+      renderAppointments(filteredAppointments.slice(0, 20), users, doctors);
+    }
+
+    function renderAppointments(appointments, users, doctors) {
+      const tableBody = document.getElementById('appointmentsTableBody');
+      
+      if (appointments.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+              No appointments found matching the selected filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      const appointmentsHTML = appointments.map(appointment => {
+        // Get patient name
+        const patient = users.find(user => user.id === appointment.userId);
+        const patientName = patient ? patient.name : 'Unknown Patient';
+        
+        // Get doctor name and specialization
+        const doctor = doctors.find(doc => doc.id === appointment.doctorId);
+        const doctorName = doctor ? doctor.name : 'Unknown Doctor';
+        const specialization = doctor ? doctor.specialization : 'Unknown';
+        
+        // Format date and time
+        const appointmentDate = new Date(appointment.date);
+        const dateFormatted = appointmentDate.toLocaleDateString();
+        const timeFormatted = appointmentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        // Get status and corresponding badge class
+        const status = appointment.status || 'Pending';
+        let statusClass = 'status-pending';
+        
+        switch(status.toLowerCase()) {
+          case 'completed':
+            statusClass = 'status-completed';
+            break;
+          case 'scheduled':
+            statusClass = 'status-scheduled';
+            break;
+          case 'cancelled':
+            statusClass = 'status-cancelled';
+            break;
+        }
+        
+        // Get fee
+        const fee = appointment.fee ? parseFloat(appointment.fee) : 0;
+        
+        return `
+          <tr>
+            <td>${dateFormatted}, ${timeFormatted}</td>
+            <td>${patientName}</td>
+            <td>${doctorName}</td>
+            <td>${specialization}</td>
+            <td>₹${fee.toLocaleString()}</td>
+            <td><span class="status-badge ${statusClass}">${status}</span></td>
+          </tr>
+        `;
+      }).join('');
+      
+      tableBody.innerHTML = appointmentsHTML;
+    }
+
+    function applyFilters() {
+      loadAppointmentsData();
+    }
+  </script>
+</body>
+</html> 

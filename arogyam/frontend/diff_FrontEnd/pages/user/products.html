@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .products-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .product-card {
+      background-color: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .product-image {
+      height: 180px;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .product-image i {
+      font-size: 64px;
+      color: var(--primary-color);
+    }
+    
+    .discount-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--warning-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    
+    .product-details {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+    
+    .product-category {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+    
+    .product-description {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      margin-bottom: 10px;
+      flex-grow: 1;
+    }
+    
+    .product-price {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+      margin-top: auto;
+    }
+    
+    .current-price {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+    }
+    
+    .original-price {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      text-decoration: line-through;
+    }
+    
+    .rating-reviews {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .rating {
+      display: flex;
+      align-items: center;
+    }
+    
+    .rating i {
+      color: var(--warning-color);
+      margin-right: 3px;
+    }
+    
+    .reviews {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .section-title {
+      margin: 40px 0 20px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .see-all {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .see-all i {
+      margin-left: 5px;
+    }
+    
+    .category-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .category-pill {
+      padding: 8px 16px;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+    
+    .category-pill:hover,
+    .category-pill.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .filter-section {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      gap: 5px;
+    }
+    
+    .page-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .page-btn:hover,
+    .page-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    @media (max-width: 768px) {
+      .products-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .category-filter {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+        display: block;
+      }
+      
+      .category-pill {
+        display: inline-block;
+        margin-right: 5px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .products-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Products</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <!-- Trending Products Section -->
+      <div class="section-title">
+        <h3>Trending Products</h3>
+        <a href="#" class="see-all" onclick="showAllTrending()">See all <i class="fas fa-chevron-right"></i></a>
+      </div>
+      
+      <div id="trendingProducts" class="products-container">
+        <!-- Trending products will be loaded here -->
+      </div>
+      
+      <!-- All Products Section -->
+      <div class="section-title">
+        <h3>All Products</h3>
+        <div class="filter-group">
+          <select id="sortProducts" onchange="filterProducts()">
+            <option value="popular">Most Popular</option>
+            <option value="newest">Newest</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-group">
+          <input type="text" id="searchProducts" placeholder="Search products" class="search-input">
+          <button class="action-btn" onclick="searchProducts()"><i class="fas fa-search"></i></button>
+        </div>
+        
+        <div class="category-filter" id="categoryFilter">
+          <button class="category-pill active" data-category="all">All</button>
+          <button class="category-pill" data-category="ayurvedic">Ayurvedic</button>
+          <button class="category-pill" data-category="allopathic">Allopathic</button>
+          <button class="category-pill" data-category="homeopathic">Homeopathic</button>
+          <button class="category-pill" data-category="vitamins">Vitamins & Supplements</button>
+          <button class="category-pill" data-category="devices">Medical Devices</button>
+          <button class="category-pill" data-category="personal-care">Personal Care</button>
+        </div>
+      </div>
+      
+      <div id="productsGrid" class="products-container">
+        <!-- Products will be loaded here -->
+      </div>
+      
+      <div class="pagination" id="pagination">
+        <!-- Pagination will be generated here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    let allProducts = [];
+    let currentPage = 1;
+    const productsPerPage = 8;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+      
+      // Initialize back button
+      document.querySelector('.back-btn').addEventListener('click', () => {
+        navigateBack();
+      });
+      
+      // Set up category filter
+      setupCategoryFilter();
+      
+      // Load products data
+      allProducts = getProducts();
+      loadTrendingProducts();
+      filterProducts();
+      
+      // Set up search input
+      document.getElementById('searchProducts').addEventListener('input', filterProducts);
+      
+      // Set up sort select
+      document.getElementById('sortProducts').addEventListener('change', filterProducts);
+    });
+    
+    function setupCategoryFilter() {
+      const categoryButtons = document.querySelectorAll('.category-pill');
+      categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons
+          categoryButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          // Filter products by category
+          filterProducts();
+        });
+      });
+    }
+
+    function loadTrendingProducts() {
+      const trendingProducts = getTrendingProducts();
+      displayProducts(trendingProducts, 'trendingProducts');
+    }
+
+    function filterProducts() {
+      const searchTerm = document.getElementById('searchProducts').value.toLowerCase();
+      const sortBy = document.getElementById('sortProducts').value;
+      const activeCategory = document.querySelector('.category-pill.active').dataset.category;
+      
+      let filteredProducts = [...allProducts];
+      
+      // Filter by category
+      if (activeCategory !== 'all') {
+        filteredProducts = filteredProducts.filter(product => product.category === activeCategory);
+      }
+      
+      // Filter by search term
+      if (searchTerm) {
+        filteredProducts = filteredProducts.filter(
+          product => product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      // Sort products
+      switch (sortBy) {
+        case 'popular':
+          filteredProducts.sort((a, b) => b.sales - a.sales);
+          break;
+        case 'newest':
+          filteredProducts.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
+          break;
+        case 'price-low':
+          filteredProducts.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-high':
+          filteredProducts.sort((a, b) => b.price - a.price);
+          break;
+        case 'rating':
+          filteredProducts.sort((a, b) => b.rating - a.rating);
+          break;
+      }
+      
+      // Reset current page
+      currentPage = 1;
+      
+      // Display paginated products
+      displayPaginatedProducts(filteredProducts);
+    }
+
+    function displayPaginatedProducts(products) {
+      // Calculate total pages
+      const totalPages = Math.ceil(products.length / productsPerPage);
+      
+      // Get products for current page
+      const startIndex = (currentPage - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+      const currentProducts = products.slice(startIndex, endIndex);
+      
+      // Display products
+      displayProducts(currentProducts, 'productsGrid');
+      
+      // Generate pagination
+      generatePagination(totalPages);
+    }
+
+    function generatePagination(totalPages) {
+      const paginationContainer = document.getElementById('pagination');
+      paginationContainer.innerHTML = '';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.classList.add('page-btn');
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.disabled = currentPage === 1;
+      prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          filterProducts();
+        }
+      });
+      paginationContainer.appendChild(prevButton);
+      
+      // Page buttons
+      const maxButtons = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+      let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+      
+      if (endPage - startPage + 1 < maxButtons) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.classList.add('page-btn');
+        if (i === currentPage) {
+          pageButton.classList.add('active');
+        }
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          filterProducts();
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.classList.add('page-btn');
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          filterProducts();
+        }
+      });
+      paginationContainer.appendChild(nextButton);
+    }
+
+    function displayProducts(products, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p class="empty-state">No products found</p>';
+        return;
+      }
+      
+      container.innerHTML = products.map(product => createProductCard(product)).join('');
+    }
+
+    function createProductCard(product) {
+      // Calculate discount percentage if there's an original price
+      const discountBadge = product.originalPrice ? 
+        `<div class="discount-badge">-${Math.round((1 - product.price / product.originalPrice) * 100)}%</div>` : '';
+      
+      // Original price display
+      const originalPrice = product.originalPrice ? 
+        `<div class="original-price">₹${product.originalPrice}</div>` : '';
+      
+      return `
+        <div class="product-card">
+          <div class="product-image">
+            <i class="fas fa-pills"></i>
+            ${discountBadge}
+          </div>
+          <div class="product-details">
+            <div class="product-name">${product.name}</div>
+            <div class="product-category">${product.category}</div>
+            <div class="product-description">${product.description}</div>
+            
+            <div class="product-price">
+              <div class="current-price">₹${product.price}</div>
+              ${originalPrice}
+            </div>
+            
+            <div class="rating-reviews">
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                ${product.rating.toFixed(1)}
+              </div>
+              <div class="reviews">${product.reviews} reviews</div>
+            </div>
+            
+            <div class="product-actions">
+              <button class="action-btn" onclick="addToCart('${product.id}')">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="action-btn secondary" onclick="viewProductDetails('${product.id}')">
+                <i class="fas fa-info-circle"></i> Details
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getProducts() {
+      // In a real app, this would fetch from an API
+      // For demo, we'll use dummy data
+      return [
+        {
+          id: 'prod1',
+          name: 'Ashwagandha Tablets',
+          category: 'ayurvedic',
+          description: 'Natural stress reliever and immunity booster',
+          price: 299,
+          originalPrice: 399,
+          rating: 4.7,
+          reviews: 128,
+          sales: 2500,
+          addedDate: '2023-01-15'
+        },
+        {
+          id: 'prod2',
+          name: 'Blood Pressure Monitor',
+          category: 'devices',
+          description: 'Digital BP monitor for home use',
+          price: 1499,
+          originalPrice: 1999,
+          rating: 4.5,
+          reviews: 86,
+          sales: 1200,
+          addedDate: '2023-02-20'
+        },
+        {
+          id: 'prod3',
+          name: 'Multivitamin Capsules',
+          category: 'vitamins',
+          description: 'Complete daily essential vitamins and minerals',
+          price: 599,
+          originalPrice: null,
+          rating: 4.8,
+          reviews: 215,
+          sales: 3800,
+          addedDate: '2023-03-10'
+        },
+        {
+          id: 'prod4',
+          name: 'Diabetes Care Tablets',
+          category: 'allopathic',
+          description: 'Helps maintain healthy blood sugar levels',
+          price: 450,
+          originalPrice: 599,
+          rating: 4.6,
+          reviews: 94,
+          sales: 1700,
+          addedDate: '2023-04-05'
+        },
+        {
+          id: 'prod5',
+          name: 'Herbal Cough Syrup',
+          category: 'ayurvedic',
+          description: 'Natural remedy for cough and throat irritation',
+          price: 180,
+          originalPrice: 210,
+          rating: 4.2,
+          reviews: 67,
+          sales: 2100,
+          addedDate: '2023-05-12'
+        },
+        {
+          id: 'prod6',
+          name: 'Pain Relief Spray',
+          category: 'allopathic',
+          description: 'Fast-acting relief for muscle pain',
+          price: 250,
+          originalPrice: null,
+          rating: 4.4,
+          reviews: 78,
+          sales: 1900,
+          addedDate: '2023-06-18'
+        },
+        {
+          id: 'prod7',
+          name: 'Digital Thermometer',
+          category: 'devices',
+          description: 'Accurate temperature measurement in seconds',
+          price: 199,
+          originalPrice: 299,
+          rating: 4.3,
+          reviews: 56,
+          sales: 2300,
+          addedDate: '2023-07-22'
+        },
+        {
+          id: 'prod8',
+          name: 'Protein Powder',
+          category: 'vitamins',
+          description: 'High-quality protein supplement for muscle building',
+          price: 999,
+          originalPrice: 1299,
+          rating: 4.7,
+          reviews: 112,
+          sales: 1600,
+          addedDate: '2023-08-08'
+        },
+        {
+          id: 'prod9',
+          name: 'Homeopathic Digestion Aid',
+          category: 'homeopathic',
+          description: 'Natural remedy for digestive issues',
+          price: 350,
+          originalPrice: null,
+          rating: 4.1,
+          reviews: 45,
+          sales: 980,
+          addedDate: '2023-09-14'
+        },
+        {
+          id: 'prod10',
+          name: 'Face Wash',
+          category: 'personal-care',
+          description: 'Gentle cleansing face wash for all skin types',
+          price: 220,
+          originalPrice: 280,
+          rating: 4.5,
+          reviews: 89,
+          sales: 2700,
+          addedDate: '2023-10-05'
+        },
+        {
+          id: 'prod11',
+          name: 'Glucose Meter',
+          category: 'devices',
+          description: 'Blood glucose monitoring system',
+          price: 1299,
+          originalPrice: 1599,
+          rating: 4.6,
+          reviews: 72,
+          sales: 950,
+          addedDate: '2023-11-11'
+        },
+        {
+          id: 'prod12',
+          name: 'Chyawanprash',
+          category: 'ayurvedic',
+          description: 'Traditional immunity booster jam',
+          price: 320,
+          originalPrice: 350,
+          rating: 4.8,
+          reviews: 156,
+          sales: 3200,
+          addedDate: '2023-12-01'
+        },
+        {
+          id: 'prod13',
+          name: 'Calcium Supplements',
+          category: 'vitamins',
+          description: 'Essential for bone health',
+          price: 450,
+          originalPrice: 499,
+          rating: 4.4,
+          reviews: 65,
+          sales: 1400,
+          addedDate: '2024-01-07'
+        },
+        {
+          id: 'prod14',
+          name: 'Hand Sanitizer',
+          category: 'personal-care',
+          description: 'Kills 99.9% of germs without water',
+          price: 99,
+          originalPrice: 120,
+          rating: 4.3,
+          reviews: 47,
+          sales: 4200,
+          addedDate: '2024-02-15'
+        },
+        {
+          id: 'prod15',
+          name: 'Homeopathic Allergy Relief',
+          category: 'homeopathic',
+          description: 'Natural remedy for seasonal allergies',
+          price: 280,
+          originalPrice: null,
+          rating: 4.0,
+          reviews: 38,
+          sales: 760,
+          addedDate: '2024-03-03'
+        },
+        {
+          id: 'prod16',
+          name: 'Vitamin C Tablets',
+          category: 'vitamins',
+          description: 'Immunity support and antioxidant',
+          price: 399,
+          originalPrice: 499,
+          rating: 4.7,
+          reviews: 92,
+          sales: 2900,
+          addedDate: '2024-03-20'
+        }
+      ];
+    }
+
+    function getTrendingProducts() {
+      // In a real app, this would fetch from an API
+      // For demo, we'll return a subset of products marked as trending
+      const products = getProducts();
+      
+      // Sort by sales as a proxy for trending
+      return [...products].sort((a, b) => b.sales - a.sales).slice(0, 4);
+    }
+
+    function addToCart(productId) {
+      // Get product details
+      const product = allProducts.find(p => p.id === productId);
+      
+      if (!product) {
+        alert('Product not found');
+        return;
+      }
+      
+      // Get cart from localStorage
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Check if product is already in cart
+      const existingItemIndex = cart.findIndex(item => item.productId === productId);
+      
+      if (existingItemIndex >= 0) {
+        // Update quantity
+        cart[existingItemIndex].quantity += 1;
+      } else {
+        // Add new item
+        cart.push({
+          productId: productId,
+          name: product.name,
+          price: product.price,
+          quantity: 1
+        });
+      }
+      
+      // Save cart to localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Show success message
+      alert(`${product.name} added to cart`);
+    }
+
+    function viewProductDetails(productId) {
+      // In a real app, this would navigate to product details page
+      alert('View product details feature will be implemented in the complete application');
+    }
+
+    function showAllTrending() {
+      // In a real app, this would filter to show all trending products
+      document.getElementById('sortProducts').value = 'popular';
+      filterProducts();
+      
+      // Scroll to all products section
+      document.querySelector('.section-title:nth-of-type(2)').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function searchProducts() {
+      filterProducts();
+    }
+  </script>
+</body>
+</html> 

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Records - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .records-container {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .record-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .record-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .record-icon {
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 20px;
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+    
+    .record-info {
+      flex: 1;
+    }
+    
+    .record-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+    
+    .record-date {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    
+    .record-desc {
+      margin-bottom: 10px;
+    }
+    
+    .record-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    
+    .record-tag {
+      background-color: var(--secondary-light);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--secondary-color);
+    }
+    
+    .record-actions {
+      display: flex;
+      gap: 10px;
+      margin-left: 20px;
+    }
+    
+    .record-actions button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .view-btn {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+    }
+    
+    .view-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .delete-btn {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #ff3b30;
+    }
+    
+    .delete-btn:hover {
+      background-color: #ff3b30;
+      color: white;
+    }
+    
+    .share-btn {
+      background-color: rgba(0, 122, 255, 0.1);
+      color: #007aff;
+    }
+    
+    .share-btn:hover {
+      background-color: #007aff;
+      color: white;
+    }
+    
+    .upload-section {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 20px;
+    }
+    
+    .upload-area:hover {
+      border-color: var(--primary-color);
+      background-color: var(--primary-light);
+    }
+    
+    .upload-icon {
+      font-size: 48px;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+    
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: var(--secondary-light);
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      margin: 0;
+      color: var(--primary-color);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+    
+    .modal-close:hover {
+      color: var(--primary-color);
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .modal-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Medical Records</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h3>Upload New Record</h3>
+        <div class="upload-area" id="dropZone">
+          <div class="upload-icon">
+            <i class="fas fa-file-medical"></i>
+          </div>
+          <h4>Drag and drop your files here</h4>
+          <p>or click to browse your computer</p>
+          <input type="file" id="fileInput" style="display: none" multiple>
+        </div>
+        
+        <div class="form-group">
+          <label for="documentType">Document Type</label>
+          <select id="documentType" class="form-control">
+            <option value="">Select document type</option>
+            <option value="Medical Report">Medical Report</option>
+            <option value="Lab Result">Lab Result</option>
+            <option value="X-Ray">X-Ray</option>
+            <option value="MRI Scan">MRI Scan</option>
+            <option value="CT Scan">CT Scan</option>
+            <option value="Vaccination Record">Vaccination Record</option>
+            <option value="Prescription">Prescription</option>
+            <option value="Insurance Document">Insurance Document</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="documentDescription">Description</label>
+          <textarea id="documentDescription" class="form-control" rows="3" placeholder="Provide a brief description of this document"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="documentTags">Tags (comma separated)</label>
+          <input type="text" id="documentTags" class="form-control" placeholder="e.g. heart, cholesterol, annual checkup">
+        </div>
+        
+        <button class="action-btn" id="uploadButton">
+          <i class="fas fa-upload"></i> Upload Document
+        </button>
+      </div>
+      
+      <!-- Filters Section -->
+      <div class="filters">
+        <div class="filter-group">
+          <label for="filterType">Filter by Type</label>
+          <select id="filterType" class="form-control">
+            <option value="">All Types</option>
+            <option value="Medical Report">Medical Reports</option>
+            <option value="Lab Result">Lab Results</option>
+            <option value="X-Ray">X-Rays</option>
+            <option value="MRI Scan">MRI Scans</option>
+            <option value="CT Scan">CT Scans</option>
+            <option value="Vaccination Record">Vaccination Records</option>
+            <option value="Prescription">Prescriptions</option>
+            <option value="Insurance Document">Insurance Documents</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sortBy">Sort by</label>
+          <select id="sortBy" class="form-control">
+            <option value="date-desc">Date (Newest First)</option>
+            <option value="date-asc">Date (Oldest First)</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="searchRecords">Search Records</label>
+          <input type="text" id="searchRecords" class="form-control" placeholder="Search by name, description or tags">
+        </div>
+      </div>
+      
+      <!-- Records List -->
+      <div id="recordsContainer" class="records-container">
+        <!-- Records will be loaded here -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Document Viewer Modal -->
+  <div id="documentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Document Title</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Document content will be displayed here -->
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn secondary" id="downloadDocument">
+          <i class="fas fa-download"></i> Download
+        </button>
+        <button class="action-btn" id="printDocument">
+          <i class="fas fa-print"></i> Print
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Share Document Modal -->
+  <div id="shareModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Share Document</h3>
+        <button class="modal-close shareModalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="recipientEmail">Recipient Email</label>
+          <input type="email" id="recipientEmail" class="form-control" placeholder="Enter email address">
+        </div>
+        
+        <div class="form-group">
+          <label for="accessDuration">Access Duration</label>
+          <select id="accessDuration" class="form-control">
+            <option value="24h">24 Hours</option>
+            <option value="7d">7 Days</option>
+            <option value="30d">30 Days</option>
+            <option value="unlimited">Unlimited</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="shareMessage">Message (Optional)</label>
+          <textarea id="shareMessage" class="form-control" rows="3" placeholder="Add a message to the recipient"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn secondary shareModalClose">Cancel</button>
+        <button class="action-btn" id="sendShareLink">
+          <i class="fas fa-paper-plane"></i> Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize back button
+      document.querySelector('.back-btn').addEventListener('click', () => {
+        navigateBack();
+      });
+      
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+      
+      // Load records
+      loadMedicalRecords();
+      
+      // Initialize upload functionality
+      initializeUpload();
+      
+      // Initialize filters
+      document.getElementById('filterType').addEventListener('change', loadMedicalRecords);
+      document.getElementById('sortBy').addEventListener('change', loadMedicalRecords);
+      document.getElementById('searchRecords').addEventListener('input', loadMedicalRecords);
+      
+      // Initialize modals
+      document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('documentModal').classList.remove('active');
+      });
+      
+      document.querySelectorAll('.shareModalClose').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('shareModal').classList.remove('active');
+        });
+      });
+      
+      document.getElementById('sendShareLink').addEventListener('click', shareDocument);
+    });
+
+    function initializeUpload() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const uploadButton = document.getElementById('uploadButton');
+      
+      // Open file browser when clicking on drop zone
+      dropZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      // Handle drag and drop
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = var('--primary-color');
+        dropZone.style.backgroundColor = var('--primary-light');
+      });
+      
+      dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '';
+        dropZone.style.backgroundColor = '';
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '';
+        dropZone.style.backgroundColor = '';
+        
+        const files = e.dataTransfer.files;
+        fileInput.files = files;
+        showSelectedFiles(files);
+      });
+      
+      // Show selected files when using file browser
+      fileInput.addEventListener('change', () => {
+        showSelectedFiles(fileInput.files);
+      });
+      
+      // Handle upload button click
+      uploadButton.addEventListener('click', uploadMedicalRecords);
+    }
+
+    function showSelectedFiles(files) {
+      if (files.length === 0) return;
+      
+      // In a real app, you might want to show a preview of selected files
+      // For now, just show the number of files selected
+      alert(`Selected ${files.length} file(s)`);
+    }
+
+    function uploadMedicalRecords() {
+      const fileInput = document.getElementById('fileInput');
+      const documentType = document.getElementById('documentType').value;
+      const description = document.getElementById('documentDescription').value;
+      const tags = document.getElementById('documentTags').value;
+      
+      // Basic validation
+      if (fileInput.files.length === 0) {
+        alert('Please select at least one file');
+        return;
+      }
+      
+      if (!documentType) {
+        alert('Please select a document type');
+        return;
+      }
+      
+      // In a real app, this would upload the file to a server
+      // For our demo, we'll simulate adding a record to localStorage
+      
+      // Get current records or initialize empty array
+      const records = JSON.parse(localStorage.getItem('medicalRecords')) || [];
+      
+      // Create record objects for each file
+      Array.from(fileInput.files).forEach(file => {
+        const record = {
+          id: 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+          name: file.name,
+          type: documentType,
+          description: description,
+          tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+          size: file.size,
+          date: new Date().toISOString(),
+          userId: JSON.parse(localStorage.getItem('currentUser')).id
+        };
+        
+        records.push(record);
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('medicalRecords', JSON.stringify(records));
+      
+      // Reset form
+      document.getElementById('fileInput').value = '';
+      document.getElementById('documentType').value = '';
+      document.getElementById('documentDescription').value = '';
+      document.getElementById('documentTags').value = '';
+      
+      // Reload records
+      loadMedicalRecords();
+      
+      // Show success message
+      alert('Medical records uploaded successfully!');
+    }
+
+    function loadMedicalRecords() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Get all records
+      let records = JSON.parse(localStorage.getItem('medicalRecords')) || [];
+      
+      // Filter by current user
+      records = records.filter(record => record.userId === currentUser.id);
+      
+      // Apply filters
+      const filterType = document.getElementById('filterType').value;
+      const searchTerm = document.getElementById('searchRecords').value.toLowerCase();
+      const sortBy = document.getElementById('sortBy').value;
+      
+      if (filterType) {
+        records = records.filter(record => record.type === filterType);
+      }
+      
+      if (searchTerm) {
+        records = records.filter(record => {
+          return record.name.toLowerCase().includes(searchTerm) ||
+                 record.description.toLowerCase().includes(searchTerm) ||
+                 record.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        });
+      }
+      
+      // Apply sorting
+      if (sortBy === 'date-desc') {
+        records.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } else if (sortBy === 'date-asc') {
+        records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else if (sortBy === 'name-asc') {
+        records.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortBy === 'name-desc') {
+        records.sort((a, b) => b.name.localeCompare(a.name));
+      }
+      
+      // Display records
+      const container = document.getElementById('recordsContainer');
+      
+      if (records.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-file-medical"></i>
+            <h3>No medical records found</h3>
+            <p>Upload your medical records to keep them organized and accessible.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = records.map(record => {
+        // Format date
+        const recordDate = new Date(record.date);
+        const formattedDate = recordDate.toLocaleDateString() + ' at ' + recordDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        // Format tags
+        const tagHtml = record.tags.map(tag => `<span class="record-tag">${tag}</span>`).join('');
+        
+        // Determine icon based on document type
+        let icon = 'fa-file-medical';
+        if (record.type === 'Lab Result') icon = 'fa-flask';
+        else if (record.type === 'X-Ray' || record.type === 'MRI Scan' || record.type === 'CT Scan') icon = 'fa-x-ray';
+        else if (record.type === 'Vaccination Record') icon = 'fa-syringe';
+        else if (record.type === 'Prescription') icon = 'fa-prescription';
+        else if (record.type === 'Insurance Document') icon = 'fa-shield-alt';
+        
+        return `
+          <div class="record-card">
+            <div class="record-icon">
+              <i class="fas ${icon}"></i>
+            </div>
+            <div class="record-info">
+              <div class="record-title">${record.name}</div>
+              <div class="record-date">Uploaded on ${formattedDate}</div>
+              <div class="record-desc">${record.description || 'No description provided'}</div>
+              <div class="record-tags">
+                <span class="record-tag">${record.type}</span>
+                ${tagHtml}
+              </div>
+            </div>
+            <div class="record-actions">
+              <button class="view-btn" onclick="viewDocument('${record.id}')">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="share-btn" onclick="openShareModal('${record.id}')">
+                <i class="fas fa-share-alt"></i>
+              </button>
+              <button class="delete-btn" onclick="deleteDocument('${record.id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function viewDocument(recordId) {
+      // Get the record
+      const records = JSON.parse(localStorage.getItem('medicalRecords')) || [];
+      const record = records.find(r => r.id === recordId);
+      
+      if (!record) {
+        alert('Record not found');
+        return;
+      }
+      
+      // Update modal content
+      document.getElementById('modalTitle').textContent = record.name;
+      
+      // In a real app, this would display the actual document
+      // For our demo, we'll just show record details
+      document.getElementById('modalBody').innerHTML = `
+        <div style="padding: 20px; text-align: center;">
+          <div style="font-size: 64px; color: var(--primary-color); margin-bottom: 20px;">
+            <i class="fas fa-file-medical"></i>
+          </div>
+          <h3>${record.name}</h3>
+          <p><strong>Type:</strong> ${record.type}</p>
+          <p><strong>Uploaded:</strong> ${new Date(record.date).toLocaleString()}</p>
+          <p><strong>Description:</strong> ${record.description || 'No description provided'}</p>
+          <p><strong>Tags:</strong> ${record.tags.join(', ') || 'No tags'}</p>
+          <div style="margin-top: 30px; padding: 20px; background-color: var(--secondary-light); border-radius: var(--radius);">
+            <p>In the production version, the actual document would be displayed here.</p>
+          </div>
+        </div>
+      `;
+      
+      // Show the modal
+      document.getElementById('documentModal').classList.add('active');
+      
+      // Set up download button
+      document.getElementById('downloadDocument').onclick = () => {
+        alert('Download functionality will be implemented in the complete application');
+      };
+      
+      // Set up print button
+      document.getElementById('printDocument').onclick = () => {
+        alert('Print functionality will be implemented in the complete application');
+      };
+    }
+
+    function openShareModal(recordId) {
+      // Get the record
+      const records = JSON.parse(localStorage.getItem('medicalRecords')) || [];
+      const record = records.find(r => r.id === recordId);
+      
+      if (!record) {
+        alert('Record not found');
+        return;
+      }
+      
+      // Store the current record ID for the share functionality
+      document.getElementById('shareModal').dataset.recordId = recordId;
+      
+      // Reset form
+      document.getElementById('recipientEmail').value = '';
+      document.getElementById('accessDuration').value = '24h';
+      document.getElementById('shareMessage').value = '';
+      
+      // Show the modal
+      document.getElementById('shareModal').classList.add('active');
+    }
+
+    function shareDocument() {
+      const recordId = document.getElementById('shareModal').dataset.recordId;
+      const recipientEmail = document.getElementById('recipientEmail').value;
+      const accessDuration = document.getElementById('accessDuration').value;
+      
+      // Basic validation
+      if (!recipientEmail) {
+        alert('Please enter a recipient email');
+        return;
+      }
+      
+      // In a real app, this would share the document with the recipient
+      // For our demo, we'll just show a success message
+      alert(`Document shared with ${recipientEmail} for ${accessDuration}`);
+      
+      // Close the modal
+      document.getElementById('shareModal').classList.remove('active');
+    }
+
+    function deleteDocument(recordId) {
+      if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+        return;
+      }
+      
+      // Get current records
+      let records = JSON.parse(localStorage.getItem('medicalRecords')) || [];
+      
+      // Filter out the record to delete
+      records = records.filter(record => record.id !== recordId);
+      
+      // Save to localStorage
+      localStorage.setItem('medicalRecords', JSON.stringify(records));
+      
+      // Reload records
+      loadMedicalRecords();
+      
+      // Show success message
+      alert('Medical record deleted successfully');
+    }
+  </script>
+</body>
+</html> 

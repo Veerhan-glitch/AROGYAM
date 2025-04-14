@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Appointments - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Doctor Appointments</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="today">Today's Appointments</button>
+        <button class="tab-btn" data-tab="upcoming">Upcoming Appointments</button>
+        <button class="tab-btn" data-tab="past">Past Appointments</button>
+        <button class="tab-btn" data-tab="schedule">My Schedule</button>
+      </div>
+      
+      <div class="tab-content active" id="today-tab">
+        <div class="filter-bar">
+          <span class="appointments-count" id="todayCount">0 appointments today</span>
+          <div class="filter-group">
+            <label for="statusFilter">Filter by Status:</label>
+            <select id="statusFilter" onchange="filterAppointments('today')">
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="todayAppointments">
+          <!-- Today's appointments will be loaded here -->
+          <p class="empty-state">Loading today's appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="upcoming-tab">
+        <div class="filter-bar">
+          <div class="date-filter">
+            <label for="dateFrom">From:</label>
+            <input type="date" id="dateFrom" onchange="filterUpcomingAppointments()">
+            <label for="dateTo">To:</label>
+            <input type="date" id="dateTo" onchange="filterUpcomingAppointments()">
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="upcomingAppointments">
+          <!-- Upcoming appointments will be loaded here -->
+          <p class="empty-state">Loading upcoming appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="past-tab">
+        <div class="filter-bar">
+          <div class="search-bar">
+            <input type="text" id="patientSearch" placeholder="Search patient name...">
+            <button onclick="searchPatients()"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="pastAppointments">
+          <!-- Past appointments will be loaded here -->
+          <p class="empty-state">Loading past appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="schedule-tab">
+        <div class="schedule-settings">
+          <h3>My Availability</h3>
+          
+          <div class="schedule-grid">
+            <div class="schedule-day">
+              <h4>Monday</h4>
+              <label class="toggle">
+                <input type="checkbox" checked id="monday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="monday-slots">
+                <div class="time-slot">
+                  <label for="monday-from">From:</label>
+                  <input type="time" id="monday-from" value="09:00">
+                  <label for="monday-to">To:</label>
+                  <input type="time" id="monday-to" value="17:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Tuesday</h4>
+              <label class="toggle">
+                <input type="checkbox" checked id="tuesday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="tuesday-slots">
+                <div class="time-slot">
+                  <label for="tuesday-from">From:</label>
+                  <input type="time" id="tuesday-from" value="09:00">
+                  <label for="tuesday-to">To:</label>
+                  <input type="time" id="tuesday-to" value="17:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Wednesday</h4>
+              <label class="toggle">
+                <input type="checkbox" checked id="wednesday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="wednesday-slots">
+                <div class="time-slot">
+                  <label for="wednesday-from">From:</label>
+                  <input type="time" id="wednesday-from" value="09:00">
+                  <label for="wednesday-to">To:</label>
+                  <input type="time" id="wednesday-to" value="17:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Thursday</h4>
+              <label class="toggle">
+                <input type="checkbox" checked id="thursday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="thursday-slots">
+                <div class="time-slot">
+                  <label for="thursday-from">From:</label>
+                  <input type="time" id="thursday-from" value="09:00">
+                  <label for="thursday-to">To:</label>
+                  <input type="time" id="thursday-to" value="17:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Friday</h4>
+              <label class="toggle">
+                <input type="checkbox" checked id="friday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="friday-slots">
+                <div class="time-slot">
+                  <label for="friday-from">From:</label>
+                  <input type="time" id="friday-from" value="09:00">
+                  <label for="friday-to">To:</label>
+                  <input type="time" id="friday-to" value="17:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Saturday</h4>
+              <label class="toggle">
+                <input type="checkbox" id="saturday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="saturday-slots">
+                <div class="time-slot">
+                  <label for="saturday-from">From:</label>
+                  <input type="time" id="saturday-from" value="09:00">
+                  <label for="saturday-to">To:</label>
+                  <input type="time" id="saturday-to" value="13:00">
+                </div>
+              </div>
+            </div>
+            
+            <div class="schedule-day">
+              <h4>Sunday</h4>
+              <label class="toggle">
+                <input type="checkbox" id="sunday-toggle">
+                <span class="slider round"></span>
+              </label>
+              <div class="time-slots" id="sunday-slots">
+                <div class="time-slot">
+                  <label for="sunday-from">From:</label>
+                  <input type="time" id="sunday-from" value="00:00">
+                  <label for="sunday-to">To:</label>
+                  <input type="time" id="sunday-to" value="00:00">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button class="action-btn" onclick="saveSchedule()">Save Schedule</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is a doctor
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'doctor') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Set up tab navigation
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active');
+          document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
+        });
+      });
+      
+      // Set date range defaults for upcoming appointments
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      
+      document.getElementById('dateFrom').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('dateTo').value = nextMonth.toISOString().split('T')[0];
+      
+      // Initialize toggle switches
+      document.querySelectorAll('.toggle input').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+          const day = this.id.split('-')[0];
+          const slots = document.getElementById(`${day}-slots`);
+          slots.style.display = this.checked ? 'block' : 'none';
+        });
+        
+        // Trigger initially
+        const day = toggle.id.split('-')[0];
+        const slots = document.getElementById(`${day}-slots`);
+        slots.style.display = toggle.checked ? 'block' : 'none';
+      });
+      
+      // Load appointments
+      loadTodayAppointments();
+      loadUpcomingAppointments();
+      loadPastAppointments();
+      loadSchedule();
+    });
+    
+    function loadTodayAppointments() {
+      // In a real app, this would be an API call
+      // Here we'll use the getTodaysAppointments function
+      const appointments = getTodaysAppointments();
+      
+      // For demo purposes, let's create some appointments
+      const demoAppointments = [
+        {
+          id: 'app1',
+          patientName: 'John Doe',
+          patientId: 'p1',
+          time: '10:00 AM',
+          reason: 'Routine checkup',
+          status: 'pending'
+        },
+        {
+          id: 'app2',
+          patientName: 'Jane Smith',
+          patientId: 'p2',
+          time: '11:30 AM',
+          reason: 'Follow-up on medication',
+          status: 'confirmed'
+        },
+        {
+          id: 'app3',
+          patientName: 'David Wilson',
+          patientId: 'p3',
+          time: '02:00 PM',
+          reason: 'Chronic pain consultation',
+          status: 'completed'
+        },
+        {
+          id: 'app4',
+          patientName: 'Emily Brown',
+          patientId: 'p4',
+          time: '03:30 PM',
+          reason: 'Annual physical',
+          status: 'cancelled'
+        }
+      ];
+      
+      renderAppointments(demoAppointments, 'todayAppointments');
+      document.getElementById('todayCount').textContent = `${demoAppointments.length} appointments today`;
+    }
+    
+    function loadUpcomingAppointments() {
+      // For demo purposes, let's create some upcoming appointments
+      const upcomingAppointments = [
+        {
+          id: 'app5',
+          patientName: 'Robert Johnson',
+          patientId: 'p5',
+          date: '2023-09-25',
+          time: '09:00 AM',
+          reason: 'Headache consultation',
+          status: 'confirmed'
+        },
+        {
+          id: 'app6',
+          patientName: 'Mary Williams',
+          patientId: 'p6',
+          date: '2023-09-26',
+          time: '10:30 AM',
+          reason: 'Prescription renewal',
+          status: 'pending'
+        },
+        {
+          id: 'app7',
+          patientName: 'James Miller',
+          patientId: 'p7',
+          date: '2023-09-27',
+          time: '03:00 PM',
+          reason: 'Back pain evaluation',
+          status: 'confirmed'
+        }
+      ];
+      
+      renderUpcomingAppointments(upcomingAppointments);
+    }
+    
+    function loadPastAppointments() {
+      // For demo purposes, let's create some past appointments
+      const pastAppointments = [
+        {
+          id: 'app8',
+          patientName: 'Patricia Martinez',
+          patientId: 'p8',
+          date: '2023-09-10',
+          time: '11:00 AM',
+          reason: 'Fever and cough',
+          status: 'completed',
+          notes: 'Prescribed antibiotics, follow-up in 7 days'
+        },
+        {
+          id: 'app9',
+          patientName: 'Thomas Anderson',
+          patientId: 'p9',
+          date: '2023-09-05',
+          time: '02:30 PM',
+          reason: 'Skin rash',
+          status: 'completed',
+          notes: 'Allergic reaction to new soap, prescribed antihistamines'
+        },
+        {
+          id: 'app10',
+          patientName: 'Linda Jackson',
+          patientId: 'p10',
+          date: '2023-08-28',
+          time: '09:15 AM',
+          reason: 'Annual physical',
+          status: 'completed',
+          notes: 'All tests normal, recommended vitamin D supplement'
+        }
+      ];
+      
+      renderPastAppointments(pastAppointments);
+    }
+    
+    function renderAppointments(appointments, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (appointments.length === 0) {
+        container.innerHTML = '<p class="empty-state">No appointments found</p>';
+        return;
+      }
+      
+      container.innerHTML = appointments.map(app => `
+        <div class="appointment-card ${app.status}">
+          <div class="appointment-header">
+            <h4>${app.patientName}</h4>
+            <span class="status ${app.status}">${app.status}</span>
+          </div>
+          <div class="appointment-details">
+            <p><i class="fas fa-clock"></i> ${app.time}</p>
+            <p><i class="fas fa-clipboard"></i> ${app.reason}</p>
+          </div>
+          <div class="appointment-actions">
+            ${getActionsForStatus(app.status, app.id)}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderUpcomingAppointments(appointments) {
+      const container = document.getElementById('upcomingAppointments');
+      
+      if (appointments.length === 0) {
+        container.innerHTML = '<p class="empty-state">No upcoming appointments found</p>';
+        return;
+      }
+      
+      container.innerHTML = appointments.map(app => `
+        <div class="appointment-card ${app.status}">
+          <div class="appointment-header">
+            <h4>${app.patientName}</h4>
+            <span class="status ${app.status}">${app.status}</span>
+          </div>
+          <div class="appointment-details">
+            <p><i class="fas fa-calendar"></i> ${new Date(app.date).toLocaleDateString()}</p>
+            <p><i class="fas fa-clock"></i> ${app.time}</p>
+            <p><i class="fas fa-clipboard"></i> ${app.reason}</p>
+          </div>
+          <div class="appointment-actions">
+            <button class="action-btn" onclick="confirmAppointment('${app.id}')">Confirm</button>
+            <button class="action-btn danger" onclick="cancelAppointment('${app.id}')">Cancel</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderPastAppointments(appointments) {
+      const container = document.getElementById('pastAppointments');
+      
+      if (appointments.length === 0) {
+        container.innerHTML = '<p class="empty-state">No past appointments found</p>';
+        return;
+      }
+      
+      container.innerHTML = appointments.map(app => `
+        <div class="appointment-card past">
+          <div class="appointment-header">
+            <h4>${app.patientName}</h4>
+            <span class="status ${app.status}">${app.status}</span>
+          </div>
+          <div class="appointment-details">
+            <p><i class="fas fa-calendar"></i> ${new Date(app.date).toLocaleDateString()}</p>
+            <p><i class="fas fa-clock"></i> ${app.time}</p>
+            <p><i class="fas fa-clipboard"></i> ${app.reason}</p>
+            ${app.notes ? `<p><i class="fas fa-notes-medical"></i> Notes: ${app.notes}</p>` : ''}
+          </div>
+          <div class="appointment-actions">
+            <button class="action-btn" onclick="viewMedicalHistory('${app.patientId}')">View Patient History</button>
+            <button class="action-btn secondary" onclick="createPrescription('${app.patientId}')">Create Prescription</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function getActionsForStatus(status, appointmentId) {
+      switch (status) {
+        case 'pending':
+          return `
+            <button class="action-btn" onclick="startConsultation('${appointmentId}')">Start Consultation</button>
+            <button class="action-btn secondary" onclick="confirmAppointment('${appointmentId}')">Confirm</button>
+            <button class="action-btn danger" onclick="cancelAppointment('${appointmentId}')">Cancel</button>
+          `;
+        case 'confirmed':
+          return `
+            <button class="action-btn" onclick="startConsultation('${appointmentId}')">Start Consultation</button>
+            <button class="action-btn secondary" onclick="rescheduleAppointment('${appointmentId}')">Reschedule</button>
+          `;
+        case 'completed':
+          return `
+            <button class="action-btn" onclick="viewConsultation('${appointmentId}')">View Consultation</button>
+            <button class="action-btn secondary" onclick="scheduleFollowUp('${appointmentId}')">Schedule Follow-up</button>
+          `;
+        case 'cancelled':
+          return `
+            <button class="action-btn secondary" onclick="restoreAppointment('${appointmentId}')">Restore</button>
+          `;
+        default:
+          return '';
+      }
+    }
+    
+    function loadSchedule() {
+      // In a real app, we'd load the schedule from an API or localStorage
+      // Here we'll just use the default values set in the HTML
+    }
+    
+    function saveSchedule() {
+      // In a real app, we'd save the schedule to an API or localStorage
+      
+      // Collect schedule data
+      const schedule = {};
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      
+      days.forEach(day => {
+        const isAvailable = document.getElementById(`${day}-toggle`).checked;
+        const fromTime = document.getElementById(`${day}-from`).value;
+        const toTime = document.getElementById(`${day}-to`).value;
+        
+        schedule[day] = {
+          available: isAvailable,
+          hours: isAvailable ? [{ from: fromTime, to: toTime }] : []
+        };
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('doctorSchedule', JSON.stringify(schedule));
+      
+      alert('Schedule saved successfully!');
+    }
+    
+    function filterAppointments(tabType) {
+      if (tabType === 'today') {
+        const statusFilter = document.getElementById('statusFilter').value;
+        loadTodayAppointments(statusFilter);
+      }
+    }
+    
+    function filterUpcomingAppointments() {
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+      
+      // In a real app, we'd make an API call with the date range
+      // Here we'll just reload the appointments
+      loadUpcomingAppointments();
+    }
+    
+    function searchPatients() {
+      const searchTerm = document.getElementById('patientSearch').value.toLowerCase();
+      
+      // In a real app, we'd make an API call with the search term
+      // Here we'll just reload the appointments
+      loadPastAppointments();
+    }
+    
+    // Appointment actions
+    function startConsultation(appointmentId) {
+      alert(`Starting consultation for appointment ${appointmentId}. In a real application, this would open the consultation interface.`);
+    }
+    
+    function confirmAppointment(appointmentId) {
+      alert(`Appointment ${appointmentId} confirmed successfully!`);
+      // In a real app, we'd update the appointment status in the database
+    }
+    
+    function cancelAppointment(appointmentId) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        alert(`Appointment ${appointmentId} cancelled.`);
+        // In a real app, we'd update the appointment status in the database
+      }
+    }
+    
+    function rescheduleAppointment(appointmentId) {
+      alert(`Reschedule functionality for appointment ${appointmentId} coming soon!`);
+    }
+    
+    function viewConsultation(appointmentId) {
+      alert(`Viewing consultation for appointment ${appointmentId}. In a real application, this would show the consultation details.`);
+    }
+    
+    function scheduleFollowUp(appointmentId) {
+      alert(`Scheduling follow-up for appointment ${appointmentId}. In a real application, this would open the scheduling interface.`);
+    }
+    
+    function restoreAppointment(appointmentId) {
+      alert(`Appointment ${appointmentId} has been restored.`);
+      // In a real app, we'd update the appointment status in the database
+    }
+    
+    function viewMedicalHistory(patientId) {
+      alert(`Viewing medical history for patient ${patientId}. In a real application, this would show the patient's complete medical history.`);
+    }
+    
+    function createPrescription(patientId) {
+      alert(`Creating prescription for patient ${patientId}. In a real application, this would open the prescription interface.`);
+    }
+  </script>
+</body>
+</html> 

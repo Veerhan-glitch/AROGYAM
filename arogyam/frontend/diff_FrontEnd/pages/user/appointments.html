@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Appointments</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="tabs">
+        <button class="tab-btn" data-tab="upcoming">Upcoming Appointments</button>
+        <button class="tab-btn" data-tab="history">Appointment History</button>
+        <button class="tab-btn" data-tab="book">Book New Appointment</button>
+      </div>
+      
+      <div class="tab-content" id="upcoming-tab">
+        <div class="appointments-list" id="upcomingAppointments">
+          <!-- Upcoming appointments will be loaded here -->
+          <p class="empty-state">Loading appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="history-tab">
+        <div class="appointments-list" id="pastAppointments">
+          <!-- Past appointments will be loaded here -->
+          <p class="empty-state">Loading appointment history...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="book-tab">
+        <div class="booking-form">
+          <h3>Book an Appointment</h3>
+          
+          <div class="form-group">
+            <label for="specialization">Specialization:</label>
+            <select id="specialization" required>
+              <option value="" disabled selected>Select Specialization</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="General Medicine">General Medicine</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="doctor">Select Doctor:</label>
+            <select id="doctor" required>
+              <option value="" disabled selected>First select specialization</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="appointmentDate">Appointment Date:</label>
+            <input type="date" id="appointmentDate" required min="">
+          </div>
+          
+          <div class="form-group">
+            <label for="appointmentTime">Appointment Time:</label>
+            <select id="appointmentTime" required>
+              <option value="" disabled selected>Select Time</option>
+              <option value="09:00">09:00 AM</option>
+              <option value="10:00">10:00 AM</option>
+              <option value="11:00">11:00 AM</option>
+              <option value="12:00">12:00 PM</option>
+              <option value="14:00">02:00 PM</option>
+              <option value="15:00">03:00 PM</option>
+              <option value="16:00">04:00 PM</option>
+              <option value="17:00">05:00 PM</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="reasonForVisit">Reason for Visit:</label>
+            <textarea id="reasonForVisit" rows="4" placeholder="Briefly describe your symptoms or reason for consultation"></textarea>
+          </div>
+          
+          <button class="action-btn" onclick="bookAppointmentSubmit()">Book Appointment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+
+      // Initialize date picker minimum to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('appointmentDate').min = today;
+      
+      // Set up tab navigation
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      // Check if URL has hash for specific tab and possibly a doctorId
+      const hash = window.location.hash.replace('#', '');
+      let activeTab = 'upcoming'; // Default tab
+      let doctorId = null;
+      
+      // Parse the hash - format could be 'book?doctorId=doc1'
+      if (hash) {
+        if (hash.startsWith('book?')) {
+          activeTab = 'book';
+          // Extract doctorId parameter
+          const params = new URLSearchParams(hash.substring(hash.indexOf('?')));
+          doctorId = params.get('doctorId');
+        } else if (['upcoming', 'history', 'book'].includes(hash)) {
+          activeTab = hash;
+        }
+      }
+      
+      // Set the active tab
+      tabButtons.forEach(btn => {
+        if (btn.dataset.tab === activeTab) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+        
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          btn.classList.add('active');
+          document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
+          
+          // Update URL hash without page reload
+          window.location.hash = btn.dataset.tab;
+        });
+      });
+      
+      // Set the active content
+      tabContents.forEach(content => {
+        if (content.id === `${activeTab}-tab`) {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+      
+      // Load specialization-doctor relation
+      document.getElementById('specialization').addEventListener('change', loadDoctorsBySpecialization);
+      
+      // Load appointments
+      loadUpcomingAppointments();
+      loadPastAppointments();
+      
+      // If doctorId is present, preselect doctor and specialization
+      if (doctorId) {
+        preselectDoctor(doctorId);
+      }
+    });
+
+    function loadDoctorsBySpecialization() {
+      const specialization = document.getElementById('specialization').value;
+      const doctorSelect = document.getElementById('doctor');
+      
+      // In a real app, this would be an API call
+      // Here we'll use the getDoctorsByRating function and filter by specialization
+      const allDoctors = getDoctorsByRating();
+      const filteredDoctors = allDoctors.filter(doctor => 
+        doctor.specialization === specialization);
+      
+      // Populate the doctor dropdown
+      doctorSelect.innerHTML = '<option value="" disabled selected>Select Doctor</option>';
+      filteredDoctors.forEach(doctor => {
+        const option = document.createElement('option');
+        option.value = doctor.id || doctor.name.replace('Dr. ', '');
+        option.textContent = `${doctor.name} (Rating: ${doctor.rating})`;
+        doctorSelect.appendChild(option);
+      });
+    }
+
+    function loadUpcomingAppointments() {
+      const appointments = getUpcomingAppointments();
+      const container = document.getElementById('upcomingAppointments');
+      
+      if (appointments.length === 0) {
+        container.innerHTML = '<p class="empty-state">No upcoming appointments</p>';
+        return;
+      }
+      
+      container.innerHTML = appointments
+        .filter(app => new Date(app.date) >= new Date())
+        .map(app => `
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <h4>Dr. ${app.doctorName || 'Smith'}</h4>
+              <span class="status ${app.status || 'pending'}">${app.status || 'Pending'}</span>
+            </div>
+            <div class="appointment-details">
+              <p><i class="fas fa-calendar"></i> ${new Date(app.date).toLocaleDateString()}</p>
+              <p><i class="fas fa-clock"></i> ${app.time || '10:00 AM'}</p>
+              <p><i class="fas fa-stethoscope"></i> ${app.specialization || 'General Checkup'}</p>
+            </div>
+            <div class="appointment-actions">
+              <button class="action-btn secondary" onclick="rescheduleAppointment('${app.id || Date.now()}')">Reschedule</button>
+              <button class="action-btn danger" onclick="cancelAppointment('${app.id || Date.now()}')">Cancel</button>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    function loadPastAppointments() {
+      const appointments = getUpcomingAppointments();
+      const container = document.getElementById('pastAppointments');
+      
+      // For demo purposes, let's create some past appointments
+      const pastAppointments = [
+        {
+          id: '1001',
+          doctorName: 'Dr. Johnson',
+          specialization: 'Cardiology',
+          date: '2023-05-15',
+          time: '10:00 AM',
+          status: 'completed'
+        },
+        {
+          id: '1002',
+          doctorName: 'Dr. Williams',
+          specialization: 'Neurology',
+          date: '2023-06-20',
+          time: '2:30 PM',
+          status: 'completed'
+        }
+      ];
+      
+      container.innerHTML = pastAppointments.map(app => `
+        <div class="appointment-card completed">
+          <div class="appointment-header">
+            <h4>${app.doctorName}</h4>
+            <span class="status completed">Completed</span>
+          </div>
+          <div class="appointment-details">
+            <p><i class="fas fa-calendar"></i> ${new Date(app.date).toLocaleDateString()}</p>
+            <p><i class="fas fa-clock"></i> ${app.time}</p>
+            <p><i class="fas fa-stethoscope"></i> ${app.specialization}</p>
+          </div>
+          <div class="appointment-actions">
+            <button class="action-btn" onclick="bookFollowUp('${app.id}')">Book Follow-up</button>
+            <button class="action-btn" onclick="viewReport('${app.id}')">View Report</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function bookAppointmentSubmit() {
+      const doctor = document.getElementById('doctor').value;
+      const date = document.getElementById('appointmentDate').value;
+      const time = document.getElementById('appointmentTime').value;
+      const reason = document.getElementById('reasonForVisit').value;
+      
+      if (!doctor || !date || !time) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Book the appointment
+      const result = bookAppointment(doctor, date, time, reason);
+      
+      if (result.success) {
+        alert('Appointment booked successfully!');
+        // Reload appointments and show the upcoming tab
+        loadUpcomingAppointments();
+        
+        // Switch to upcoming tab
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        document.querySelector('[data-tab="upcoming"]').classList.add('active');
+        document.getElementById('upcoming-tab').classList.add('active');
+        
+        // Reset form
+        document.getElementById('specialization').selectedIndex = 0;
+        document.getElementById('doctor').innerHTML = '<option value="" disabled selected>First select specialization</option>';
+        document.getElementById('appointmentDate').value = '';
+        document.getElementById('appointmentTime').selectedIndex = 0;
+        document.getElementById('reasonForVisit').value = '';
+      } else {
+        alert('Error booking appointment: ' + (result.message || 'Unknown error'));
+      }
+    }
+
+    function rescheduleAppointment(appointmentId) {
+      // In a real app, this would navigate to a reschedule page or show a modal
+      alert('Reschedule functionality will be implemented soon!');
+    }
+
+    function cancelAppointment(appointmentId) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        // In a real app, this would call an API to cancel the appointment
+        alert('Appointment cancelled successfully!');
+        loadUpcomingAppointments(); // Reload list
+      }
+    }
+
+    function bookFollowUp(appointmentId) {
+      // Set the booking tab as active
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      document.querySelector('[data-tab="book"]').classList.add('active');
+      document.getElementById('book-tab').classList.add('active');
+      
+      // Optionally pre-fill some fields
+      document.getElementById('reasonForVisit').value = 'Follow-up for previous appointment';
+    }
+
+    function viewReport(appointmentId) {
+      // In a real app, this would show the report
+      alert('Report viewer will be implemented soon!');
+    }
+
+    // Preselect doctor based on doctorId
+    function preselectDoctor(doctorId) {
+      const doctors = getDoctorsByRating();
+      const doctor = doctors.find(d => d.id === doctorId);
+      
+      if (doctor) {
+        // Set specialization first
+        const specializationSelect = document.getElementById('specialization');
+        specializationSelect.value = doctor.specialization;
+        
+        // Trigger change to load doctors
+        loadDoctorsBySpecialization();
+        
+        // Then set doctor (after a small delay to ensure the doctor options are loaded)
+        setTimeout(() => {
+          const doctorSelect = document.getElementById('doctor');
+          Array.from(doctorSelect.options).forEach(option => {
+            if (option.value === doctorId) {
+              option.selected = true;
+            }
+          });
+        }, 100);
+      }
+    }
+  </script>
+</body>
+</html> 

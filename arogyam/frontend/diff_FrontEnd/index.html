@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arogyam</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta name="description" content="Arogyam - Your Digital Health Partner">
+  <meta name="keywords" content="health, digital health, Arogyam, health partner">
+  <meta name="author" content="Your Name">
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div class="splash" id="splash">
+  <div class="splash-content">
+    <div class="app-title">Arogyam</div>
+    <div class="slogan">Your Digital Health Partner</div>
+  </div>
+</div>
+
+<!-- Login Page -->
+<div class="login-section" id="loginSection">
+  <div class="login-box">
+    <h2>Welcome</h2>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <input type="email" id="loginEmail" placeholder="Email" required><br>
+      <input type="password" id="loginPassword" placeholder="Password" required><br>
+      <select id="loginUserType" required>
+        <option value="" disabled selected>Login as</option>
+        <option value="user">User</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
+      </select><br>
+      <button type="submit">Login</button>
+    </form>
+    <p class="link-text">Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+  </div>
+</div>
+
+<!-- Register Page -->
+<div class="register-section" id="registerSection">
+  <div class="login-box">
+    <h2>Register</h2>
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <input type="text" id="registerName" placeholder="Name" required><br>
+      <input type="email" id="registerEmail" placeholder="Email" required><br>
+      <input type="password" id="registerPassword" placeholder="Password" required><br>
+      <input type="tel" id="registerPhone" placeholder="Phone Number" required><br>
+      <select id="registerUserType" required>
+        <option value="" disabled selected>Register as</option>
+        <option value="user">User</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
+      </select><br>
+      <button type="submit">Register</button>
+    </form>
+    <p class="link-text">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+  </div>
+</div>
+
+<!-- User Dashboard -->
+<div class="dashboard user-dashboard" id="userDashboard">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <h2 id="userWelcome">Welcome</h2>
+      <p id="userType"></p>
+    </div>
+    <div class="header-controls">
+      <div class="notification" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notif-count">3</span>
+        <div class="notif-dropdown" id="notifDropdown">
+          <p><strong>Notifications</strong></p>
+          <ul id="notificationsList"></ul>
+        </div>
+      </div>
+      <div class="cart-icon">
+        <a href="pages/user/cart.html" title="View Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+      <div class="profile-icon" onclick="toggleProfileMenu()">
+        <i class="fas fa-user-circle"></i>
+        <div class="profile-dropdown" id="profileDropdown">
+          <ul>
+            <li onclick="showProfile('user')"><i class="fas fa-user"></i> My Profile</li>
+            <li onclick="showOrderHistory()"><i class="fas fa-history"></i> Order History</li>
+            <li onclick="window.location.href='pages/user/prescriptions.html'"><i class="fas fa-prescription"></i> Prescriptions</li>
+            <li onclick="window.location.href='pages/user/appointments.html'"><i class="fas fa-calendar-check"></i> Appointments</li>
+            <li class="divider"></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </div>
+      </div>
+      <button class="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-intro">
+    <div class="quick-access">
+      <button class="quick-access-btn" onclick="window.location.href='pages/user/products.html'">
+        <i class="fas fa-shopping-basket"></i>
+        <span>Shop Medicines</span>
+      </button>
+      <button class="quick-access-btn" onclick="window.location.href='pages/user/appointments.html'">
+        <i class="fas fa-calendar-plus"></i>
+        <span>Book Appointment</span>
+      </button>
+      <button class="quick-access-btn" onclick="window.location.href='pages/user/lab-tests.html'">
+        <i class="fas fa-vial"></i>
+        <span>Lab Tests</span>
+      </button>
+      <button class="quick-access-btn" onclick="window.location.href='pages/user/doctor-analytics.html'">
+        <i class="fas fa-user-md"></i>
+        <span>Find Doctors</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- Trending Products Section -->
+    <section class="dashboard-section" id="trendingProducts">
+      <h3>Trending Products</h3>
+      <div class="product-grid" id="trendingProductsList"></div>
+    </section>
+
+    <!-- Top Doctors Section -->
+    <section class="dashboard-section" id="topDoctors">
+      <h3>Doctors</h3>
+      <div class="doctors-grid" id="topDoctorsList"></div>
+    </section>
+
+    <!-- Appointments Section -->
+    <section class="dashboard-section" id="appointments">
+      <h3>Appointments</h3>
+      <div class="appointments-list" id="appointmentsList"></div>
+    </section>
+
+    <!-- Prescriptions Section -->
+    <section class="dashboard-section" id="prescriptions">
+      <h3>Prescriptions</h3>
+      <div class="upload-section">
+        <input type="file" id="prescriptionFile" accept=".pdf,.jpg,.png">
+        <button class="action-btn" onclick="handlePrescriptionUpload()">Upload Prescription</button>
+      </div>
+      <div class="prescriptions-list" id="prescriptionsList"></div>
+    </section>
+
+    <!-- Order History Section -->
+    <section class="dashboard-section" id="orderHistory">
+      <h3>Order History</h3>
+      <div class="orders-list" id="ordersList"></div>
+    </section>
+  </div>
+</div>
+
+<!-- Doctor Dashboard -->
+<div class="dashboard doctor-dashboard" id="doctorDashboard">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <h2 id="doctorWelcome">Welcome, Dr.</h2>
+      <p>Doctor Dashboard</p>
+    </div>
+    <div class="header-controls">
+      <div class="notification" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notif-count">3</span>
+        <div class="notif-dropdown" id="doctorNotifDropdown">
+          <p><strong>Notifications</strong></p>
+          <ul id="doctorNotificationsList"></ul>
+        </div>
+      </div>
+      <div class="profile-icon" onclick="toggleDoctorProfileMenu()">
+        <i class="fas fa-user-circle"></i>
+        <div class="profile-dropdown" id="doctorProfileDropdown">
+          <ul>
+            <li onclick="showProfile('doctor')"><i class="fas fa-user"></i> My Profile</li>
+            <li onclick="window.location.href='pages/doctor/appointments.html'"><i class="fas fa-calendar-check"></i> My Appointments</li>
+            <li onclick="window.location.href='pages/doctor/patients.html'"><i class="fas fa-users"></i> My Patients</li>
+            <li onclick="window.location.href='pages/doctor/schedule.html'"><i class="fas fa-clock"></i> My Schedule</li>
+            <li class="divider"></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </div>
+      </div>
+      <button class="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- Today's Appointments -->
+    <section class="dashboard-section" id="todayAppointments">
+      <h3>Today's Appointments</h3>
+      <div class="appointments-list" id="doctorAppointmentsList"></div>
+    </section>
+
+    <!-- Prescription Upload -->
+    <section class="dashboard-section" id="prescriptionUpload">
+      <h3>Upload Prescription</h3>
+      <div class="prescription-form">
+        <select id="patientSelect"></select>
+        <textarea id="prescriptionText" placeholder="Enter prescription details"></textarea>
+        <button class="action-btn" onclick="handleDoctorPrescriptionUpload()">Submit Prescription</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div class="dashboard admin-dashboard" id="adminDashboard">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <h2>Admin Dashboard</h2>
+    </div>
+    <div class="header-controls">
+      <div class="notification" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notif-count">5</span>
+        <div class="notif-dropdown" id="adminNotifDropdown">
+          <p><strong>Notifications</strong></p>
+          <ul id="adminNotificationsList"></ul>
+        </div>
+      </div>
+      <div class="profile-icon" onclick="toggleAdminProfileMenu()">
+        <i class="fas fa-user-circle"></i>
+        <div class="profile-dropdown" id="adminProfileDropdown">
+          <ul>
+            <li onclick="showProfile('admin')"><i class="fas fa-user"></i> My Profile</li>
+            <li onclick="window.location.href='pages/admin/doctors.html'"><i class="fas fa-user-md"></i> Manage Doctors</li>
+            <li onclick="window.location.href='pages/admin/users.html'"><i class="fas fa-users"></i> Manage Users</li>
+            <li onclick="window.location.href='pages/admin/products.html'"><i class="fas fa-pills"></i> Manage Products</li>
+            <li onclick="window.location.href='pages/admin/patient-medical-summaries.html'"><i class="fas fa-notes-medical"></i> Patient Summaries</li>
+            <li class="divider"></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </div>
+      </div>
+      <button class="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- High Value Customers -->
+    <section class="dashboard-section" id="highValueCustomers">
+      <h3>High Value Customers</h3>
+      <div class="customers-list" id="highValueCustomersList"></div>
+    </section>
+
+    <!-- Top Products -->
+    <section class="dashboard-section" id="topProducts">
+      <h3>Top Revenue Generating Products</h3>
+      <div class="products-list" id="topProductsList"></div>
+    </section>
+
+    <!-- User Growth Stats -->
+    <section class="dashboard-section" id="userGrowth">
+      <h3>User Growth Statistics</h3>
+      <div class="stats-container" id="userGrowthStats"></div>
+    </section>
+  </div>
+</div>
+
+<script src="features.js"></script>
+<script src="navigation.js"></script>
+<script src="index.js"></script>
+<script>
+// Fix for profile menu toggles
+function toggleProfileMenu() {
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function closeDropdown(e) {
+    if (!e.target.closest('.profile-icon')) {
+      dropdown.style.display = 'none';
+      document.removeEventListener('click', closeDropdown);
+    }
+  });
+}
+
+function toggleDoctorProfileMenu() {
+  const dropdown = document.getElementById('doctorProfileDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function closeDropdown(e) {
+    if (!e.target.closest('.profile-icon')) {
+      dropdown.style.display = 'none';
+      document.removeEventListener('click', closeDropdown);
+    }
+  });
+}
+
+function toggleAdminProfileMenu() {
+  const dropdown = document.getElementById('adminProfileDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function closeDropdown(e) {
+    if (!e.target.closest('.profile-icon')) {
+      dropdown.style.display = 'none';
+      document.removeEventListener('click', closeDropdown);
+    }
+  });
+}
+</script>
+</body>
+</html>

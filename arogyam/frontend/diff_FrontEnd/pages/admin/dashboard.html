@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .admin-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .admin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    
+    .card-description {
+      color: var(--text-light);
+      margin-bottom: 20px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+    
+    .recent-activity {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-top: 30px;
+    }
+    
+    .activity-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    
+    .activity-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .activity-item {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      flex-shrink: 0;
+    }
+    
+    .activity-details {
+      flex: 1;
+    }
+    
+    .activity-details .title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .activity-details .subtitle {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .activity-time {
+      color: var(--text-light);
+      font-size: 0.8rem;
+    }
+    
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .welcome-text h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: white;
+    }
+    
+    .welcome-text p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+      .welcome-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+      }
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 500px;
+      padding: 25px;
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      color: var(--primary-color);
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-light);
+      cursor: pointer;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+      background-color: #f9fafc;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2>Welcome to Admin Dashboard</h2>
+        <p>Manage your health platform, track performance, and monitor user activity</p>
+      </div>
+      <button class="action-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+    
+    <div class="stats-summary">
+      <div class="stat-card">
+        <div class="stat-value" id="totalUsersValue">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalDoctorsValue">0</div>
+        <div class="stat-label">Doctors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalProductsValue">0</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalAppointmentsValue">0</div>
+        <div class="stat-label">Appointments</div>
+      </div>
+    </div>
+    
+    <div class="admin-grid">
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="card-title">Manage Doctors</div>
+        <div class="card-description">Add, edit, or remove doctors. Update their profiles, specializations, and availability.</div>
+        <button class="action-btn" onclick="window.location.href='doctors.html'">
+          <i class="fas fa-cog"></i> Manage Doctors
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-pills"></i>
+        </div>
+        <div class="card-title">Manage Products</div>
+        <div class="card-description">Add new products, update inventory, manage categories, and set pricing.</div>
+        <button class="action-btn" onclick="navigateTo('products.html')">
+          <i class="fas fa-cog"></i> Manage Products
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="card-title">Manage Users</div>
+        <div class="card-description">View all users, manage accounts, and update user permissions.</div>
+        <div style="display: flex; gap: 10px;">
+          <button class="action-btn" onclick="window.location.href='users.html'" style="flex: 1;">
+            <i class="fas fa-cog"></i> Manage Users
+          </button>
+          <button class="action-btn" onclick="openSendNotificationModal()" style="flex: 1;">
+            <i class="fas fa-bell"></i> Send Notifications
+          </button>
+        </div>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-calendar-check"></i>
+        </div>
+        <div class="card-title">Manage Appointments</div>
+        <div class="card-description">View all appointments, manage schedules, and handle cancellations.</div>
+        <button class="action-btn" onclick="window.location.href='manage-appointments.html'">
+          <i class="fas fa-cog"></i> Manage Appointments
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-crown"></i>
+        </div>
+        <div class="card-title">High Value Customers</div>
+        <div class="card-description">Identify and manage your most valuable customers based on purchase history.</div>
+        <button class="action-btn" onclick="navigateTo('high-value-customers.html')">
+          <i class="fas fa-user-check"></i> View High Value Customers
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="card-title">User Feedback Analysis</div>
+        <div class="card-description">Review users who have placed orders and provided feedback to improve service quality.</div>
+        <button class="action-btn" onclick="navigateTo('user-feedback.html')">
+          <i class="fas fa-thumbs-up"></i> View Feedback
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="card-title">Top Revenue Products</div>
+        <div class="card-description">Analyze the top 5 highest revenue-generating products in your inventory.</div>
+        <button class="action-btn" onclick="navigateTo('top-revenue-products.html')">
+          <i class="fas fa-chart-bar"></i> View Top Products
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-notes-medical"></i>
+        </div>
+        <div class="card-title">Patient Medical Summaries</div>
+        <div class="card-description">Access comprehensive medical summaries for patients including history and prescriptions.</div>
+        <button class="action-btn" onclick="navigateTo('patient-medical-summaries.html')">
+          <i class="fas fa-file-medical"></i> View Medical Summaries
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div class="card-title">User Order History</div>
+        <div class="card-description">Track and analyze detailed order history for all users across the platform.</div>
+        <button class="action-btn" onclick="navigateTo('user-order-history.html')">
+          <i class="fas fa-history"></i> View Order History
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <div class="card-title">Order Spending & Offers</div>
+        <div class="card-description">Monitor user spending patterns and analyze the effectiveness of promotional offers.</div>
+        <button class="action-btn" onclick="navigateTo('order-spending-offers.html')">
+          <i class="fas fa-percent"></i> View Spending & Offers
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-prescription-bottle-alt"></i>
+        </div>
+        <div class="card-title">Top Products with Prescriptions</div>
+        <div class="card-description">Analyze the top 5 revenue-generating products for users with prescriptions.</div>
+        <button class="action-btn" onclick="navigateTo('prescription-products.html')">
+          <i class="fas fa-chart-line"></i> View Prescription Products
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+        <div class="card-title">Active Users</div>
+        <div class="card-description">Identify users who have received notifications or placed orders within the last year.</div>
+        <button class="action-btn" onclick="navigateTo('active-users.html')">
+          <i class="fas fa-user-clock"></i> View Active Users
+        </button>
+      </div>
+      
+      <div class="admin-card">
+        <div class="card-icon">
+          <i class="fas fa-prescription"></i>
+        </div>
+        <div class="card-title">Prescription Product Users</div>
+        <div class="card-description">Track users who have ordered products that require a prescription for compliance monitoring.</div>
+        <button class="action-btn" onclick="navigateTo('prescription-users.html')">
+          <i class="fas fa-clipboard-check"></i> View Prescription Users
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Initialize products if needed
+      initializeProductsIfNeeded();
+      
+      // Load dashboard data
+      loadDashboardData();
+    });
+
+    function initializeProductsIfNeeded() {
+      // Check if products exist
+      let products = JSON.parse(localStorage.getItem('products')) || [];
+      
+      // If no products, initialize with sample data
+      if (products.length === 0) {
+        products = [
+          { 
+            id: 'prod1',
+            name: 'Glucofast Blood Glucose Monitor', 
+            rating: 4.8, 
+            reviews: 120,
+            price: 1499,
+            category: 'Healthcare',
+            description: 'Advanced blood glucose monitoring system with accurate readings',
+            stockQuantity: 45
+          },
+          { 
+            id: 'prod2',
+            name: 'Zencalm Stress Relief Tablets', 
+            rating: 4.7, 
+            reviews: 85,
+            price: 299,
+            category: 'Tablets',
+            description: 'Natural formula to help reduce stress and anxiety',
+            stockQuantity: 120
+          },
+          { 
+            id: 'prod3',
+            name: 'VitaBoost Multivitamin Pack', 
+            rating: 4.9, 
+            reviews: 200,
+            price: 599,
+            category: 'Supplements',
+            description: 'Complete daily multivitamin formula for adults',
+            stockQuantity: 80
+          },
+          { 
+            id: 'prod4',
+            name: 'OrthoFlex Joint Support', 
+            rating: 4.6, 
+            reviews: 150,
+            price: 499,
+            category: 'Supplements',
+            description: 'Supports joint health and improves mobility',
+            stockQuantity: 65
+          },
+          { 
+            id: 'prod5',
+            name: 'NeuroCalm Headache Relief', 
+            rating: 4.5, 
+            reviews: 78,
+            price: 199,
+            category: 'Tablets',
+            description: 'Fast-acting relief for headaches and migraines',
+            stockQuantity: 100
+          }
+        ];
+        
+        // Save to localStorage
+        localStorage.setItem('products', JSON.stringify(products));
+      }
+      
+      // Check if medicines exist
+      let medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+      
+      // If no medicines, initialize with sample data
+      if (medicines.length === 0) {
+        medicines = [
+          {
+            id: 'med1',
+            name: 'Paracetamol 500mg',
+            price: 99,
+            category: 'Pain Relief',
+            description: 'For fever and mild to moderate pain relief',
+            stockQuantity: 200
+          },
+          {
+            id: 'med2',
+            name: 'Azithromycin 250mg',
+            price: 199,
+            category: 'Antibiotics',
+            description: 'Antibiotic for bacterial infections',
+            stockQuantity: 150
+          },
+          {
+            id: 'med3',
+            name: 'Vitamin D3 60K',
+            price: 149,
+            category: 'Supplements',
+            description: 'Weekly vitamin D supplement',
+            stockQuantity: 180
+          }
+        ];
+        
+        // Save to localStorage
+        localStorage.setItem('medicines', JSON.stringify(medicines));
+      }
+      
+      // Initialize notifications
+      initializeNotifications();
+    }
+    
+    function initializeNotifications() {
+      // Check if notifications exist
+      let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      
+      // If no notifications, initialize with sample data
+      if (notifications.length === 0) {
+        // Get all users
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Create notifications for each user
+        const allNotifications = [];
+        
+        // Get current date for reference
+        const currentDate = new Date();
+        
+        users.forEach(user => {
+          if (user.userType === 'user') {
+            // Standard notifications for all users
+            
+            // New offer notification
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'New Offer Available',
+              message: 'A special 20% discount offer is available on all healthcare products for you.',
+              date: new Date(currentDate - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+              read: false,
+              type: 'offer'
+            });
+            
+            // Appointment reminder notification
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Appointment Reminder',
+              message: 'Your next doctor appointment is scheduled for tomorrow at 10:00 AM.',
+              date: new Date(currentDate - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
+              read: false,
+              type: 'appointment'
+            });
+            
+            // Order delivered notification
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Order Delivered',
+              message: `Your order #ORD-${Math.floor(1000 + Math.random() * 9000)} has been successfully delivered.`,
+              date: new Date(currentDate - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+              read: true,
+              type: 'order'
+            });
+            
+            // Additional health-related notifications
+            
+            // Medication reminder
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Medication Reminder',
+              message: 'Remember to take your evening dose of medication. Staying consistent with your medication schedule is important for your health.',
+              date: new Date(currentDate - 12 * 60 * 60 * 1000).toISOString(), // 12 hours ago
+              read: false,
+              type: 'reminder'
+            });
+            
+            // Health tip
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Health Tip of the Day',
+              message: 'Stay hydrated! Drinking 8 glasses of water daily improves skin health, aids digestion, and helps maintain energy levels.',
+              date: new Date(currentDate - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+              read: true,
+              type: 'tip'
+            });
+            
+            // Lab results
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Lab Results Available',
+              message: 'Your recent blood work results are now available. Please check your medical records section to view them.',
+              date: new Date(currentDate - 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 days ago
+              read: false,
+              type: 'medical'
+            });
+            
+            // Prescription refill
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Prescription Refill Available',
+              message: 'Your prescription for Lisinopril is due for refill. Would you like to order a refill now?',
+              date: new Date(currentDate - 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days ago
+              read: true,
+              type: 'prescription'
+            });
+            
+            // Vaccine reminder
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Flu Shot Reminder',
+              message: 'Flu season is approaching. Schedule your annual flu vaccination to stay protected.',
+              date: new Date(currentDate - 8 * 24 * 60 * 60 * 1000).toISOString(), // 8 days ago
+              read: true,
+              type: 'reminder'
+            });
+            
+            // BMI calculation
+            allNotifications.push({
+              id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+              userId: user.id,
+              title: 'Health Assessment Completed',
+              message: 'Your BMI assessment is complete. Your current BMI is 23.5, which falls within the normal weight range.',
+              date: new Date(currentDate - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+              read: true,
+              type: 'assessment'
+            });
+          }
+        });
+        
+        // Save to localStorage
+        localStorage.setItem('notifications', JSON.stringify(allNotifications));
+        console.log('Initialized notifications for users:', allNotifications.length);
+      }
+    }
+
+    function loadDashboardData() {
+      // Get data
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      
+      // Get products from the correct localStorage keys
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+      const totalProducts = products.length + medicines.length;
+      
+      // Get appointments
+      const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      
+      // Update stats
+      document.getElementById('totalUsersValue').textContent = users.filter(u => u.userType === 'user').length;
+      document.getElementById('totalDoctorsValue').textContent = doctors.length;
+      document.getElementById('totalProductsValue').textContent = totalProducts;
+      document.getElementById('totalAppointmentsValue').textContent = appointments.length;
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../../index.html';
+      }
+    }
+    
+    function openSendNotificationModal() {
+      // Load users to select from
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const userSelect = document.getElementById('notificationUserSelect');
+      
+      // Clear previous options
+      userSelect.innerHTML = '';
+      
+      // Add "All Users" option
+      const allOption = document.createElement('option');
+      allOption.value = 'all';
+      allOption.textContent = 'All Users';
+      userSelect.appendChild(allOption);
+      
+      // Add individual users (only patients)
+      users.filter(user => user.userType === 'user').forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.name} (${user.email})`;
+        userSelect.appendChild(option);
+      });
+      
+      // Show modal
+      document.getElementById('sendNotificationModal').style.display = 'flex';
+    }
+    
+    function closeNotificationModal() {
+      document.getElementById('sendNotificationModal').style.display = 'none';
+    }
+    
+    function sendNotification(event) {
+      event.preventDefault();
+      
+      const userId = document.getElementById('notificationUserSelect').value;
+      const title = document.getElementById('notificationTitle').value;
+      const message = document.getElementById('notificationMessage').value;
+      const type = document.getElementById('notificationType').value;
+      
+      // Get existing notifications
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      
+      // Get users to send to
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const targetUsers = userId === 'all' 
+        ? users.filter(user => user.userType === 'user') 
+        : users.filter(user => user.id === userId);
+      
+      // Create notifications for each target user
+      targetUsers.forEach(user => {
+        const newNotification = {
+          id: 'notif_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+          userId: user.id,
+          title,
+          message,
+          date: new Date().toISOString(),
+          read: false,
+          type
+        };
+        
+        notifications.push(newNotification);
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      
+      // Close modal
+      closeNotificationModal();
+      
+      // Reset form
+      document.getElementById('notificationForm').reset();
+      
+      // Show success message
+      alert(`Notification "${title}" sent to ${targetUsers.length} user(s)`);
+    }
+  </script>
+  
+  <!-- Send Notification Modal -->
+  <div id="sendNotificationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Send Notification</h3>
+        <button class="close-btn" onclick="closeNotificationModal()">&times;</button>
+      </div>
+      <form id="notificationForm" onsubmit="sendNotification(event)">
+        <div class="form-group">
+          <label for="notificationUserSelect">Select User</label>
+          <select id="notificationUserSelect" class="form-input" required>
+            <option value="">Select User</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="notificationType">Notification Type</label>
+          <select id="notificationType" class="form-input" required>
+            <option value="general">General</option>
+            <option value="offer">Special Offer</option>
+            <option value="appointment">Appointment</option>
+            <option value="order">Order Update</option>
+            <option value="reminder">Medication Reminder</option>
+            <option value="tip">Health Tip</option>
+            <option value="medical">Medical Results</option>
+            <option value="prescription">Prescription</option>
+            <option value="assessment">Health Assessment</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="notificationTitle">Title</label>
+          <input type="text" id="notificationTitle" class="form-input" required placeholder="Notification Title">
+        </div>
+        <div class="form-group">
+          <label for="notificationMessage">Message</label>
+          <textarea id="notificationMessage" class="form-input" rows="4" required placeholder="Notification Message"></textarea>
+        </div>
+        <div style="margin-top: 20px; text-align: right;">
+          <button type="button" class="action-btn secondary" onclick="closeNotificationModal()">Cancel</button>
+          <button type="submit" class="action-btn">Send Notification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html> 

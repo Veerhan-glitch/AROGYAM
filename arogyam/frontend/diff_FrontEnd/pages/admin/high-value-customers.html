@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High Value Customers - Arogyam Admin</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .customer-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .customer-table th, .customer-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .customer-table th {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .customer-table tbody tr:hover {
+      background-color: rgba(58, 123, 213, 0.05);
+    }
+
+    .customer-name {
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+
+    .value-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    .value-badge.gold {
+      background-color: rgba(255, 215, 0, 0.15);
+      color: #b8860b;
+    }
+
+    .value-badge.silver {
+      background-color: rgba(192, 192, 192, 0.15);
+      color: #708090;
+    }
+
+    .value-badge.bronze {
+      background-color: rgba(205, 127, 50, 0.15);
+      color: #8b4513;
+    }
+
+    .customer-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .customer-stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .customer-stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+
+    .customer-stat-label {
+      color: var(--text-light);
+    }
+
+    .filter-section {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>High Value Customers</h2>
+    </div>
+
+    <div class="subpage-content">
+      <div class="customer-stats">
+        <div class="customer-stat-card">
+          <div class="customer-stat-value" id="totalSpendValue">₹0</div>
+          <div class="customer-stat-label">Total Customer Spending</div>
+        </div>
+        <div class="customer-stat-card">
+          <div class="customer-stat-value" id="avgOrderValue">₹0</div>
+          <div class="customer-stat-label">Average Order Value</div>
+        </div>
+        <div class="customer-stat-card">
+          <div class="customer-stat-value" id="topCustomerValue">₹0</div>
+          <div class="customer-stat-label">Top Customer Spend</div>
+        </div>
+        <div class="customer-stat-card">
+          <div class="customer-stat-value" id="repeatCustomersValue">0</div>
+          <div class="customer-stat-label">Repeat Customers</div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-group">
+          <label for="valueFilter">Filter by Value:</label>
+          <select id="valueFilter" onchange="applyFilters()">
+            <option value="all">All Tiers</option>
+            <option value="gold">Gold Tier</option>
+            <option value="silver">Silver Tier</option>
+            <option value="bronze">Bronze Tier</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortBy">Sort By:</label>
+          <select id="sortBy" onchange="applyFilters()">
+            <option value="spend">Total Spend (High to Low)</option>
+            <option value="orders">Order Count (High to Low)</option>
+            <option value="recent">Most Recent Order</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Value Tier</th>
+            <th>Total Orders</th>
+            <th>Total Spend</th>
+            <th>Last Order</th>
+            <th>Feedback</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customersTableBody">
+          <!-- Customer data will be loaded here -->
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 30px;">Loading customers data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load high value customers data
+      loadHighValueCustomersData();
+    });
+
+    function loadHighValueCustomersData() {
+      // Get all users and orders
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Filter for only customer users
+      const customers = users.filter(user => user.userType === 'user');
+      
+      // Calculate customer metrics
+      const customerData = customers.map(customer => {
+        // Get all orders for this customer
+        const customerOrders = orders.filter(order => order.userId === customer.id);
+        const orderCount = customerOrders.length;
+        
+        // Calculate total spend
+        const totalSpend = customerOrders.reduce((sum, order) => sum + (parseFloat(order.totalAmount) || 0), 0);
+        
+        // Get most recent order date
+        let lastOrderDate = new Date(0);
+        if (customerOrders.length > 0) {
+          const dateStrings = customerOrders.map(order => order.date);
+          const lastOrder = new Date(Math.max(...dateStrings.map(date => new Date(date))));
+          lastOrderDate = lastOrder;
+        }
+        
+        // Determine value tier
+        let valueTier = 'bronze';
+        if (totalSpend >= 5000 || orderCount >= 10) {
+          valueTier = 'gold';
+        } else if (totalSpend >= 2000 || orderCount >= 5) {
+          valueTier = 'silver';
+        }
+        
+        return {
+          id: customer.id,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          orderCount,
+          totalSpend,
+          lastOrderDate,
+          valueTier
+        };
+      });
+      
+      // Sort by total spend (default)
+      customerData.sort((a, b) => b.totalSpend - a.totalSpend);
+      
+      // Update dashboard stats
+      updateCustomerStats(customerData);
+      
+      // Render the table
+      renderCustomersTable(customerData);
+    }
+    
+    function updateCustomerStats(customerData) {
+      // Calculate total spend across all customers
+      const totalSpend = customerData.reduce((sum, customer) => sum + customer.totalSpend, 0);
+      
+      // Calculate average order value
+      const totalOrders = customerData.reduce((sum, customer) => sum + customer.orderCount, 0);
+      const avgOrder = totalOrders > 0 ? totalSpend / totalOrders : 0;
+      
+      // Get top customer spend
+      const topSpend = customerData.length > 0 ? customerData[0].totalSpend : 0;
+      
+      // Count repeat customers (more than 1 order)
+      const repeatCustomers = customerData.filter(customer => customer.orderCount > 1).length;
+      
+      // Update the UI
+      document.getElementById('totalSpendValue').textContent = '₹' + totalSpend.toFixed(2);
+      document.getElementById('avgOrderValue').textContent = '₹' + avgOrder.toFixed(2);
+      document.getElementById('topCustomerValue').textContent = '₹' + topSpend.toFixed(2);
+      document.getElementById('repeatCustomersValue').textContent = repeatCustomers;
+    }
+    
+    function renderCustomersTable(customerData) {
+      const tableBody = document.getElementById('customersTableBody');
+      
+      if (customerData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 30px;">
+              No customers found.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tableBody.innerHTML = customerData.map(customer => {
+        const formattedDate = customer.lastOrderDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        
+        // Display feedback icon based on value tier
+        let feedbackIcon = '';
+        if (customer.valueTier === 'gold') {
+          feedbackIcon = '<i class="fas fa-thumbs-up" style="color: var(--success-color);"></i> Positive';
+        } else if (customer.valueTier === 'silver') {
+          feedbackIcon = '<i class="fas fa-thumbs-up" style="color: var(--success-color);"></i> Positive';
+        } else {
+          feedbackIcon = '<i class="fas fa-thumbs-up" style="color: var(--text-light);"></i> Neutral';
+        }
+        
+        return `
+          <tr>
+            <td>
+              <div class="customer-name">${customer.name}</div>
+              <div style="color: var(--text-light); font-size: 0.9rem;">${customer.email}</div>
+            </td>
+            <td>
+              <span class="value-badge ${customer.valueTier}">${customer.valueTier.charAt(0).toUpperCase() + customer.valueTier.slice(1)}</span>
+            </td>
+            <td>${customer.orderCount}</td>
+            <td>₹${customer.totalSpend.toFixed(2)}</td>
+            <td>${formattedDate}</td>
+            <td>${feedbackIcon}</td>
+            <td>
+              <button class="action-btn" onclick="viewCustomerDetails('${customer.id}')">
+                <i class="fas fa-eye"></i> View
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    function applyFilters() {
+      const valueFilter = document.getElementById('valueFilter').value;
+      const sortBy = document.getElementById('sortBy').value;
+      
+      // Get all users and orders
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Filter for only customer users
+      const customers = users.filter(user => user.userType === 'user');
+      
+      // Calculate customer metrics
+      let customerData = customers.map(customer => {
+        // Get all orders for this customer
+        const customerOrders = orders.filter(order => order.userId === customer.id);
+        const orderCount = customerOrders.length;
+        
+        // Calculate total spend
+        const totalSpend = customerOrders.reduce((sum, order) => sum + (parseFloat(order.totalAmount) || 0), 0);
+        
+        // Get most recent order date
+        let lastOrderDate = new Date(0);
+        if (customerOrders.length > 0) {
+          const dateStrings = customerOrders.map(order => order.date);
+          const lastOrder = new Date(Math.max(...dateStrings.map(date => new Date(date))));
+          lastOrderDate = lastOrder;
+        }
+        
+        // Determine value tier
+        let valueTier = 'bronze';
+        if (totalSpend >= 5000 || orderCount >= 10) {
+          valueTier = 'gold';
+        } else if (totalSpend >= 2000 || orderCount >= 5) {
+          valueTier = 'silver';
+        }
+        
+        return {
+          id: customer.id,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          orderCount,
+          totalSpend,
+          lastOrderDate,
+          valueTier
+        };
+      });
+      
+      // Filter by value tier
+      if (valueFilter !== 'all') {
+        customerData = customerData.filter(customer => customer.valueTier === valueFilter);
+      }
+      
+      // Sort based on selected option
+      switch (sortBy) {
+        case 'spend':
+          customerData.sort((a, b) => b.totalSpend - a.totalSpend);
+          break;
+        case 'orders':
+          customerData.sort((a, b) => b.orderCount - a.orderCount);
+          break;
+        case 'recent':
+          customerData.sort((a, b) => b.lastOrderDate - a.lastOrderDate);
+          break;
+      }
+      
+      // Render the filtered and sorted data
+      renderCustomersTable(customerData);
+    }
+    
+    function viewCustomerDetails(customerId) {
+      alert('Customer details view functionality will be implemented here.');
+      // In a real application, this would navigate to a detailed view of the customer
+    }
+  </script>
+</body>
+</html> 

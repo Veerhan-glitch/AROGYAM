@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Profile - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .profile-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .profile-sidebar {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-avatar {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      color: var(--primary-color);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-edit {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .profile-menu {
+      margin-top: 30px;
+    }
+    
+    .profile-menu-item {
+      padding: 12px 15px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .profile-menu-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .profile-menu-item.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .profile-menu-item i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .profile-content {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-section {
+      display: none;
+    }
+    
+    .profile-section.active {
+      display: block;
+    }
+    
+    .profile-section h3 {
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:history.back()" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+      <h2>Admin Profile</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="profile-container">
+        <!-- Profile Sidebar -->
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div id="avatarImage"><i class="fas fa-user-shield"></i></div>
+            <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">
+              <i class="fas fa-camera"></i> Change
+            </div>
+            <input type="file" id="avatarInput" style="display:none" accept="image/*" onchange="updateAvatar(this)">
+          </div>
+          
+          <h3 id="profile-name" style="text-align: center; margin-top: 10px;">Admin Name</h3>
+          <p id="profile-role" style="text-align: center; color: var(--primary-color);">System Administrator</p>
+          
+          <div class="profile-menu">
+            <div class="profile-menu-item active" data-target="personal-info">
+              <i class="fas fa-user"></i> Personal Info
+            </div>
+            <div class="profile-menu-item" data-target="security">
+              <i class="fas fa-lock"></i> Security
+            </div>
+            <div class="profile-menu-item" data-target="system">
+              <i class="fas fa-cogs"></i> System Settings
+            </div>
+          </div>
+        </div>
+        
+        <!-- Profile Content -->
+        <div class="profile-content">
+          <!-- Personal Info Section -->
+          <div class="profile-section active" id="personal-info">
+            <h3>Personal Information</h3>
+            <form id="personal-info-form">
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="form-input" placeholder="Your full name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="Your email address" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" class="form-input" placeholder="Your phone number" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="role">Admin Role</label>
+                <select id="role" class="form-input">
+                  <option value="system">System Administrator</option>
+                  <option value="content">Content Manager</option>
+                  <option value="user">User Manager</option>
+                  <option value="product">Product Manager</option>
+                </select>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save Personal Info</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Security Section -->
+          <div class="profile-section" id="security">
+            <h3>Security Settings</h3>
+            <form id="security-form">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" class="form-input" placeholder="Enter your current password">
+              </div>
+              
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" class="form-input" placeholder="Enter new password">
+              </div>
+              
+              <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm new password">
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Update Password</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- System Settings Section -->
+          <div class="profile-section" id="system">
+            <h3>System Settings</h3>
+            <form id="system-form">
+              <div class="form-group">
+                <label>Email Notifications</label>
+                <div class="preference-item">
+                  <div>
+                    <div class="preference-title">New User Registration</div>
+                    <div class="preference-desc">Receive notifications when new users register</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="notifyUserRegistration" checked>
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="preference-item">
+                  <div>
+                    <div class="preference-title">New Doctor Registration</div>
+                    <div class="preference-desc">Receive notifications when new doctors register</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="notifyDoctorRegistration" checked>
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="preference-item">
+                  <div>
+                    <div class="preference-title">System Alerts</div>
+                    <div class="preference-desc">Receive important system alerts and notices</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="systemAlerts" checked>
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save System Settings</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is an admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load admin data
+      loadAdminData();
+      
+      // Setup menu navigation
+      document.querySelectorAll('.profile-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          // Remove active class from all menu items and sections
+          document.querySelectorAll('.profile-menu-item').forEach(i => i.classList.remove('active'));
+          document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+          
+          // Add active class to clicked menu item and corresponding section
+          item.classList.add('active');
+          document.getElementById(item.dataset.target).classList.add('active');
+        });
+      });
+      
+      // Setup form submissions
+      document.getElementById('personal-info-form').addEventListener('submit', savePersonalInfo);
+      document.getElementById('security-form').addEventListener('submit', saveSecuritySettings);
+      document.getElementById('system-form').addEventListener('submit', saveSystemSettings);
+    });
+    
+    function loadAdminData() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Load profile picture if exists
+      if (currentUser.avatar) {
+        document.getElementById('avatarImage').innerHTML = `<img src="${currentUser.avatar}" alt="Profile Picture">`;
+      }
+      
+      // Update sidebar info
+      document.getElementById('profile-name').textContent = currentUser.name;
+      document.getElementById('profile-role').textContent = currentUser.adminRole || 'System Administrator';
+      
+      // Populate personal info form
+      document.getElementById('fullName').value = currentUser.name || '';
+      document.getElementById('email').value = currentUser.email || '';
+      document.getElementById('phone').value = currentUser.phone || '';
+      document.getElementById('role').value = currentUser.adminRole || 'system';
+      
+      // Populate system settings
+      if (currentUser.adminPreferences) {
+        document.getElementById('notifyUserRegistration').checked = currentUser.adminPreferences.notifyUserRegistration !== false;
+        document.getElementById('notifyDoctorRegistration').checked = currentUser.adminPreferences.notifyDoctorRegistration !== false;
+        document.getElementById('systemAlerts').checked = currentUser.adminPreferences.systemAlerts !== false;
+      }
+    }
+    
+    function savePersonalInfo(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update user object
+      currentUser.name = document.getElementById('fullName').value;
+      currentUser.email = document.getElementById('email').value;
+      currentUser.phone = document.getElementById('phone').value;
+      currentUser.adminRole = document.getElementById('role').value;
+      
+      // Update sidebar
+      document.getElementById('profile-name').textContent = currentUser.name;
+      document.getElementById('profile-role').textContent = 
+        document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
+      
+      // Save user data
+      saveUserData(currentUser);
+      
+      alert('Personal information updated successfully');
+    }
+    
+    function saveSecuritySettings(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate password change
+      if (currentPassword && newPassword && confirmPassword) {
+        if (currentPassword !== currentUser.password) {
+          alert('Current password is incorrect');
+          return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+          alert('New passwords do not match');
+          return;
+        }
+        
+        // Update password
+        currentUser.password = newPassword;
+        
+        // Save user data
+        saveUserData(currentUser);
+        
+        // Reset form
+        document.getElementById('security-form').reset();
+        
+        alert('Password updated successfully');
+      } else if (currentPassword || newPassword || confirmPassword) {
+        alert('Please fill all password fields to change your password');
+      } else {
+        alert('No changes made');
+      }
+    }
+    
+    function saveSystemSettings(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update admin preferences
+      if (!currentUser.adminPreferences) currentUser.adminPreferences = {};
+      
+      currentUser.adminPreferences.notifyUserRegistration = document.getElementById('notifyUserRegistration').checked;
+      currentUser.adminPreferences.notifyDoctorRegistration = document.getElementById('notifyDoctorRegistration').checked;
+      currentUser.adminPreferences.systemAlerts = document.getElementById('systemAlerts').checked;
+      
+      // Save user data
+      saveUserData(currentUser);
+      
+      alert('System settings updated successfully');
+    }
+    
+    function updateAvatar(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          // Display the image
+          document.getElementById('avatarImage').innerHTML = `<img src="${e.target.result}" alt="Profile Picture">`;
+          
+          // Save avatar to user data
+          const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+          if (currentUser) {
+            currentUser.avatar = e.target.result;
+            saveUserData(currentUser);
+          }
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    
+    function saveUserData(userData) {
+      // Save current user
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      
+      // Update user in users array
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const userIndex = users.findIndex(user => user.id === userData.id);
+      
+      if (userIndex !== -1) {
+        users[userIndex] = userData;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+  </script>
+</body>
+</html> 

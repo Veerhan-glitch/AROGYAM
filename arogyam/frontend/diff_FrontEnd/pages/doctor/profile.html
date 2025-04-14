@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Profile - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .profile-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .profile-sidebar {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-avatar {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      color: var(--primary-color);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-edit {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .profile-menu {
+      margin-top: 30px;
+    }
+    
+    .profile-menu-item {
+      padding: 12px 15px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .profile-menu-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .profile-menu-item.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .profile-menu-item i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .profile-content {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-section {
+      display: none;
+    }
+    
+    .profile-section.active {
+      display: block;
+    }
+    
+    .profile-section h3 {
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:history.back()" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+      <h2>Doctor Profile</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="profile-container">
+        <!-- Profile Sidebar -->
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div id="avatarImage"><i class="fas fa-user-md"></i></div>
+            <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">
+              <i class="fas fa-camera"></i> Change
+            </div>
+            <input type="file" id="avatarInput" style="display:none" accept="image/*" onchange="updateAvatar(this)">
+          </div>
+          
+          <h3 id="profile-name" style="text-align: center; margin-top: 10px;">Dr. Name</h3>
+          <p id="profile-specialization" style="text-align: center; color: var(--primary-color);">Specialization</p>
+          
+          <div class="profile-menu">
+            <div class="profile-menu-item active" data-target="professional-info">
+              <i class="fas fa-user-md"></i> Professional Info
+            </div>
+            <div class="profile-menu-item" data-target="personal-info">
+              <i class="fas fa-user"></i> Personal Info
+            </div>
+            <div class="profile-menu-item" data-target="security">
+              <i class="fas fa-lock"></i> Security
+            </div>
+            <div class="profile-menu-item" data-target="schedule">
+              <i class="fas fa-calendar-check"></i> Schedule
+            </div>
+          </div>
+        </div>
+        
+        <!-- Profile Content -->
+        <div class="profile-content">
+          <!-- Professional Info Section -->
+          <div class="profile-section active" id="professional-info">
+            <h3>Professional Information</h3>
+            <form id="professional-info-form">
+              <div class="form-group">
+                <label for="specialization">Specialization</label>
+                <select id="specialization" class="form-input" required>
+                  <option value="">Select specialization</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Dermatology">Dermatology</option>
+                  <option value="Neurology">Neurology</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Psychiatry">Psychiatry</option>
+                  <option value="Gynecology">Gynecology</option>
+                  <option value="Ophthalmology">Ophthalmology</option>
+                  <option value="ENT">ENT</option>
+                  <option value="General Medicine">General Medicine</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="qualification">Qualifications</label>
+                <input type="text" id="qualification" class="form-input" placeholder="e.g. MBBS, MD, MS, DM, etc." required>
+              </div>
+              
+              <div class="form-group">
+                <label for="experience">Experience (Years)</label>
+                <input type="number" id="experience" class="form-input" min="0" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="registrationNumber">Medical Registration Number</label>
+                <input type="text" id="registrationNumber" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="consultationFee">Consultation Fee (₹)</label>
+                <input type="number" id="consultationFee" class="form-input" min="0" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="bio">Professional Bio</label>
+                <textarea id="bio" class="form-input" rows="4" placeholder="Brief description of your expertise and professional background"></textarea>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save Professional Info</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Personal Info Section -->
+          <div class="profile-section" id="personal-info">
+            <h3>Personal Information</h3>
+            <form id="personal-info-form">
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="form-input" placeholder="Your full name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="Your email address" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" class="form-input" placeholder="Your phone number" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="address">Clinic/Hospital Address</label>
+                <textarea id="address" class="form-input" rows="3" placeholder="Your clinic or hospital address"></textarea>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save Personal Info</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Security Section -->
+          <div class="profile-section" id="security">
+            <h3>Security Settings</h3>
+            <form id="security-form">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" class="form-input" placeholder="Enter your current password">
+              </div>
+              
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" class="form-input" placeholder="Enter new password">
+              </div>
+              
+              <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm new password">
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Update Password</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Schedule Section -->
+          <div class="profile-section" id="schedule">
+            <h3>Availability Schedule</h3>
+            <form id="schedule-form">
+              <div class="days-container">
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="monday-available" checked>
+                      <span>Monday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="monday-start">Start Time</label>
+                      <input type="time" id="monday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="monday-end">End Time</label>
+                      <input type="time" id="monday-end" class="form-input" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="tuesday-available" checked>
+                      <span>Tuesday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="tuesday-start">Start Time</label>
+                      <input type="time" id="tuesday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="tuesday-end">End Time</label>
+                      <input type="time" id="tuesday-end" class="form-input" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="wednesday-available" checked>
+                      <span>Wednesday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="wednesday-start">Start Time</label>
+                      <input type="time" id="wednesday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="wednesday-end">End Time</label>
+                      <input type="time" id="wednesday-end" class="form-input" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="thursday-available" checked>
+                      <span>Thursday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="thursday-start">Start Time</label>
+                      <input type="time" id="thursday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="thursday-end">End Time</label>
+                      <input type="time" id="thursday-end" class="form-input" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="friday-available" checked>
+                      <span>Friday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="friday-start">Start Time</label>
+                      <input type="time" id="friday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="friday-end">End Time</label>
+                      <input type="time" id="friday-end" class="form-input" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="saturday-available">
+                      <span>Saturday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="saturday-start">Start Time</label>
+                      <input type="time" id="saturday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="saturday-end">End Time</label>
+                      <input type="time" id="saturday-end" class="form-input" value="13:00">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="day-item">
+                  <div class="day-header">
+                    <label class="day-checkbox">
+                      <input type="checkbox" id="sunday-available">
+                      <span>Sunday</span>
+                    </label>
+                  </div>
+                  <div class="time-slots">
+                    <div class="form-group">
+                      <label for="sunday-start">Start Time</label>
+                      <input type="time" id="sunday-start" class="form-input" value="09:00">
+                    </div>
+                    <div class="form-group">
+                      <label for="sunday-end">End Time</label>
+                      <input type="time" id="sunday-end" class="form-input" value="13:00">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div style="text-align: right; margin-top: 30px;">
+                <button type="submit" class="action-btn">Save Schedule</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is a doctor
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'doctor') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load doctor data
+      loadDoctorData();
+      
+      // Setup menu navigation
+      document.querySelectorAll('.profile-menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          // Remove active class from all menu items and sections
+          document.querySelectorAll('.profile-menu-item').forEach(i => i.classList.remove('active'));
+          document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+          
+          // Add active class to clicked menu item and corresponding section
+          item.classList.add('active');
+          document.getElementById(item.dataset.target).classList.add('active');
+        });
+      });
+      
+      // Setup form submissions
+      document.getElementById('professional-info-form').addEventListener('submit', saveProfessionalInfo);
+      document.getElementById('personal-info-form').addEventListener('submit', savePersonalInfo);
+      document.getElementById('security-form').addEventListener('submit', saveSecuritySettings);
+      document.getElementById('schedule-form').addEventListener('submit', saveSchedule);
+    });
+    
+    function loadDoctorData() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Get doctor data from users or doctors collection
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      const doctorData = doctors.find(doc => doc.userId === currentUser.id) || {};
+      
+      // Load profile picture if exists
+      if (currentUser.avatar) {
+        document.getElementById('avatarImage').innerHTML = `<img src="${currentUser.avatar}" alt="Profile Picture">`;
+      }
+      
+      // Update sidebar info
+      document.getElementById('profile-name').textContent = `Dr. ${currentUser.name}`;
+      document.getElementById('profile-specialization').textContent = doctorData.specialization || 'Specialization';
+      
+      // Populate professional info form
+      document.getElementById('specialization').value = doctorData.specialization || '';
+      document.getElementById('qualification').value = doctorData.qualification || '';
+      document.getElementById('experience').value = doctorData.experience || '';
+      document.getElementById('registrationNumber').value = doctorData.registrationNumber || '';
+      document.getElementById('consultationFee').value = doctorData.consultationFee || '';
+      document.getElementById('bio').value = doctorData.bio || '';
+      
+      // Populate personal info form
+      document.getElementById('fullName').value = currentUser.name || '';
+      document.getElementById('email').value = currentUser.email || '';
+      document.getElementById('phone').value = currentUser.phone || '';
+      document.getElementById('address').value = doctorData.address || '';
+      
+      // Populate schedule if available
+      if (doctorData.schedule) {
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        days.forEach(day => {
+          if (doctorData.schedule[day]) {
+            document.getElementById(`${day}-available`).checked = doctorData.schedule[day].available;
+            document.getElementById(`${day}-start`).value = doctorData.schedule[day].start || '09:00';
+            document.getElementById(`${day}-end`).value = doctorData.schedule[day].end || '17:00';
+          }
+        });
+      }
+    }
+    
+    function saveProfessionalInfo(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Get all doctors
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      
+      // Find current doctor or create new one
+      let doctorData = doctors.find(doc => doc.userId === currentUser.id);
+      const isNew = !doctorData;
+      
+      if (isNew) {
+        doctorData = {
+          id: 'doc_' + Date.now(),
+          userId: currentUser.id,
+          name: currentUser.name
+        };
+      }
+      
+      // Update doctor data
+      doctorData.specialization = document.getElementById('specialization').value;
+      doctorData.qualification = document.getElementById('qualification').value;
+      doctorData.experience = document.getElementById('experience').value;
+      doctorData.registrationNumber = document.getElementById('registrationNumber').value;
+      doctorData.consultationFee = document.getElementById('consultationFee').value;
+      doctorData.bio = document.getElementById('bio').value;
+      
+      // Update sidebar
+      document.getElementById('profile-specialization').textContent = doctorData.specialization;
+      
+      // Save to localStorage
+      if (isNew) {
+        doctors.push(doctorData);
+      }
+      localStorage.setItem('doctors', JSON.stringify(doctors));
+      
+      alert('Professional information updated successfully');
+    }
+    
+    function savePersonalInfo(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Update user object
+      currentUser.name = document.getElementById('fullName').value;
+      currentUser.email = document.getElementById('email').value;
+      currentUser.phone = document.getElementById('phone').value;
+      
+      // Update doctor object
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      const doctorData = doctors.find(doc => doc.userId === currentUser.id);
+      
+      if (doctorData) {
+        doctorData.name = currentUser.name;
+        doctorData.address = document.getElementById('address').value;
+        localStorage.setItem('doctors', JSON.stringify(doctors));
+      }
+      
+      // Update sidebar
+      document.getElementById('profile-name').textContent = `Dr. ${currentUser.name}`;
+      
+      // Save user data
+      saveUserData(currentUser);
+      
+      alert('Personal information updated successfully');
+    }
+    
+    function saveSecuritySettings(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate password change
+      if (currentPassword && newPassword && confirmPassword) {
+        if (currentPassword !== currentUser.password) {
+          alert('Current password is incorrect');
+          return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+          alert('New passwords do not match');
+          return;
+        }
+        
+        // Update password
+        currentUser.password = newPassword;
+        
+        // Save user data
+        saveUserData(currentUser);
+        
+        // Reset form
+        document.getElementById('security-form').reset();
+        
+        alert('Password updated successfully');
+      } else if (currentPassword || newPassword || confirmPassword) {
+        alert('Please fill all password fields to change your password');
+      } else {
+        alert('No changes made');
+      }
+    }
+    
+    function saveSchedule(event) {
+      event.preventDefault();
+      
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) return;
+      
+      // Get all doctors
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      const doctorData = doctors.find(doc => doc.userId === currentUser.id);
+      
+      if (!doctorData) {
+        alert('Please save your professional information first');
+        return;
+      }
+      
+      // Create schedule object
+      const schedule = {};
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      
+      days.forEach(day => {
+        schedule[day] = {
+          available: document.getElementById(`${day}-available`).checked,
+          start: document.getElementById(`${day}-start`).value,
+          end: document.getElementById(`${day}-end`).value
+        };
+      });
+      
+      // Update doctor data
+      doctorData.schedule = schedule;
+      localStorage.setItem('doctors', JSON.stringify(doctors));
+      
+      alert('Schedule updated successfully');
+    }
+    
+    function updateAvatar(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          // Display the image
+          document.getElementById('avatarImage').innerHTML = `<img src="${e.target.result}" alt="Profile Picture">`;
+          
+          // Save avatar to user data
+          const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+          if (currentUser) {
+            currentUser.avatar = e.target.result;
+            saveUserData(currentUser);
+          }
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    
+    function saveUserData(userData) {
+      // Save current user
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      
+      // Update user in users array
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const userIndex = users.findIndex(user => user.id === userData.id);
+      
+      if (userIndex !== -1) {
+        users[userIndex] = userData;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+  </script>
+</body>
+</html> 

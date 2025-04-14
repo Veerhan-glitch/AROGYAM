@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Spending & Offers - Arogyam Admin</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .chart-container {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 25px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+      height: 350px;
+    }
+    
+    .chart-container h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+    
+    .chart-placeholder {
+      height: 300px;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    
+    .spending-category {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+    
+    .spending-category:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .category-name {
+      font-weight: 600;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
+    .category-value {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .category-progress {
+      height: 8px;
+      background-color: var(--secondary-light);
+      border-radius: 4px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 4px;
+    }
+    
+    .category-percentage {
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    
+    .offer-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .offer-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .offer-card.active {
+      border-left-color: var(--success-color);
+    }
+    
+    .offer-card.expired {
+      border-left-color: var(--danger-color);
+      opacity: 0.8;
+    }
+    
+    .offer-card.upcoming {
+      border-left-color: var(--warning-color);
+    }
+    
+    .offer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .offer-title {
+      font-weight: 600;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
+    .offer-dates {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    
+    .offer-details {
+      margin-bottom: 15px;
+    }
+    
+    .offer-code {
+      background-color: var(--primary-light);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      font-family: monospace;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .offer-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    
+    .status-active {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-color);
+    }
+    
+    .status-expired {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .status-upcoming {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .offer-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .offer-stat {
+      text-align: center;
+      padding: 10px;
+      background-color: var(--secondary-light);
+      border-radius: var(--radius-sm);
+    }
+    
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-text {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    /* Modal for new offer */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow: auto;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: var(--radius);
+      max-width: 600px;
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin: 0;
+    }
+    
+    .close-btn {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+    
+    .close-btn:hover {
+      color: var(--danger-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h2>Order Spending & Offers</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="totalSpendingValue">₹0</div>
+          <div class="stat-label">Total Spending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="activeOffersValue">0</div>
+          <div class="stat-label">Active Offers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="offerRedemptionsValue">0</div>
+          <div class="stat-label">Offer Redemptions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="avgDiscountValue">0%</div>
+          <div class="stat-label">Avg. Discount</div>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="offers">Promotional Offers</button>
+        <button class="tab-btn" data-tab="spending">Spending Analysis</button>
+      </div>
+      
+      <!-- Overview Tab -->
+      <div class="tab-content active" id="overviewTab">
+        <div class="chart-container">
+          <h3>Monthly Spending Overview</h3>
+          <div class="chart-placeholder" id="monthlySpendingChart">
+            <div>
+              <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+              <p>Chart will be displayed here</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+          <div>
+            <h3>Top Spending Categories</h3>
+            <div id="topCategoriesContainer">
+              <!-- Top categories will be loaded here -->
+            </div>
+          </div>
+          
+          <div>
+            <h3>Current Promotional Offers</h3>
+            <div id="currentOffersContainer">
+              <!-- Current offers will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Offers Tab -->
+      <div class="tab-content" id="offersTab">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Manage Promotional Offers</h3>
+          <button class="action-btn" onclick="openNewOfferModal()">
+            <i class="fas fa-plus"></i> Create New Offer
+          </button>
+        </div>
+        
+        <div class="filter-group" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+          <div class="filter-group">
+            <label for="offerStatusFilter">Filter by Status:</label>
+            <select id="offerStatusFilter" onchange="filterOffers()">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="expired">Expired</option>
+              <option value="upcoming">Upcoming</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="offerTypeFilter">Filter by Type:</label>
+            <select id="offerTypeFilter" onchange="filterOffers()">
+              <option value="">All Types</option>
+              <option value="percentage">Percentage Discount</option>
+              <option value="fixed">Fixed Amount</option>
+              <option value="bogo">Buy One Get One</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="offerSortBy">Sort By:</label>
+            <select id="offerSortBy" onchange="filterOffers()">
+              <option value="date-desc">End Date (Newest First)</option>
+              <option value="date-asc">End Date (Oldest First)</option>
+              <option value="usage-desc">Usage (High to Low)</option>
+              <option value="discount-desc">Discount Value (High to Low)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div id="offersContainer">
+          <!-- Offers will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Spending Analysis Tab -->
+      <div class="tab-content" id="spendingTab">
+        <div class="chart-container">
+          <h3>Spending by Category</h3>
+          <div class="chart-placeholder" id="categorySpendingChart">
+            <div>
+              <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+              <p>Category breakdown chart will be displayed here</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+          <div class="chart-container" style="height: auto; min-height: 350px;">
+            <h3>Top Spending Users</h3>
+            <div id="topSpendingUsersContainer">
+              <!-- Top spending users will be loaded here -->
+            </div>
+          </div>
+          
+          <div class="chart-container" style="height: auto; min-height: 350px;">
+            <h3>High-Value Transaction Analysis</h3>
+            <div id="highValueTransactionsContainer">
+              <!-- High value transactions will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- New Offer Modal -->
+  <div id="newOfferModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Offer</h2>
+        <span class="close-btn" onclick="closeNewOfferModal()">&times;</span>
+      </div>
+      
+      <form id="newOfferForm" onsubmit="createNewOffer(event)">
+        <div class="form-group">
+          <label for="offerTitle">Offer Title</label>
+          <input type="text" id="offerTitle" required placeholder="Enter offer title">
+        </div>
+        
+        <div class="form-group">
+          <label for="offerDescription">Description</label>
+          <textarea id="offerDescription" required placeholder="Enter offer description"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="offerCode">Coupon Code</label>
+          <input type="text" id="offerCode" required placeholder="Enter coupon code (e.g., SUMMER20)">
+        </div>
+        
+        <div class="form-group">
+          <label for="offerType">Discount Type</label>
+          <select id="offerType" required>
+            <option value="" disabled selected>Select discount type</option>
+            <option value="percentage">Percentage Discount</option>
+            <option value="fixed">Fixed Amount</option>
+            <option value="bogo">Buy One Get One Free</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="offerValue">Discount Value</label>
+          <input type="number" id="offerValue" required placeholder="Enter discount value">
+        </div>
+        
+        <div class="form-group">
+          <label for="minimumOrder">Minimum Order Value</label>
+          <input type="number" id="minimumOrder" required placeholder="Enter minimum order value">
+        </div>
+        
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" id="startDate" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" id="endDate" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="maxUsage">Maximum Redemptions</label>
+          <input type="number" id="maxUsage" required placeholder="Maximum number of times this offer can be used">
+        </div>
+        
+        <button type="submit" class="action-btn" style="width: 100%; margin-top: 20px;">
+          <i class="fas fa-plus-circle"></i> Create Offer
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Initialize offers if needed
+      initializeOffersIfNeeded();
+      
+      // Load spending statistics
+      loadSpendingStats();
+      
+      // Load tab content
+      loadOverviewTab();
+      
+      // Setup tab switching
+      setupTabs();
+    });
+    
+    function setupTabs() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to current button and corresponding content
+          btn.classList.add('active');
+          const tabId = btn.getAttribute('data-tab');
+          document.getElementById(`${tabId}Tab`).classList.add('active');
+          
+          // Load tab content
+          switch (tabId) {
+            case 'overview':
+              loadOverviewTab();
+              break;
+            case 'offers':
+              loadOffersTab();
+              break;
+            case 'spending':
+              loadSpendingTab();
+              break;
+          }
+        });
+      });
+    }
+    
+    function initializeOffersIfNeeded() {
+      // Check if offers exist in localStorage
+      let offers = JSON.parse(localStorage.getItem('offers')) || [];
+      
+      // If no offers, create sample data
+      if (offers.length === 0) {
+        // Sample offer data
+        const sampleOffers = [
+          {
+            id: 'offer_' + Date.now() + '_1',
+            title: 'Summer Special Discount',
+            description: 'Get 20% off on all summer healthcare products and supplements.',
+            code: 'SUMMER20',
+            type: 'percentage',
+            value: 20,
+            minimumOrder: 500,
+            startDate: new Date(new Date().setDate(new Date().getDate() - 10)).toISOString(),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 20)).toISOString(),
+            maxUsage: 100,
+            usedCount: 37,
+            totalDiscount: 14820,
+            status: 'active'
+          },
+          {
+            id: 'offer_' + Date.now() + '_2',
+            title: 'First Order Discount',
+            description: 'Get ₹200 off on your first order above ₹1000.',
+            code: 'WELCOME200',
+            type: 'fixed',
+            value: 200,
+            minimumOrder: 1000,
+            startDate: new Date(new Date().setDate(new Date().getDate() - 60)).toISOString(),
+            endDate: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
+            maxUsage: 500,
+            usedCount: 283,
+            totalDiscount: 56600,
+            status: 'expired'
+          },
+          {
+            id: 'offer_' + Date.now() + '_3',
+            title: 'Festive Season Offer',
+            description: 'Buy one get one free on all vitamin supplements.',
+            code: 'BOGO2023',
+            type: 'bogo',
+            value: 100,
+            minimumOrder: 800,
+            startDate: new Date(new Date().setDate(new Date().getDate() + 15)).toISOString(),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 45)).toISOString(),
+            maxUsage: 200,
+            usedCount: 0,
+            totalDiscount: 0,
+            status: 'upcoming'
+          },
+          {
+            id: 'offer_' + Date.now() + '_4',
+            title: 'Senior Citizen Discount',
+            description: 'Special 15% discount for senior citizens on all medicine orders.',
+            code: 'SENIOR15',
+            type: 'percentage',
+            value: 15,
+            minimumOrder: 0,
+            startDate: new Date(new Date().setDate(new Date().getDate() - 90)).toISOString(),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 275)).toISOString(),
+            maxUsage: 1000,
+            usedCount: 156,
+            totalDiscount: 28340,
+            status: 'active'
+          },
+          {
+            id: 'offer_' + Date.now() + '_5',
+            title: 'Weekend Flash Sale',
+            description: 'Get flat ₹500 off on orders above ₹2000 this weekend only.',
+            code: 'FLASH500',
+            type: 'fixed',
+            value: 500,
+            minimumOrder: 2000,
+            startDate: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString(),
+            endDate: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString(),
+            maxUsage: 50,
+            usedCount: 48,
+            totalDiscount: 24000,
+            status: 'expired'
+          }
+        ];
+        
+        localStorage.setItem('offers', JSON.stringify(sampleOffers));
+      }
+    }
+    
+    function loadSpendingStats() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const offers = JSON.parse(localStorage.getItem('offers')) || [];
+      
+      // Total spending
+      const totalSpending = orders.reduce((sum, order) => sum + order.total, 0);
+      document.getElementById('totalSpendingValue').textContent = `₹${totalSpending}`;
+      
+      // Active offers
+      const activeOffers = offers.filter(offer => offer.status === 'active').length;
+      document.getElementById('activeOffersValue').textContent = activeOffers;
+      
+      // Offer redemptions
+      const offerRedemptions = offers.reduce((sum, offer) => sum + offer.usedCount, 0);
+      document.getElementById('offerRedemptionsValue').textContent = offerRedemptions;
+      
+      // Average discount
+      const totalDiscount = offers.reduce((sum, offer) => sum + offer.totalDiscount, 0);
+      const totalOrders = orders.length;
+      const avgDiscount = totalOrders > 0 ? Math.round((totalDiscount / totalSpending) * 100) : 0;
+      document.getElementById('avgDiscountValue').textContent = `${avgDiscount}%`;
+    }
+    
+    function loadOverviewTab() {
+      // Load top spending categories
+      loadTopSpendingCategories();
+      
+      // Load current offers
+      loadCurrentOffers();
+      
+      // In a real app, render charts using a charting library like Chart.js
+      document.getElementById('monthlySpendingChart').innerHTML = `
+        <div>
+          <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+          <p>Monthly spending chart would be displayed here using a library like Chart.js</p>
+          <p>Showing spending trends over the last 12 months</p>
+        </div>
+      `;
+    }
+    
+    function loadTopSpendingCategories() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Get all items from all orders
+      let allItems = [];
+      orders.forEach(order => {
+        order.items.forEach(item => {
+          allItems.push(item);
+        });
+      });
+      
+      // Calculate spending by category
+      const categories = {};
+      allItems.forEach(item => {
+        const type = item.type || 'other';
+        if (!categories[type]) {
+          categories[type] = 0;
+        }
+        categories[type] += item.price * item.quantity;
+      });
+      
+      // Sort categories by spending
+      const sortedCategories = Object.entries(categories)
+        .sort(([, valueA], [, valueB]) => valueB - valueA);
+      
+      // Calculate total spending
+      const totalSpending = sortedCategories.reduce((sum, [, value]) => sum + value, 0);
+      
+      // Take top 5 categories
+      const topCategories = sortedCategories.slice(0, 5);
+      
+      const container = document.getElementById('topCategoriesContainer');
+      container.innerHTML = '';
+      
+      // Render top categories
+      topCategories.forEach(([category, value]) => {
+        const percentage = Math.round((value / totalSpending) * 100);
+        
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'spending-category';
+        categoryEl.innerHTML = `
+          <div class="category-header">
+            <h4 class="category-name">${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+            <span class="category-value">₹${value}</span>
+          </div>
+          <div class="category-progress">
+            <div class="progress-bar" style="width: ${percentage}%"></div>
+          </div>
+          <div class="category-percentage">${percentage}% of total spending</div>
+        `;
+        
+        container.appendChild(categoryEl);
+      });
+      
+      // If no categories
+      if (topCategories.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-chart-pie" style="font-size: 3rem; color: var(--text-light); margin-bottom: 15px;"></i>
+            <p>No spending data available to show categories.</p>
+          </div>
+        `;
+      }
+    }
+    
+    function loadCurrentOffers() {
+      const offers = JSON.parse(localStorage.getItem('offers')) || [];
+      
+      // Filter active offers
+      const activeOffers = offers.filter(offer => offer.status === 'active');
+      
+      const container = document.getElementById('currentOffersContainer');
+      container.innerHTML = '';
+      
+      // Render active offers
+      activeOffers.forEach(offer => {
+        const offerEl = document.createElement('div');
+        offerEl.className = 'offer-card active';
+        
+        // Format dates
+        const startDate = new Date(offer.startDate);
+        const endDate = new Date(offer.endDate);
+        
+        const formattedStartDate = startDate.toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        
+        const formattedEndDate = endDate.toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        
+        offerEl.innerHTML = `
+          <div class="offer-header">
+            <h4 class="offer-title">${offer.title}</h4>
+            <span class="offer-status status-active">Active</span>
+          </div>
+          <div class="offer-details">
+            <p>${offer.description}</p>
+            <div class="offer-code">${offer.code}</div>
+            <p class="offer-dates">Valid from ${formattedStartDate} to ${formattedEndDate}</p>
+          </div>
+          <div class="offer-stats">
+            <div class="offer-stat">
+              <div class="stat-number">${offer.usedCount}</div>
+              <div class="stat-text">Used</div>
+            </div>
+            <div class="offer-stat">
+              <div class="stat-number">${offer.maxUsage - offer.usedCount}</div>
+              <div class="stat-text">Remaining</div>
+            </div>
+            <div class="offer-stat">
+              <div class="stat-number">₹${offer.totalDiscount}</div>
+              <div class="stat-text">Total Discount</div>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(offerEl);
+      });
+      
+      // If no active offers
+      if (activeOffers.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-tags" style="font-size: 3rem; color: var(--text-light); margin-bottom: 15px;"></i>
+            <p>No active offers available.</p>
+          </div>
+        `;
+      }
+    }
+    
+    function loadOffersTab() {
+      filterOffers();
+    }
+    
+    function filterOffers() {
+      let offers = JSON.parse(localStorage.getItem('offers')) || [];
+      
+      // Apply filters
+      const statusFilter = document.getElementById('offerStatusFilter').value;
+      const typeFilter = document.getElementById('offerTypeFilter').value;
+      const sortBy = document.getElementById('offerSortBy').value;
+      
+      if (statusFilter) {
+        offers = offers.filter(offer => offer.status === statusFilter);
+      }
+      
+      if (typeFilter) {
+        offers = offers.filter(offer => offer.type === typeFilter);
+      }
+      
+      // Sort offers
+      switch (sortBy) {
+        case 'date-desc':
+          offers.sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+          break;
+        case 'date-asc':
+          offers.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
+          break;
+        case 'usage-desc':
+          offers.sort((a, b) => b.usedCount - a.usedCount);
+          break;
+        case 'discount-desc':
+          offers.sort((a, b) => b.totalDiscount - a.totalDiscount);
+          break;
+      }
+      
+      const container = document.getElementById('offersContainer');
+      
+      if (offers.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-percentage" style="font-size: 3rem; color: var(--text-light); margin-bottom: 15px;"></i>
+            <p>No offers found matching the selected filters.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      // Render offers
+      offers.forEach(offer => {
+        const offerEl = document.createElement('div');
+        offerEl.className = `offer-card ${offer.status}`;
+        
+        // Format dates
+        const startDate = new Date(offer.startDate);
+        const endDate = new Date(offer.endDate);
+        
+        const formattedStartDate = startDate.toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        
+        const formattedEndDate = endDate.toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        
+        // Format discount value based on type
+        let discountText = '';
+        switch (offer.type) {
+          case 'percentage':
+            discountText = `${offer.value}% off`;
+            break;
+          case 'fixed':
+            discountText = `₹${offer.value} off`;
+            break;
+          case 'bogo':
+            discountText = 'Buy 1 Get 1 Free';
+            break;
+        }
+        
+        // Format status text
+        const statusText = offer.status.charAt(0).toUpperCase() + offer.status.slice(1);
+        
+        offerEl.innerHTML = `
+          <div class="offer-header">
+            <h4 class="offer-title">${offer.title}</h4>
+            <span class="offer-status status-${offer.status}">${statusText}</span>
+          </div>
+          <div class="offer-details">
+            <p>${offer.description}</p>
+            <p><strong>Discount:</strong> ${discountText}</p>
+            <p><strong>Minimum Order:</strong> ₹${offer.minimumOrder}</p>
+            <div class="offer-code">${offer.code}</div>
+            <p class="offer-dates">Valid from ${formattedStartDate} to ${formattedEndDate}</p>
+          </div>
+          <div class="offer-stats">
+            <div class="offer-stat">
+              <div class="stat-number">${offer.usedCount}</div>
+              <div class="stat-text">Used</div>
+            </div>
+            <div class="offer-stat">
+              <div class="stat-number">${offer.maxUsage - offer.usedCount}</div>
+              <div class="stat-text">Remaining</div>
+            </div>
+            <div class="offer-stat">
+              <div class="stat-number">₹${offer.totalDiscount}</div>
+              <div class="stat-text">Total Discount</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="action-btn" onclick="editOffer('${offer.id}')">
+              <i class="fas fa-edit"></i> Edit Offer
+            </button>
+            <button class="action-btn danger" onclick="deleteOffer('${offer.id}')">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(offerEl);
+      });
+    }
+    
+    function loadSpendingTab() {
+      // Load top spending users
+      loadTopSpendingUsers();
+      
+      // Load high value transactions
+      loadHighValueTransactions();
+      
+      // In a real app, render charts using a charting library like Chart.js
+      document.getElementById('categorySpendingChart').innerHTML = `
+        <div>
+          <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+          <p>Category spending chart would be displayed here using a library like Chart.js</p>
+          <p>Showing spending breakdown by product and service categories</p>
+        </div>
+      `;
+    }
+    
+    function loadTopSpendingUsers() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Calculate spending by user
+      const userSpending = {};
+      
+      orders.forEach(order => {
+        const userId = order.userId;
+        if (!userSpending[userId]) {
+          userSpending[userId] = {
+            userId: userId,
+            userName: order.userName,
+            userEmail: order.userEmail,
+            totalSpending: 0,
+            orderCount: 0
+          };
+        }
+        
+        userSpending[userId].totalSpending += order.total;
+        userSpending[userId].orderCount += 1;
+      });
+      
+      // Sort users by spending
+      const sortedUsers = Object.values(userSpending)
+        .sort((a, b) => b.totalSpending - a.totalSpending);
+      
+      // Take top 5 users
+      const topUsers = sortedUsers.slice(0, 5);
+      
+      const container = document.getElementById('topSpendingUsersContainer');
+      
+      if (topUsers.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-user-tag" style="font-size: 3rem; color: var(--text-light); margin-bottom: 15px;"></i>
+            <p>No user spending data available.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = `
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 10px;">User</th>
+              <th style="text-align: right; padding: 10px;">Orders</th>
+              <th style="text-align: right; padding: 10px;">Total Spending</th>
+              <th style="text-align: right; padding: 10px;">Avg. Order Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${topUsers.map(user => `
+              <tr>
+                <td style="padding: 10px; border-top: 1px solid var(--border-color);">
+                  <div style="font-weight: 500;">${user.userName}</div>
+                  <div style="font-size: 0.8rem; color: var(--text-light);">${user.userEmail}</div>
+                </td>
+                <td style="padding: 10px; text-align: right; border-top: 1px solid var(--border-color);">${user.orderCount}</td>
+                <td style="padding: 10px; text-align: right; border-top: 1px solid var(--border-color); font-weight: 500;">₹${user.totalSpending}</td>
+                <td style="padding: 10px; text-align: right; border-top: 1px solid var(--border-color);">₹${Math.round(user.totalSpending / user.orderCount)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+    
+    function loadHighValueTransactions() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Sort orders by total amount
+      const sortedOrders = [...orders].sort((a, b) => b.total - a.total);
+      
+      // Take top 5 high value orders
+      const highValueOrders = sortedOrders.slice(0, 5);
+      
+      const container = document.getElementById('highValueTransactionsContainer');
+      
+      if (highValueOrders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-money-bill-wave" style="font-size: 3rem; color: var(--text-light); margin-bottom: 15px;"></i>
+            <p>No transaction data available.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = `
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 10px;">Order ID</th>
+              <th style="text-align: left; padding: 10px;">User</th>
+              <th style="text-align: right; padding: 10px;">Date</th>
+              <th style="text-align: right; padding: 10px;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${highValueOrders.map(order => {
+              const orderDate = new Date(order.orderDate);
+              const formattedDate = orderDate.toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              });
+              
+              return `
+                <tr>
+                  <td style="padding: 10px; border-top: 1px solid var(--border-color);">${order.id}</td>
+                  <td style="padding: 10px; border-top: 1px solid var(--border-color);">${order.userName}</td>
+                  <td style="padding: 10px; text-align: right; border-top: 1px solid var(--border-color);">${formattedDate}</td>
+                  <td style="padding: 10px; text-align: right; border-top: 1px solid var(--border-color); font-weight: 500;">₹${order.total}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+    
+    // New Offer Modal Functions
+    function openNewOfferModal() {
+      document.getElementById('newOfferModal').style.display = 'block';
+      
+      // Set default dates
+      const today = new Date().toISOString().split('T')[0];
+      const nextMonth = new Date();
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      const nextMonthDate = nextMonth.toISOString().split('T')[0];
+      
+      document.getElementById('startDate').value = today;
+      document.getElementById('endDate').value = nextMonthDate;
+    }
+    
+    function closeNewOfferModal() {
+      document.getElementById('newOfferModal').style.display = 'none';
+      document.getElementById('newOfferForm').reset();
+    }
+    
+    function createNewOffer(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('offerTitle').value;
+      const description = document.getElementById('offerDescription').value;
+      const code = document.getElementById('offerCode').value;
+      const type = document.getElementById('offerType').value;
+      const value = parseFloat(document.getElementById('offerValue').value);
+      const minimumOrder = parseFloat(document.getElementById('minimumOrder').value);
+      const startDate = new Date(document.getElementById('startDate').value);
+      const endDate = new Date(document.getElementById('endDate').value);
+      const maxUsage = parseInt(document.getElementById('maxUsage').value);
+      
+      // Validate dates
+      if (startDate > endDate) {
+        alert('End date must be after start date.');
+        return;
+      }
+      
+      // Check if code already exists
+      const offers = JSON.parse(localStorage.getItem('offers')) || [];
+      if (offers.some(offer => offer.code === code)) {
+        alert('This coupon code already exists. Please use a different code.');
+        return;
+      }
+      
+      // Determine status based on dates
+      const now = new Date();
+      let status = 'upcoming';
+      
+      if (startDate <= now && endDate >= now) {
+        status = 'active';
+      } else if (endDate < now) {
+        status = 'expired';
+      }
+      
+      // Create new offer
+      const newOffer = {
+        id: 'offer_' + Date.now(),
+        title,
+        description,
+        code,
+        type,
+        value,
+        minimumOrder,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        maxUsage,
+        usedCount: 0,
+        totalDiscount: 0,
+        status
+      };
+      
+      // Add to offers
+      offers.push(newOffer);
+      localStorage.setItem('offers', JSON.stringify(offers));
+      
+      // Close modal and reload offers
+      closeNewOfferModal();
+      loadSpendingStats();
+      filterOffers();
+      
+      if (document.querySelector('.tab-btn.active').getAttribute('data-tab') === 'overview') {
+        loadCurrentOffers();
+      }
+      
+      alert('New offer created successfully!');
+    }
+    
+    function editOffer(offerId) {
+      alert('Edit functionality will be implemented with backend integration.');
+    }
+    
+    function deleteOffer(offerId) {
+      if (confirm('Are you sure you want to delete this offer?')) {
+        const offers = JSON.parse(localStorage.getItem('offers')) || [];
+        const updatedOffers = offers.filter(offer => offer.id !== offerId);
+        localStorage.setItem('offers', JSON.stringify(updatedOffers));
+        
+        // Reload data
+        loadSpendingStats();
+        filterOffers();
+        
+        if (document.querySelector('.tab-btn.active').getAttribute('data-tab') === 'overview') {
+          loadCurrentOffers();
+        }
+        
+        alert('Offer deleted successfully!');
+      }
+    }
+  </script>
+</body>
+</html> 

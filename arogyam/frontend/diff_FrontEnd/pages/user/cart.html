@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .cart-container {
+      margin-top: 20px;
+    }
+    
+    .cart-item {
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .cart-header {
+      font-weight: bold;
+      background-color: var(--primary-light);
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+    
+    .cart-item .product-name {
+      font-weight: 500;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quantity-control button {
+      background: var(--secondary-light);
+      border: none;
+      width: 30px;
+      height: 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    
+    .quantity-control button:hover {
+      background: var(--secondary-color);
+      color: white;
+    }
+    
+    .quantity-control span {
+      margin: 0 10px;
+      font-weight: 500;
+    }
+    
+    .cart-summary {
+      margin-top: 30px;
+      background-color: var(--primary-light);
+      padding: 20px;
+      border-radius: var(--radius);
+    }
+    
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    
+    .checkout-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 50px 20px;
+      background-color: var(--primary-light);
+      border-radius: var(--radius);
+      margin-top: 30px;
+    }
+    
+    .empty-cart i {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+    
+    .empty-cart h3 {
+      margin-bottom: 15px;
+    }
+    
+    .remove-item {
+      color: var(--danger-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    
+    .remove-item:hover {
+      color: #bd2130;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Your Shopping Cart</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div id="cartContent">
+        <!-- Content will be dynamically loaded here -->
+        <p>Loading cart...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    // Backup getTrendingProducts function in case features.js fails to load
+    function getTrendingProducts() {
+      // Check if we already have products in localStorage
+      let products = JSON.parse(localStorage.getItem('products')) || [];
+      
+      // If no products found, create sample data
+      if (products.length === 0) {
+        products = [
+          { 
+            id: 'prod1',
+            name: 'Glucofast Blood Glucose Monitor', 
+            rating: 4.8, 
+            reviews: 120,
+            price: 1499,
+            category: 'Healthcare',
+            description: 'Advanced blood glucose monitoring system with accurate readings'
+          },
+          { 
+            id: 'prod2',
+            name: 'Zencalm Stress Relief Tablets', 
+            rating: 4.7, 
+            reviews: 85,
+            price: 299,
+            category: 'Tablets',
+            description: 'Natural formula to help reduce stress and anxiety'
+          },
+          { 
+            id: 'prod3',
+            name: 'VitaBoost Multivitamin Pack', 
+            rating: 4.9, 
+            reviews: 200,
+            price: 599,
+            category: 'Supplements',
+            description: 'Complete daily multivitamin formula for adults'
+          },
+          { 
+            id: 'prod4',
+            name: 'OrthoFlex Joint Support', 
+            rating: 4.6, 
+            reviews: 150,
+            price: 499,
+            category: 'Supplements',
+            description: 'Supports joint health and improves mobility'
+          },
+          { 
+            id: 'prod5',
+            name: 'NeuroCalm Headache Relief', 
+            rating: 4.5, 
+            reviews: 78,
+            price: 199,
+            category: 'Tablets',
+            description: 'Fast-acting relief for headaches and migraines'
+          }
+        ];
+        
+        // Save to localStorage
+        localStorage.setItem('products', JSON.stringify(products));
+      }
+      
+      return products;
+    }
+    
+    // Local version of updateCartCount function
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const totalItems = cart.reduce((total, item) => total + (parseInt(item.quantity) || 0), 0);
+      
+      // If we have a cart count element on this page, update it
+      const cartCountElement = document.getElementById('cartCount');
+      if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = totalItems > 0 ? 'inline-block' : 'none';
+      }
+      
+      return totalItems;
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load cart items
+      loadCart();
+    });
+    
+    function loadCart() {
+      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartContent = document.getElementById('cartContent');
+      
+      if (cartItems.length === 0) {
+        cartContent.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <button class="action-btn" onclick="window.location.href='doctor-analytics.html#medicines'">
+              <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </button>
+          </div>
+        `;
+        return;
+      }
+      
+      // Get product information using the IDs in the cart
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+      
+      // Debug information
+      console.log('Cart items:', cartItems);
+      console.log('Products:', products);
+      console.log('Medicines:', medicines);
+      
+      // Initialize trending products if needed for product data
+      if (!products || products.length === 0) {
+        console.log('Initializing products data');
+        getTrendingProducts(); // This will initialize products data if it doesn't exist
+      }
+      
+      // Merge products data with cart quantities, product info can be in either products or medicines array
+      const cartWithDetails = cartItems.map(item => {
+        // Check for product in both arrays
+        let productInfo = null;
+        
+        if (products && products.length > 0) {
+          productInfo = products.find(p => p.id === item.productId);
+        }
+        
+        if (!productInfo && medicines && medicines.length > 0) {
+          productInfo = medicines.find(p => p.id === item.productId);
+        }
+        
+        // If product not found, use info saved in cart
+        if (!productInfo) {
+          productInfo = {
+            name: item.productName || 'Product',
+            price: parseFloat(item.price) || 199
+          };
+        }
+        
+        // Ensure price is a number
+        const price = parseFloat(productInfo.price || item.price || 199);
+        const quantity = parseInt(item.quantity || 1);
+        
+        return {
+          ...item,
+          name: productInfo.name || item.productName || 'Product',
+          price: price,
+          quantity: quantity,
+          total: price * quantity
+        };
+      });
+      
+      // Calculate cart total
+      const cartTotal = cartWithDetails.reduce((sum, item) => sum + item.total, 0);
+      
+      // Generate cart HTML
+      let cartHTML = `
+        <div class="cart-container">
+          <div class="cart-item cart-header">
+            <div>Product</div>
+            <div>Price</div>
+            <div>Quantity</div>
+            <div>Total</div>
+            <div></div>
+          </div>
+      `;
+      
+      cartWithDetails.forEach(item => {
+        cartHTML += `
+          <div class="cart-item" data-id="${item.productId}">
+            <div class="product-name">${item.name}</div>
+            <div>₹${item.price.toFixed(2)}</div>
+            <div class="quantity-control">
+              <button onclick="updateCartItem('${item.productId}', -1)">-</button>
+              <span>${item.quantity}</span>
+              <button onclick="updateCartItem('${item.productId}', 1)">+</button>
+            </div>
+            <div>₹${item.total.toFixed(2)}</div>
+            <div>
+              <i class="fas fa-trash-alt remove-item" onclick="removeFromCart('${item.productId}')"></i>
+            </div>
+          </div>
+        `;
+      });
+      
+      cartHTML += `
+        </div>
+        
+        <div class="cart-summary">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span>₹${cartTotal.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <button class="action-btn danger-btn" style="background-color: var(--danger-color); flex: 1;" onclick="clearCart()">
+              <i class="fas fa-trash"></i> Clear Cart
+            </button>
+            <button class="action-btn" style="flex: 2;" onclick="checkout()">
+              <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
+          </div>
+        </div>
+      `;
+      
+      cartContent.innerHTML = cartHTML;
+    }
+    
+    function updateCartItem(productId, change) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const itemIndex = cart.findIndex(item => item.productId === productId);
+      
+      if (itemIndex !== -1) {
+        // Update quantity
+        cart[itemIndex].quantity += change;
+        
+        // Remove item if quantity is 0 or less
+        if (cart[itemIndex].quantity <= 0) {
+          cart.splice(itemIndex, 1);
+        }
+        
+        // Save updated cart
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Update UI
+        if (cart.length === 0) {
+          // If cart is now empty, show empty cart message
+          const cartContent = document.getElementById('cartContent');
+          cartContent.innerHTML = `
+            <div class="empty-cart">
+              <i class="fas fa-shopping-cart"></i>
+              <h3>Your cart is empty</h3>
+              <p>Looks like you haven't added any items to your cart yet.</p>
+              <button class="action-btn" onclick="window.location.href='doctor-analytics.html#medicines'">
+                <i class="fas fa-shopping-bag"></i> Continue Shopping
+              </button>
+            </div>
+          `;
+        } else {
+          loadCart();
+        }
+        
+        // Update cart count in both windows
+        try {
+          window.opener?.updateCartCount();
+        } catch (e) {
+          console.log("Couldn't update parent window cart count");
+        }
+        
+        // Update local cart count
+        updateCartCount();
+      }
+    }
+    
+    function removeFromCart(productId) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const updatedCart = cart.filter(item => item.productId !== productId);
+      
+      // Save updated cart
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      
+      // Update UI
+      if (updatedCart.length === 0) {
+        // If cart is now empty, show empty cart message
+        const cartContent = document.getElementById('cartContent');
+        cartContent.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <button class="action-btn" onclick="window.location.href='doctor-analytics.html#medicines'">
+              <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </button>
+          </div>
+        `;
+      } else {
+        loadCart();
+      }
+      
+      // Update cart count in header (in parent window)
+      try {
+        // Try to update the cart count in the parent window
+        window.opener?.updateCartCount();
+      } catch (e) {
+        console.log("Couldn't update parent window cart count");
+      }
+      
+      // Try to update the local cart count if updateCartCount function exists
+      if (typeof updateCartCount === 'function') {
+        updateCartCount();
+      }
+    }
+    
+    function checkout() {
+      // Get cart items
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      
+      // Get the current user
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        alert('Please log in to complete your purchase');
+        return;
+      }
+      
+      // Calculate cart total
+      const cartTotal = cart.reduce((sum, item) => {
+        return sum + (parseFloat(item.price) * parseInt(item.quantity));
+      }, 0);
+      
+      // Generate a unique order ID
+      const orderId = 'ord_' + Date.now();
+      
+      // Create a new order
+      const newOrder = {
+        id: orderId,
+        userId: currentUser.id,
+        date: new Date().toISOString(),
+        paymentMethod: 'card', // Default payment method
+        status: 'processing',
+        totalAmount: cartTotal,
+        items: [...cart] // Save cart items with the order
+      };
+      
+      // Get existing orders
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+      // Add the new order
+      orders.push(newOrder);
+      
+      // Save updated orders to localStorage
+      localStorage.setItem('orders', JSON.stringify(orders));
+      
+      // Create order items
+      const orderItems = cart.map(item => {
+        return {
+          id: 'item_' + Date.now() + '_' + item.productId,
+          orderId: orderId,
+          productId: item.productId,
+          productName: item.productName,
+          quantity: item.quantity,
+          price: item.price
+        };
+      });
+      
+      // Save order items
+      const allOrderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
+      localStorage.setItem('orderItems', JSON.stringify([...allOrderItems, ...orderItems]));
+      
+      // Clear the cart
+      localStorage.setItem('cart', JSON.stringify([]));
+      
+      // Update cart count
+      updateCartCount();
+      
+      // Show success message
+      alert('Order placed successfully!');
+      
+      // Redirect to orders page with a success parameter
+      window.location.href = 'orders.html?orderPlaced=true';
+    }
+    
+    // Clear all items from cart
+    function clearCart() {
+      if (confirm('Are you sure you want to empty your cart?')) {
+        // Clear cart in localStorage
+        localStorage.setItem('cart', JSON.stringify([]));
+        
+        // Show empty cart UI
+        const cartContent = document.getElementById('cartContent');
+        cartContent.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <button class="action-btn" onclick="window.location.href='doctor-analytics.html#medicines'">
+              <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </button>
+          </div>
+        `;
+        
+        // Update cart count in both windows
+        try {
+          window.opener?.updateCartCount();
+        } catch (e) {
+          console.log("Couldn't update parent window cart count");
+        }
+        
+        // Update local cart count
+        updateCartCount();
+      }
+    }
+  </script>
+</body>
+</html> 

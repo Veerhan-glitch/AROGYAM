@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Tests - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Lab Tests</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="tabs">
+        <button class="tab-btn" data-tab="available">Available Tests</button>
+        <button class="tab-btn" data-tab="upcoming">Upcoming Tests</button>
+        <button class="tab-btn" data-tab="results">Test Results</button>
+      </div>
+      
+      <div class="tab-content" id="available-tab">
+        <div class="filter-section">
+          <div class="filter-group">
+            <input type="text" id="searchTests" placeholder="Search tests..." class="search-input">
+            <button class="action-btn" onclick="searchTests()"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="filter-group">
+            <select id="categoryFilter">
+              <option value="all">All Categories</option>
+              <option value="blood">Blood Tests</option>
+              <option value="urine">Urine Tests</option>
+              <option value="imaging">Imaging Tests</option>
+              <option value="cardio">Cardiology Tests</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="tests-grid" id="availableTests">
+          <!-- Tests will be loaded here -->
+          <p class="empty-state">Loading available tests...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="upcoming-tab">
+        <div class="upcoming-tests" id="upcomingTests">
+          <!-- Upcoming tests will be loaded here -->
+          <p class="empty-state">Loading upcoming tests...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="results-tab">
+        <div class="results-list" id="testResults">
+          <!-- Test results will be loaded here -->
+          <p class="empty-state">Loading test results...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+      
+      // Set up tab navigation
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      // Check if URL has hash for specific tab
+      const hash = window.location.hash.replace('#', '');
+      let activeTab = 'available'; // Default tab
+      
+      if (hash && ['available', 'upcoming', 'results'].includes(hash)) {
+        activeTab = hash;
+      }
+      
+      // Set the active tab
+      tabButtons.forEach(btn => {
+        if (btn.dataset.tab === activeTab) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+        
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          btn.classList.add('active');
+          document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
+          
+          // Update URL hash without page reload
+          window.location.hash = btn.dataset.tab;
+        });
+      });
+      
+      // Set the active content
+      tabContents.forEach(content => {
+        if (content.id === `${activeTab}-tab`) {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+      
+      // Set up category filter change event
+      document.getElementById('categoryFilter').addEventListener('change', filterTests);
+      
+      // Load lab tests data
+      loadAvailableTests();
+      loadUpcomingTests();
+      loadTestResults();
+    });
+
+    function loadAvailableTests() {
+      // Get lab tests from the feature.js function
+      const labTests = getLabTests();
+      const container = document.getElementById('availableTests');
+      
+      if (!labTests || labTests.length === 0) {
+        container.innerHTML = '<p class="empty-state">No lab tests available at the moment</p>';
+        return;
+      }
+      
+      container.innerHTML = labTests.map(test => `
+        <div class="test-card" data-category="${getCategoryFromName(test.name)}">
+          <div class="test-header">
+            <h4>${test.name}</h4>
+          </div>
+          <div class="test-details">
+            <p>${test.description}</p>
+            <p class="preparation"><strong>Preparation:</strong> ${test.preparationInfo}</p>
+            <div class="price">₹${test.price}</div>
+          </div>
+          <div class="test-actions">
+            <button class="action-btn" onclick="bookLabTest('${test.id}')">
+              <i class="fas fa-calendar-plus"></i> Book Test
+            </button>
+            <button class="action-btn secondary" onclick="viewTestDetails('${test.id}')">
+              <i class="fas fa-info-circle"></i> More Info
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadUpcomingTests() {
+      // In a real app, this would come from the backend
+      // For now, we'll use mock data
+      const upcomingTests = [
+        {
+          id: 'test1',
+          name: 'Complete Blood Count (CBC)',
+          date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 days from now
+          time: '10:00 AM',
+          location: 'Main Lab Center, 1st Floor',
+          status: 'confirmed'
+        },
+        {
+          id: 'test2',
+          name: 'Thyroid Function Test',
+          date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days from now
+          time: '11:30 AM',
+          location: 'Main Lab Center, 1st Floor',
+          status: 'pending'
+        }
+      ];
+
+      const container = document.getElementById('upcomingTests');
+      
+      if (upcomingTests.length === 0) {
+        container.innerHTML = '<p class="empty-state">No upcoming tests</p>';
+        return;
+      }
+      
+      container.innerHTML = upcomingTests.map(test => `
+        <div class="appointment-card ${test.status}">
+          <div class="appointment-header">
+            <h4>${test.name}</h4>
+            <span class="status ${test.status}">${test.status}</span>
+          </div>
+          <div class="appointment-details">
+            <p><i class="fas fa-calendar"></i> ${new Date(test.date).toLocaleDateString()}</p>
+            <p><i class="fas fa-clock"></i> ${test.time}</p>
+            <p><i class="fas fa-map-marker-alt"></i> ${test.location}</p>
+          </div>
+          <div class="appointment-actions">
+            <button class="action-btn secondary" onclick="rescheduleTest('${test.id}')">Reschedule</button>
+            <button class="action-btn danger" onclick="cancelTest('${test.id}')">Cancel</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadTestResults() {
+      // In a real app, this would come from the backend
+      // For now, we'll use mock data
+      const testResults = [
+        {
+          id: 'result1',
+          name: 'Lipid Profile',
+          date: '2023-06-15',
+          status: 'normal',
+          viewed: true
+        },
+        {
+          id: 'result2',
+          name: 'Blood Glucose Test',
+          date: '2023-08-20',
+          status: 'abnormal',
+          viewed: false
+        }
+      ];
+
+      const container = document.getElementById('testResults');
+      
+      if (testResults.length === 0) {
+        container.innerHTML = '<p class="empty-state">No test results available</p>';
+        return;
+      }
+      
+      container.innerHTML = testResults.map(result => `
+        <div class="result-card ${result.viewed ? 'viewed' : 'new'}">
+          <div class="result-header">
+            <h4>${result.name}</h4>
+            <span class="status ${result.status}">${result.status}</span>
+          </div>
+          <div class="result-details">
+            <p><i class="fas fa-calendar"></i> ${new Date(result.date).toLocaleDateString()}</p>
+            <p><i class="fas fa-check-circle"></i> ${result.viewed ? 'Viewed' : 'New Result'}</p>
+          </div>
+          <div class="result-actions">
+            <button class="action-btn" onclick="viewTestResult('${result.id}')">
+              <i class="fas fa-eye"></i> View Result
+            </button>
+            <button class="action-btn secondary" onclick="downloadTestResult('${result.id}')">
+              <i class="fas fa-download"></i> Download PDF
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getCategoryFromName(testName) {
+      const lcName = testName.toLowerCase();
+      if (lcName.includes('blood')) return 'blood';
+      if (lcName.includes('urine')) return 'urine';
+      if (lcName.includes('scan') || lcName.includes('x-ray') || lcName.includes('ultrasound')) return 'imaging';
+      if (lcName.includes('cardio') || lcName.includes('heart') || lcName.includes('ecg')) return 'cardio';
+      return 'general';
+    }
+
+    function filterTests() {
+      const category = document.getElementById('categoryFilter').value;
+      const searchTerm = document.getElementById('searchTests').value.toLowerCase();
+      const cards = document.querySelectorAll('.test-card');
+      
+      cards.forEach(card => {
+        const cardCategory = card.dataset.category;
+        const cardText = card.textContent.toLowerCase();
+        
+        const categoryMatch = category === 'all' || cardCategory === category;
+        const searchMatch = !searchTerm || cardText.includes(searchTerm);
+        
+        if (categoryMatch && searchMatch) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function searchTests() {
+      filterTests();
+    }
+
+    function bookLabTest(testId) {
+      // Get the test details
+      const labTests = getLabTests();
+      const test = labTests.find(t => t.id === testId);
+      
+      if (!test) {
+        alert('Test not found. Please try again.');
+        return;
+      }
+      
+      // In a real app, this would open a booking modal or navigate to a booking page
+      if (confirm(`Would you like to book the ${test.name} test?`)) {
+        // Show confirmation message
+        alert(`Your ${test.name} test has been booked successfully! Please check your upcoming tests.`);
+        
+        // In a real app, this would create the booking in the backend
+        // For demo purposes, we'll reload the upcoming tests tab
+        loadUpcomingTests();
+        
+        // Switch to upcoming tab
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        document.querySelector('[data-tab="upcoming"]').classList.add('active');
+        document.getElementById('upcoming-tab').classList.add('active');
+      }
+    }
+
+    function viewTestDetails(testId) {
+      // In a real app, this would open a modal with detailed test information
+      alert('Test details will be shown in a modal in the complete application');
+    }
+
+    function rescheduleTest(testId) {
+      // In a real app, this would open a modal to reschedule
+      alert('Reschedule functionality will be implemented in the complete application');
+    }
+
+    function cancelTest(testId) {
+      if (confirm('Are you sure you want to cancel this test?')) {
+        // In a real app, this would call an API to cancel the test
+        alert('Test cancelled successfully!');
+        loadUpcomingTests(); // Reload list
+      }
+    }
+
+    function viewTestResult(resultId) {
+      // In a real app, this would open a modal with the test result
+      alert('Test result viewer will be implemented in the complete application');
+    }
+
+    function downloadTestResult(resultId) {
+      // In a real app, this would download the test result as a PDF
+      alert('PDF download functionality will be implemented in the complete application');
+    }
+  </script>
+</body>
+</html> 

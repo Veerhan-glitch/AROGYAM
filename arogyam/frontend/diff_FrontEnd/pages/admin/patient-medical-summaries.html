@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Medical Summaries - Arogyam Admin</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .patient-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .patient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .patient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .patient-header h3 {
+      margin: 0;
+      color: var(--primary-color);
+    }
+    
+    .patient-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .detail-item {
+      padding: 10px;
+      background: var(--primary-light);
+      border-radius: var(--radius-sm);
+    }
+    
+    .detail-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+    
+    .detail-value {
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    .summary-list {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    
+    .summary-item {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+    
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+    
+    .summary-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .summary-item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .summary-title {
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+    
+    .summary-date {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      border-radius: 12px;
+      margin-right: 5px;
+    }
+    
+    .tag-chronic {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .tag-checkup {
+      background-color: rgba(0, 123, 255, 0.1);
+      color: var(--primary-color);
+    }
+    
+    .tag-followup {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-color);
+    }
+    
+    .tag-emergency {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .summary-content {
+      margin-top: 10px;
+      color: var(--text-color);
+    }
+    
+    .filter-section {
+      margin-bottom: 20px;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      margin-bottom: 15px;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    
+    .view-toggle {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    
+    .view-toggle button {
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .view-toggle button:first-child {
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+    
+    .view-toggle button:last-child {
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    
+    .view-toggle button.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h2>Patient Medical Summaries</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="filter-section">
+        <input type="text" class="search-input" id="patientSearch" placeholder="Search patients by name, ID, or condition...">
+        
+        <div class="tabs">
+          <div class="tab active" data-tab="all">All Patients</div>
+          <div class="tab" data-tab="recent">Recent Activity</div>
+          <div class="tab" data-tab="chronic">Chronic Conditions</div>
+          <div class="tab" data-tab="critical">Critical Cases</div>
+        </div>
+        
+        <div class="view-toggle">
+          <button class="active" id="listView"><i class="fas fa-list"></i> List View</button>
+          <button id="gridView"><i class="fas fa-th-large"></i> Grid View</button>
+        </div>
+      </div>
+      
+      <div id="patientsContainer">
+        <!-- Patients will be loaded here -->
+      </div>
+    </div>
+  </div>
+  
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load patients
+      loadPatients();
+      
+      // Setup event listeners
+      document.getElementById('patientSearch').addEventListener('input', filterPatients);
+      
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          loadPatients(this.dataset.tab);
+        });
+      });
+      
+      // View toggle
+      document.getElementById('listView').addEventListener('click', function() {
+        this.classList.add('active');
+        document.getElementById('gridView').classList.remove('active');
+        document.getElementById('patientsContainer').classList.remove('grid-view');
+      });
+      
+      document.getElementById('gridView').addEventListener('click', function() {
+        this.classList.add('active');
+        document.getElementById('listView').classList.remove('active');
+        document.getElementById('patientsContainer').classList.add('grid-view');
+      });
+    });
+    
+    function loadPatients(filter = 'all') {
+      const patientsContainer = document.getElementById('patientsContainer');
+      
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const patients = users.filter(user => user.userType === 'user');
+      
+      // Get medical summaries
+      const medicalSummaries = getMedicalSummaries();
+      
+      // Group summaries by patient
+      const patientSummaries = {};
+      medicalSummaries.forEach(summary => {
+        if (!patientSummaries[summary.patientId]) {
+          patientSummaries[summary.patientId] = [];
+        }
+        patientSummaries[summary.patientId].push(summary);
+      });
+      
+      // Clear container
+      patientsContainer.innerHTML = '';
+      
+      // Filter patients
+      let filteredPatients = patients;
+      
+      if (filter === 'chronic') {
+        filteredPatients = patients.filter(patient => {
+          const summaries = patientSummaries[patient.id] || [];
+          return summaries.some(summary => summary.type === 'chronic');
+        });
+      } else if (filter === 'critical') {
+        filteredPatients = patients.filter(patient => {
+          const summaries = patientSummaries[patient.id] || [];
+          return summaries.some(summary => summary.isCritical);
+        });
+      } else if (filter === 'recent') {
+        filteredPatients = patients.filter(patient => {
+          const summaries = patientSummaries[patient.id] || [];
+          if (summaries.length === 0) return false;
+          
+          const latestSummary = summaries.sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+          )[0];
+          
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          
+          return new Date(latestSummary.date) >= oneWeekAgo;
+        });
+      }
+      
+      // Display patients
+      if (filteredPatients.length === 0) {
+        patientsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-user-injured" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+            <h3>No patients found</h3>
+            <p>No patients match the current filter criteria</p>
+          </div>
+        `;
+        return;
+      }
+      
+      filteredPatients.forEach(patient => {
+        const summaries = patientSummaries[patient.id] || [];
+        const card = createPatientCard(patient, summaries);
+        patientsContainer.appendChild(card);
+      });
+    }
+    
+    function createPatientCard(patient, summaries) {
+      const card = document.createElement('div');
+      card.className = 'patient-card';
+      card.dataset.patientId = patient.id;
+      
+      // Sort summaries by date (newest first)
+      summaries.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      // Format latest visit date
+      let latestVisitDate = 'No visits';
+      if (summaries.length > 0) {
+        const date = new Date(summaries[0].date);
+        latestVisitDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+      
+      // Get conditions
+      const allConditions = new Set();
+      summaries.forEach(summary => {
+        summary.conditions.forEach(condition => allConditions.add(condition));
+      });
+      
+      // Create patient header
+      const html = `
+        <div class="patient-header">
+          <h3>${patient.name}</h3>
+          <button class="action-btn" onclick="viewPatientDetails('${patient.id}')">
+            <i class="fas fa-eye"></i> View Full Profile
+          </button>
+        </div>
+        
+        <div class="patient-details">
+          <div class="detail-item">
+            <div class="detail-label">Patient ID</div>
+            <div class="detail-value">${patient.id.substring(0, 8)}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Registration Date</div>
+            <div class="detail-value">${new Date(patient.registrationDate).toLocaleDateString()}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Latest Visit</div>
+            <div class="detail-value">${latestVisitDate}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Total Records</div>
+            <div class="detail-value">${summaries.length}</div>
+          </div>
+        </div>
+        
+        <h4>Medical Conditions</h4>
+        <div style="margin-bottom: 15px;">
+          ${Array.from(allConditions).length > 0 ? 
+            Array.from(allConditions).map(condition => 
+              `<span class="tag ${condition.toLowerCase().includes('chronic') ? 'tag-chronic' : 'tag-checkup'}">${condition}</span>`
+            ).join('') : 
+            '<span class="tag">No conditions recorded</span>'
+          }
+        </div>
+        
+        <h4>Medical Summaries</h4>
+        <div class="summary-list">
+          ${summaries.length > 0 ? 
+            summaries.slice(0, 3).map(summary => `
+              <div class="summary-item">
+                <div class="summary-item-header">
+                  <div class="summary-title">${summary.title}</div>
+                  <div class="summary-date">${new Date(summary.date).toLocaleDateString()}</div>
+                </div>
+                <div>
+                  <span class="tag tag-${summary.type}">${getTypeLabel(summary.type)}</span>
+                  <span>Dr. ${summary.doctor}</span>
+                </div>
+                <div class="summary-content">${summary.description}</div>
+              </div>
+            `).join('') : 
+            '<div class="summary-item">No medical summaries available</div>'
+          }
+        </div>
+        
+        ${summaries.length > 3 ? 
+          `<div style="text-align: center; margin-top: 15px;">
+            <button class="action-btn" onclick="viewAllSummaries('${patient.id}')">
+              View All ${summaries.length} Summaries
+            </button>
+          </div>` : ''
+        }
+      `;
+      
+      card.innerHTML = html;
+      return card;
+    }
+    
+    function filterPatients() {
+      const searchTerm = document.getElementById('patientSearch').value.toLowerCase();
+      const patientCards = document.querySelectorAll('.patient-card');
+      
+      patientCards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+        if (cardText.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+    
+    function viewPatientDetails(patientId) {
+      // In a real application, this would navigate to a detailed patient view
+      alert(`Viewing detailed profile for patient ${patientId}`);
+    }
+    
+    function viewAllSummaries(patientId) {
+      // In a real application, this would show all summaries for the patient
+      alert(`Viewing all medical summaries for patient ${patientId}`);
+    }
+    
+    function getTypeLabel(type) {
+      switch(type) {
+        case 'chronic': return 'Chronic';
+        case 'checkup': return 'Checkup';
+        case 'followup': return 'Follow-up';
+        case 'emergency': return 'Emergency';
+        default: return type;
+      }
+    }
+    
+    // Sample data - This would normally come from an API or database
+    function getMedicalSummaries() {
+      return [
+        {
+          id: 1,
+          patientId: "1679012345678",
+          title: "Annual Physical Examination",
+          doctor: "Rajesh Kumar",
+          date: "2023-10-15",
+          type: "checkup",
+          description: "Comprehensive annual health assessment. Patient is in good health overall.",
+          conditions: ["Mild hypertension", "Vitamin D deficiency"],
+          isCritical: false
+        },
+        {
+          id: 2,
+          patientId: "1679012345678",
+          title: "Hypertension Follow-up",
+          doctor: "Rajesh Kumar",
+          date: "2023-07-10",
+          type: "followup",
+          description: "Blood pressure is still slightly elevated. Medication dosage adjusted.",
+          conditions: ["Hypertension"],
+          isCritical: false
+        },
+        {
+          id: 3,
+          patientId: "1679087654321",
+          title: "Diabetes Management",
+          doctor: "Priya Sharma",
+          date: "2023-09-05",
+          type: "chronic",
+          description: "Quarterly diabetes check-up. HbA1c levels improved from previous visit.",
+          conditions: ["Type 2 Diabetes", "Dyslipidemia"],
+          isCritical: false
+        },
+        {
+          id: 4,
+          patientId: "1679087654321",
+          title: "Emergency Room Visit",
+          doctor: "Anand Patil",
+          date: "2023-05-22",
+          type: "emergency",
+          description: "Patient admitted with severe hypoglycemia. Stabilized and discharged after 24 hours.",
+          conditions: ["Type 2 Diabetes", "Hypoglycemia"],
+          isCritical: true
+        },
+        {
+          id: 5,
+          patientId: "1679087654321",
+          title: "Post-Hypoglycemia Follow-up",
+          doctor: "Priya Sharma",
+          date: "2023-06-05",
+          type: "followup",
+          description: "Patient recovering well. Insulin dosage adjusted to prevent future episodes.",
+          conditions: ["Type 2 Diabetes", "Hypoglycemia"],
+          isCritical: false
+        },
+        {
+          id: 6,
+          patientId: "1679099887766",
+          title: "Cardiac Evaluation",
+          doctor: "Vivek Malhotra",
+          date: "2023-11-12",
+          type: "chronic",
+          description: "Patient experiencing occasional chest pain. ECG shows minor abnormalities.",
+          conditions: ["Coronary Artery Disease", "Hypertension"],
+          isCritical: true
+        },
+        {
+          id: 7,
+          patientId: "1679099887766",
+          title: "Cardiac Follow-up",
+          doctor: "Vivek Malhotra",
+          date: "2023-11-26",
+          type: "followup",
+          description: "Stress test results show moderate ischemia. Referred for angiography.",
+          conditions: ["Coronary Artery Disease", "Hypertension"],
+          isCritical: true
+        }
+      ];
+    }
+  </script>
+</body>
+</html> 

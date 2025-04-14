@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .doctor-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .doctor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .doctor-header {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .doctor-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--primary-color);
+      flex-shrink: 0;
+    }
+    
+    .doctor-info {
+      flex: 1;
+    }
+    
+    .doctor-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+    
+    .doctor-specialization {
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+    
+    .doctor-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .doctor-rating i {
+      color: var(--warning-color);
+      margin-right: 3px;
+    }
+    
+    .doctor-stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: var(--primary-light);
+      border-radius: var(--radius-sm);
+    }
+    
+    .doctor-stat {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+    
+    .doctor-details {
+      margin-bottom: 15px;
+    }
+    
+    .doctor-qualification {
+      margin-bottom: 5px;
+    }
+    
+    .doctor-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .section-header {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .section-header h3 {
+      color: var(--primary-color);
+      margin: 0;
+    }
+    
+    .specialty-section {
+      margin-bottom: 30px;
+    }
+    
+    .specialty-section h4 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .filter-option {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .filter-option:hover,
+    .filter-option.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .doctors-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-options {
+        overflow-x: auto;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        white-space: nowrap;
+        display: block;
+      }
+      
+      .filter-option {
+        display: inline-block;
+        margin-right: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="javascript:void(0)" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Doctors</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="filter-section">
+        <div class="filter-group">
+          <input type="text" id="searchDoctor" placeholder="Search doctors by name or specialization" class="search-input">
+          <button class="action-btn" onclick="searchDoctors()"><i class="fas fa-search"></i></button>
+        </div>
+        
+        <div class="filter-group">
+          <select id="specializationFilter" onchange="filterDoctors()">
+            <option value="">All Specializations</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="General Medicine">General Medicine</option>
+            <option value="Gynecology">Gynecology</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <select id="sortBy" onchange="filterDoctors()">
+            <option value="rating-desc">Rating (High to Low)</option>
+            <option value="rating-asc">Rating (Low to High)</option>
+            <option value="experience-desc">Experience (High to Low)</option>
+            <option value="visits-desc">Patient Visits (High to Low)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filter-options">
+        <button class="filter-option active" data-filter="all" onclick="showDoctorSection('all')">All Doctors</button>
+        <button class="filter-option" data-filter="top-rated" onclick="showDoctorSection('top-rated')">Top Rated</button>
+        <button class="filter-option" data-filter="by-specialty" onclick="showDoctorSection('by-specialty')">By Specialty</button>
+        <button class="filter-option" data-filter="most-visits" onclick="showDoctorSection('most-visits')">Most Patient Visits</button>
+      </div>
+      
+      <!-- All Doctors Section -->
+      <section id="all-doctors-section" class="doctor-section">
+        <div id="allDoctorsGrid" class="doctors-grid">
+          <!-- Doctors will be loaded here -->
+        </div>
+      </section>
+      
+      <!-- Top Rated Doctors Section -->
+      <section id="top-rated-section" class="doctor-section" style="display: none;">
+        <div class="section-header">
+          <h3>Highest Rated Doctors</h3>
+        </div>
+        <div id="topRatedDoctorsGrid" class="doctors-grid">
+          <!-- Top rated doctors will be loaded here -->
+        </div>
+        
+        <div class="section-header">
+          <h3>Lowest Rated Doctors</h3>
+        </div>
+        <div id="lowestRatedDoctorsGrid" class="doctors-grid">
+          <!-- Lowest rated doctors will be loaded here -->
+        </div>
+      </section>
+      
+      <!-- Doctors By Specialty Section -->
+      <section id="by-specialty-section" class="doctor-section" style="display: none;">
+        <div class="section-header">
+          <h3>Highest Rated Doctor in Each Specialty</h3>
+        </div>
+        <div id="specialtyContainer">
+          <!-- Specialty sections will be loaded here -->
+        </div>
+      </section>
+      
+      <!-- Most Patient Visits Section -->
+      <section id="most-visits-section" class="doctor-section" style="display: none;">
+        <div class="section-header">
+          <h3>Doctors by Patient Visits</h3>
+        </div>
+        <div id="mostVisitsDoctorsGrid" class="doctors-grid">
+          <!-- Most visits doctors will be loaded here -->
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        navigateTo('../../index.html');
+        return;
+      }
+      
+      // Initialize back button
+      document.querySelector('.back-btn').addEventListener('click', () => {
+        navigateBack();
+      });
+      
+      // Load doctors data
+      loadAllDoctors();
+      loadTopRatedDoctors();
+      loadDoctorsBySpecialty();
+      loadDoctorsByVisits();
+      
+      // Set up search input
+      document.getElementById('searchDoctor').addEventListener('input', searchDoctors);
+    });
+
+    function loadAllDoctors() {
+      const doctors = getDoctors();
+      displayDoctors(doctors, 'allDoctorsGrid');
+    }
+
+    function loadTopRatedDoctors() {
+      const doctors = getDoctors();
+      
+      // Sort by rating in descending order
+      const sortedByRating = [...doctors].sort((a, b) => b.rating - a.rating);
+      
+      // Get top 4 doctors
+      const topRatedDoctors = sortedByRating.slice(0, 4);
+      displayDoctors(topRatedDoctors, 'topRatedDoctorsGrid');
+      
+      // Get bottom 4 doctors
+      const lowestRatedDoctors = [...sortedByRating].reverse().slice(0, 4);
+      displayDoctors(lowestRatedDoctors, 'lowestRatedDoctorsGrid');
+    }
+
+    function loadDoctorsBySpecialty() {
+      const doctors = getDoctors();
+      const specialtyContainer = document.getElementById('specialtyContainer');
+      
+      // Get all specialties
+      const specialties = [...new Set(doctors.map(doctor => doctor.specialization))];
+      
+      // Create a section for each specialty
+      specialtyContainer.innerHTML = '';
+      
+      specialties.forEach(specialty => {
+        // Get doctors in this specialty
+        const specialtyDoctors = doctors.filter(doctor => doctor.specialization === specialty);
+        
+        // Sort by rating
+        const sortedDoctors = [...specialtyDoctors].sort((a, b) => b.rating - a.rating);
+        
+        // Get the highest rated doctor
+        const topDoctor = sortedDoctors[0];
+        
+        if (topDoctor) {
+          const specialtySection = document.createElement('div');
+          specialtySection.className = 'specialty-section';
+          
+          specialtySection.innerHTML = `
+            <h4>${specialty}</h4>
+            <div class="doctors-grid">
+              ${createDoctorCard(topDoctor)}
+            </div>
+          `;
+          
+          specialtyContainer.appendChild(specialtySection);
+        }
+      });
+    }
+
+    function loadDoctorsByVisits() {
+      const doctors = getDoctors();
+      
+      // Sort by patient visits in descending order
+      const sortedByVisits = [...doctors].sort((a, b) => b.patientVisits - a.patientVisits);
+      
+      displayDoctors(sortedByVisits, 'mostVisitsDoctorsGrid');
+    }
+
+    function displayDoctors(doctors, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (!doctors || doctors.length === 0) {
+        container.innerHTML = '<p class="empty-state">No doctors found</p>';
+        return;
+      }
+      
+      container.innerHTML = doctors.map(doctor => createDoctorCard(doctor)).join('');
+    }
+
+    function createDoctorCard(doctor) {
+      // Generate initials from doctor name
+      const nameParts = doctor.name.split(' ');
+      const initials = nameParts.map(part => part[0]).join('');
+      
+      return `
+        <div class="doctor-card">
+          <div class="doctor-header">
+            <div class="doctor-avatar">${initials}</div>
+            <div class="doctor-info">
+              <div class="doctor-name">${doctor.name}</div>
+              <div class="doctor-specialization">${doctor.specialization}</div>
+              <div class="doctor-rating">
+                <i class="fas fa-star"></i>
+                ${doctor.rating.toFixed(1)} (${doctor.reviews || 0} reviews)
+              </div>
+            </div>
+          </div>
+          
+          <div class="doctor-stats">
+            <div class="doctor-stat">
+              <div class="stat-value">${doctor.experience}</div>
+              <div class="stat-label">Experience</div>
+            </div>
+            <div class="doctor-stat">
+              <div class="stat-value">${doctor.patientVisits}</div>
+              <div class="stat-label">Patient Visits</div>
+            </div>
+            <div class="doctor-stat">
+              <div class="stat-value">₹${doctor.consultationFee}</div>
+              <div class="stat-label">Fee</div>
+            </div>
+          </div>
+          
+          <div class="doctor-details">
+            <div class="doctor-qualification">${doctor.qualification}</div>
+            <div class="doctor-available-days">Available: ${doctor.availability.join(', ')}</div>
+          </div>
+          
+          <div class="doctor-actions">
+            <button class="action-btn" onclick="bookAppointment('${doctor.id}')">
+              <i class="fas fa-calendar-plus"></i> Book Appointment
+            </button>
+            <button class="action-btn secondary" onclick="viewDoctorProfile('${doctor.id}')">
+              <i class="fas fa-user-md"></i> View Profile
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getDoctors() {
+      // In a real app, this would fetch from an API
+      // For demo, we'll use dummy data
+      return [
+        {
+          id: 'doc1',
+          name: 'Dr. Rajesh Kumar',
+          specialization: 'Cardiology',
+          rating: 4.8,
+          reviews: 124,
+          patientVisits: 780,
+          qualification: 'MD, DM Cardiology',
+          experience: '15 years',
+          consultationFee: 800,
+          availability: ['Mon', 'Wed', 'Fri']
+        },
+        {
+          id: 'doc2',
+          name: 'Dr. Priya Sharma',
+          specialization: 'Dermatology',
+          rating: 4.7,
+          reviews: 98,
+          patientVisits: 650,
+          qualification: 'MD, Dermatology',
+          experience: '10 years',
+          consultationFee: 700,
+          availability: ['Tue', 'Thu', 'Sat']
+        },
+        {
+          id: 'doc3',
+          name: 'Dr. Vikram Singh',
+          specialization: 'Orthopedics',
+          rating: 4.9,
+          reviews: 156,
+          patientVisits: 920,
+          qualification: 'MS, Orthopedics',
+          experience: '18 years',
+          consultationFee: 900,
+          availability: ['Mon', 'Tue', 'Thu', 'Sat']
+        },
+        {
+          id: 'doc4',
+          name: 'Dr. Neha Gupta',
+          specialization: 'Pediatrics',
+          rating: 4.6,
+          reviews: 87,
+          patientVisits: 540,
+          qualification: 'MD, Pediatrics',
+          experience: '8 years',
+          consultationFee: 600,
+          availability: ['Mon', 'Wed', 'Fri', 'Sat']
+        },
+        {
+          id: 'doc5',
+          name: 'Dr. Sanjay Patel',
+          specialization: 'Neurology',
+          rating: 4.5,
+          reviews: 76,
+          patientVisits: 480,
+          qualification: 'MD, DM Neurology',
+          experience: '12 years',
+          consultationFee: 1000,
+          availability: ['Tue', 'Wed', 'Fri']
+        },
+        {
+          id: 'doc6',
+          name: 'Dr. Meera Iyer',
+          specialization: 'Gynecology',
+          rating: 4.8,
+          reviews: 112,
+          patientVisits: 710,
+          qualification: 'MD, Gynecology',
+          experience: '14 years',
+          consultationFee: 800,
+          availability: ['Mon', 'Tue', 'Thu', 'Sat']
+        },
+        {
+          id: 'doc7',
+          name: 'Dr. Arjun Reddy',
+          specialization: 'General Medicine',
+          rating: 4.2,
+          reviews: 64,
+          patientVisits: 380,
+          qualification: 'MBBS, MD',
+          experience: '6 years',
+          consultationFee: 500,
+          availability: ['Mon', 'Wed', 'Fri', 'Sat']
+        },
+        {
+          id: 'doc8',
+          name: 'Dr. Sunita Desai',
+          specialization: 'Dermatology',
+          rating: 4.6,
+          reviews: 92,
+          patientVisits: 620,
+          qualification: 'MD, Dermatology',
+          experience: '11 years',
+          consultationFee: 750,
+          availability: ['Mon', 'Thu', 'Sat']
+        },
+        {
+          id: 'doc9',
+          name: 'Dr. Karan Malhotra',
+          specialization: 'Cardiology',
+          rating: 4.4,
+          reviews: 78,
+          patientVisits: 520,
+          qualification: 'MD, DM Cardiology',
+          experience: '9 years',
+          consultationFee: 850,
+          availability: ['Tue', 'Wed', 'Fri']
+        },
+        {
+          id: 'doc10',
+          name: 'Dr. Ananya Das',
+          specialization: 'Pediatrics',
+          rating: 4.7,
+          reviews: 103,
+          patientVisits: 680,
+          qualification: 'MD, Pediatrics',
+          experience: '12 years',
+          consultationFee: 650,
+          availability: ['Mon', 'Tue', 'Thu', 'Sat']
+        },
+        {
+          id: 'doc11',
+          name: 'Dr. Rahul Kapoor',
+          specialization: 'Orthopedics',
+          rating: 4.3,
+          reviews: 71,
+          patientVisits: 450,
+          qualification: 'MS, Orthopedics',
+          experience: '8 years',
+          consultationFee: 750,
+          availability: ['Mon', 'Wed', 'Fri']
+        },
+        {
+          id: 'doc12',
+          name: 'Dr. Deepa Nair',
+          specialization: 'Gynecology',
+          rating: 4.9,
+          reviews: 138,
+          patientVisits: 840,
+          qualification: 'MD, Gynecology',
+          experience: '16 years',
+          consultationFee: 900,
+          availability: ['Tue', 'Thu', 'Sat']
+        }
+      ];
+    }
+
+    function filterDoctors() {
+      const specialization = document.getElementById('specializationFilter').value;
+      const sortBy = document.getElementById('sortBy').value;
+      const searchTerm = document.getElementById('searchDoctor').value.toLowerCase();
+      
+      let doctors = getDoctors();
+      
+      // Filter by specialization
+      if (specialization) {
+        doctors = doctors.filter(doctor => doctor.specialization === specialization);
+      }
+      
+      // Filter by search term
+      if (searchTerm) {
+        doctors = doctors.filter(
+          doctor => doctor.name.toLowerCase().includes(searchTerm) || 
+                   doctor.specialization.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      // Sort doctors
+      switch (sortBy) {
+        case 'rating-desc':
+          doctors.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'rating-asc':
+          doctors.sort((a, b) => a.rating - b.rating);
+          break;
+        case 'experience-desc':
+          doctors.sort((a, b) => parseInt(b.experience) - parseInt(a.experience));
+          break;
+        case 'visits-desc':
+          doctors.sort((a, b) => b.patientVisits - a.patientVisits);
+          break;
+      }
+      
+      // Display filtered doctors
+      displayDoctors(doctors, 'allDoctorsGrid');
+    }
+
+    function searchDoctors() {
+      filterDoctors();
+    }
+
+    function showDoctorSection(section) {
+      // Hide all sections
+      document.querySelectorAll('.doctor-section').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      // Show selected section
+      switch (section) {
+        case 'all':
+          document.getElementById('all-doctors-section').style.display = 'block';
+          break;
+        case 'top-rated':
+          document.getElementById('top-rated-section').style.display = 'block';
+          break;
+        case 'by-specialty':
+          document.getElementById('by-specialty-section').style.display = 'block';
+          break;
+        case 'most-visits':
+          document.getElementById('most-visits-section').style.display = 'block';
+          break;
+      }
+      
+      // Update active filter button
+      document.querySelectorAll('.filter-option').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`.filter-option[data-filter="${section}"]`).classList.add('active');
+    }
+
+    function bookAppointment(doctorId) {
+      // In a real app, this would navigate to appointment booking page with the doctorId
+      navigateTo(`appointments.html?doctorId=${doctorId}`);
+    }
+
+    function viewDoctorProfile(doctorId) {
+      // In a real app, this would navigate to doctor profile page
+      alert('View doctor profile feature will be implemented in the complete application');
+    }
+  </script>
+</body>
+</html> 

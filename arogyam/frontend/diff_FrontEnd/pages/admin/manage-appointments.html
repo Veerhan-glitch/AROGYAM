@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Appointments - Admin Dashboard - Arogyam</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .appointments-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .appointment-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-left: 4px solid transparent;
+    }
+    
+    .appointment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .appointment-card.confirmed {
+      border-left-color: var(--success-color);
+    }
+    
+    .appointment-card.pending {
+      border-left-color: var(--warning-color);
+    }
+    
+    .appointment-card.cancelled {
+      border-left-color: var(--danger-color);
+      opacity: 0.8;
+    }
+    
+    .appointment-card.completed {
+      border-left-color: var(--secondary-color);
+    }
+    
+    .appointment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .appointment-header h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+    
+    .appointment-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .appointment-details p {
+      margin: 5px 0;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+    }
+    
+    .appointment-details p i {
+      margin-right: 10px;
+      color: var(--primary-color);
+      width: 20px;
+      text-align: center;
+    }
+    
+    .appointment-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+    
+    .filter-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      background-color: var(--primary-light);
+      border-radius: var(--radius);
+      margin-bottom: 30px;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .filter-group label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    
+    .patient-doctor-info {
+      padding: 10px;
+      background-color: rgba(58, 123, 213, 0.05);
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .appointment-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Manage Appointments</h2>
+    </div>
+    
+    <div class="subpage-content">
+      <div class="stats-summary">
+        <div class="stat-card">
+          <div class="stat-value" id="totalAppointmentsValue">0</div>
+          <div class="stat-label">Total Appointments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="todayAppointmentsValue">0</div>
+          <div class="stat-label">Today's Appointments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="upcomingAppointmentsValue">0</div>
+          <div class="stat-label">Upcoming</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="completedAppointmentsValue">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+      
+      <div class="filter-form">
+        <div class="filter-group">
+          <label for="dateFrom">From Date</label>
+          <input type="date" id="dateFrom" class="form-input">
+        </div>
+        
+        <div class="filter-group">
+          <label for="dateTo">To Date</label>
+          <input type="date" id="dateTo" class="form-input">
+        </div>
+        
+        <div class="filter-group">
+          <label for="doctorFilter">Doctor</label>
+          <select id="doctorFilter" class="form-input">
+            <option value="">All Doctors</option>
+            <!-- Will be populated dynamically -->
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="patientFilter">Patient</label>
+          <select id="patientFilter" class="form-input">
+            <option value="">All Patients</option>
+            <!-- Will be populated dynamically -->
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter" class="form-input">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        
+        <div class="filter-buttons">
+          <button class="action-btn" onclick="applyFilters()">
+            <i class="fas fa-filter"></i> Apply Filters
+          </button>
+          <button class="action-btn secondary" onclick="resetFilters()">
+            <i class="fas fa-sync"></i> Reset
+          </button>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="all">All Appointments</button>
+        <button class="tab-btn" data-tab="today">Today's Appointments</button>
+        <button class="tab-btn" data-tab="upcoming">Upcoming Appointments</button>
+        <button class="tab-btn" data-tab="past">Past Appointments</button>
+      </div>
+      
+      <div id="all-tab" class="tab-content active">
+        <h3>All Appointments</h3>
+        <div id="allAppointmentsContainer" class="appointments-grid">
+          <!-- Appointments will be loaded here -->
+          <p class="empty-state">Loading appointments...</p>
+        </div>
+      </div>
+      
+      <div id="today-tab" class="tab-content">
+        <h3>Today's Appointments</h3>
+        <div id="todayAppointmentsContainer" class="appointments-grid">
+          <!-- Today's appointments will be loaded here -->
+        </div>
+      </div>
+      
+      <div id="upcoming-tab" class="tab-content">
+        <h3>Upcoming Appointments</h3>
+        <div id="upcomingAppointmentsContainer" class="appointments-grid">
+          <!-- Upcoming appointments will be loaded here -->
+        </div>
+      </div>
+      
+      <div id="past-tab" class="tab-content">
+        <h3>Past Appointments</h3>
+        <div id="pastAppointmentsContainer" class="appointments-grid">
+          <!-- Past appointments will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        // For testing, create a test admin user
+        if (!currentUser) {
+          const testAdmin = {
+            id: 'admin123',
+            name: 'Test Admin',
+            email: 'admin@test.com',
+            userType: 'admin'
+          };
+          localStorage.setItem('currentUser', JSON.stringify(testAdmin));
+          console.log("Created temporary admin user for testing");
+        } else {
+          window.location.href = '../../index.html';
+          return;
+        }
+      }
+      
+      // Set up tab navigation
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active');
+          document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
+        });
+      });
+      
+      // Set default date range (last week to next month)
+      const today = new Date();
+      
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      
+      const nextMonth = new Date(today);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      
+      document.getElementById('dateFrom').value = lastWeek.toISOString().split('T')[0];
+      document.getElementById('dateTo').value = nextMonth.toISOString().split('T')[0];
+      
+      // Load doctors for filter
+      populateDoctorsFilter();
+      
+      // Load patients for filter
+      populatePatientsFilter();
+      
+      // Load all appointments
+      loadAllAppointments();
+    });
+
+    function populateDoctorsFilter() {
+      const doctors = getAllDoctors();
+      const select = document.getElementById('doctorFilter');
+      
+      doctors.forEach(doctor => {
+        const option = document.createElement('option');
+        option.value = doctor.id;
+        option.textContent = doctor.name;
+        select.appendChild(option);
+      });
+    }
+    
+    function populatePatientsFilter() {
+      const patients = getAllPatients();
+      const select = document.getElementById('patientFilter');
+      
+      patients.forEach(patient => {
+        const option = document.createElement('option');
+        option.value = patient.id;
+        option.textContent = patient.name;
+        select.appendChild(option);
+      });
+    }
+    
+    function getAllDoctors() {
+      // Get doctors from localStorage
+      const doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+      
+      // If no doctors found, return demo data
+      if (doctors.length === 0) {
+        return [
+          {
+            id: 'doc1',
+            name: 'Dr. Rajesh Kumar',
+            specialization: 'Cardiology'
+          },
+          {
+            id: 'doc2',
+            name: 'Dr. Priya Sharma',
+            specialization: 'Dermatology'
+          },
+          {
+            id: 'doc3',
+            name: 'Dr. Vikram Singh',
+            specialization: 'Orthopedics'
+          },
+          {
+            id: 'doc4',
+            name: 'Dr. Neha Gupta',
+            specialization: 'Pediatrics'
+          }
+        ];
+      }
+      
+      return doctors;
+    }
+    
+    function getAllPatients() {
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      
+      // Filter users with userType 'user' (patients)
+      const patients = users.filter(user => user.userType === 'user');
+      
+      // If no patients found, return demo data
+      if (patients.length === 0) {
+        return [
+          {
+            id: 'user1',
+            name: 'Rohit Sharma',
+            email: 'rohit@example.com'
+          },
+          {
+            id: 'user2',
+            name: 'Anjali Patel',
+            email: 'anjali@example.com'
+          },
+          {
+            id: 'user3',
+            name: 'Kiran Desai',
+            email: 'kiran@example.com'
+          }
+        ];
+      }
+      
+      return patients;
+    }
+    
+    function getAllAppointments() {
+      // Get appointments from localStorage
+      let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      
+      // If no appointments found, create demo data
+      if (appointments.length === 0) {
+        const doctors = getAllDoctors();
+        const patients = getAllPatients();
+        
+        // Generate dates
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        const nextWeek = new Date(today);
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        
+        // Demo appointments - mix of past, today, and upcoming
+        appointments = [
+          // Today's appointments
+          {
+            id: 'app1',
+            userId: patients[0].id,
+            doctorId: doctors[0].id,
+            date: today.toISOString().split('T')[0],
+            time: '09:30 AM',
+            reason: 'Routine checkup',
+            status: 'confirmed',
+            patientName: patients[0].name,
+            doctorName: doctors[0].name,
+            specialization: doctors[0].specialization
+          },
+          {
+            id: 'app2',
+            userId: patients[1].id,
+            doctorId: doctors[1].id,
+            date: today.toISOString().split('T')[0],
+            time: '11:00 AM',
+            reason: 'Skin rash treatment',
+            status: 'pending',
+            patientName: patients[1].name,
+            doctorName: doctors[1].name,
+            specialization: doctors[1].specialization
+          },
+          
+          // Past appointments
+          {
+            id: 'app3',
+            userId: patients[2].id,
+            doctorId: doctors[2].id,
+            date: yesterday.toISOString().split('T')[0],
+            time: '02:15 PM',
+            reason: 'Joint pain',
+            status: 'completed',
+            patientName: patients[2].name,
+            doctorName: doctors[2].name,
+            specialization: doctors[2].specialization
+          },
+          {
+            id: 'app4',
+            userId: patients[0].id,
+            doctorId: doctors[3].id,
+            date: yesterday.toISOString().split('T')[0],
+            time: '10:45 AM',
+            reason: 'Fever and cold',
+            status: 'cancelled',
+            patientName: patients[0].name,
+            doctorName: doctors[3].name,
+            specialization: doctors[3].specialization
+          },
+          
+          // Upcoming appointments
+          {
+            id: 'app5',
+            userId: patients[1].id,
+            doctorId: doctors[0].id,
+            date: tomorrow.toISOString().split('T')[0],
+            time: '03:30 PM',
+            reason: 'Heart palpitations',
+            status: 'confirmed',
+            patientName: patients[1].name,
+            doctorName: doctors[0].name,
+            specialization: doctors[0].specialization
+          },
+          {
+            id: 'app6',
+            userId: patients[2].id,
+            doctorId: doctors[1].id,
+            date: nextWeek.toISOString().split('T')[0],
+            time: '01:00 PM',
+            reason: 'Skin allergy follow-up',
+            status: 'pending',
+            patientName: patients[2].name,
+            doctorName: doctors[1].name,
+            specialization: doctors[1].specialization
+          }
+        ];
+        
+        // Save demo appointments to localStorage
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+      }
+      
+      return appointments;
+    }
+    
+    function loadAllAppointments() {
+      const appointments = getAllAppointments();
+      
+      // Load all appointments
+      renderAppointments(appointments, 'allAppointmentsContainer');
+      
+      // Load today's appointments
+      const today = new Date().toISOString().split('T')[0];
+      const todayAppointments = appointments.filter(app => app.date === today);
+      renderAppointments(todayAppointments, 'todayAppointmentsContainer');
+      
+      // Load upcoming appointments
+      const upcomingAppointments = appointments.filter(app => {
+        return new Date(app.date) > new Date() && app.status !== 'cancelled';
+      });
+      renderAppointments(upcomingAppointments, 'upcomingAppointmentsContainer');
+      
+      // Load past appointments
+      const pastAppointments = appointments.filter(app => {
+        return new Date(app.date) < new Date() || app.status === 'completed';
+      });
+      renderAppointments(pastAppointments, 'pastAppointmentsContainer');
+      
+      // Update statistics
+      updateStatistics({
+        total: appointments.length,
+        today: todayAppointments.length,
+        upcoming: upcomingAppointments.length,
+        completed: appointments.filter(app => app.status === 'completed').length
+      });
+    }
+    
+    function renderAppointments(appointments, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (!appointments || appointments.length === 0) {
+        container.innerHTML = '<p class="empty-state">No appointments found</p>';
+        return;
+      }
+      
+      const html = appointments.map(app => {
+        // Get action buttons based on appointment status
+        const actionButtons = getActionButtonsForStatus(app.status, app.id);
+        
+        return `
+          <div class="appointment-card ${app.status}">
+            <div class="appointment-header">
+              <h4>Appointment #${app.id.substring(0, 8)}</h4>
+              <span class="status ${app.status}">${app.status}</span>
+            </div>
+            
+            <div class="appointment-details">
+              <p><i class="fas fa-user-md"></i> <strong>Doctor:</strong> ${app.doctorName}</p>
+              <p><i class="fas fa-user"></i> <strong>Patient:</strong> ${app.patientName}</p>
+              <p><i class="fas fa-calendar"></i> <strong>Date:</strong> ${new Date(app.date).toLocaleDateString()}</p>
+              <p><i class="fas fa-clock"></i> <strong>Time:</strong> ${app.time}</p>
+              <p><i class="fas fa-stethoscope"></i> <strong>Specialization:</strong> ${app.specialization || 'General'}</p>
+              <p><i class="fas fa-clipboard"></i> <strong>Reason:</strong> ${app.reason}</p>
+            </div>
+            
+            <div class="patient-doctor-info">
+              <div><strong>Patient ID:</strong> ${app.userId}</div>
+              <div><strong>Doctor ID:</strong> ${app.doctorId}</div>
+            </div>
+            
+            <div class="appointment-actions">
+              ${actionButtons}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      container.innerHTML = html;
+    }
+    
+    function getActionButtonsForStatus(status, appointmentId) {
+      switch(status) {
+        case 'pending':
+          return `
+            <button class="action-btn" onclick="updateAppointmentStatus('${appointmentId}', 'confirmed')">
+              <i class="fas fa-check"></i> Confirm
+            </button>
+            <button class="action-btn danger" onclick="updateAppointmentStatus('${appointmentId}', 'cancelled')">
+              <i class="fas fa-ban"></i> Cancel
+            </button>
+          `;
+        case 'confirmed':
+          return `
+            <button class="action-btn" onclick="updateAppointmentStatus('${appointmentId}', 'completed')">
+              <i class="fas fa-check-double"></i> Mark Completed
+            </button>
+            <button class="action-btn danger" onclick="updateAppointmentStatus('${appointmentId}', 'cancelled')">
+              <i class="fas fa-ban"></i> Cancel
+            </button>
+          `;
+        case 'completed':
+          return `
+            <button class="action-btn" onclick="viewAppointmentDetails('${appointmentId}')">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+          `;
+        case 'cancelled':
+          return `
+            <button class="action-btn" onclick="updateAppointmentStatus('${appointmentId}', 'pending')">
+              <i class="fas fa-redo"></i> Reactivate
+            </button>
+          `;
+        default:
+          return '';
+      }
+    }
+    
+    function updateStatistics(stats) {
+      document.getElementById('totalAppointmentsValue').textContent = stats.total;
+      document.getElementById('todayAppointmentsValue').textContent = stats.today;
+      document.getElementById('upcomingAppointmentsValue').textContent = stats.upcoming;
+      document.getElementById('completedAppointmentsValue').textContent = stats.completed;
+    }
+    
+    function updateAppointmentStatus(appointmentId, newStatus) {
+      // Get all appointments
+      const appointments = getAllAppointments();
+      
+      // Find and update the specific appointment
+      const updatedAppointments = appointments.map(app => {
+        if (app.id === appointmentId) {
+          return { ...app, status: newStatus };
+        }
+        return app;
+      });
+      
+      // Save the updated appointments
+      localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+      
+      // Reload appointments
+      loadAllAppointments();
+      
+      // Show success message
+      alert(`Appointment status updated to ${newStatus}`);
+    }
+    
+    function viewAppointmentDetails(appointmentId) {
+      // In a real app, this would open a modal with detailed appointment information
+      alert(`Viewing details for appointment ${appointmentId}`);
+    }
+    
+    function applyFilters() {
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+      const doctorId = document.getElementById('doctorFilter').value;
+      const patientId = document.getElementById('patientFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      
+      // Get all appointments
+      let appointments = getAllAppointments();
+      
+      // Apply date range filter
+      if (dateFrom) {
+        appointments = appointments.filter(app => app.date >= dateFrom);
+      }
+      
+      if (dateTo) {
+        appointments = appointments.filter(app => app.date <= dateTo);
+      }
+      
+      // Apply doctor filter
+      if (doctorId) {
+        appointments = appointments.filter(app => app.doctorId === doctorId);
+      }
+      
+      // Apply patient filter
+      if (patientId) {
+        appointments = appointments.filter(app => app.userId === patientId);
+      }
+      
+      // Apply status filter
+      if (status) {
+        appointments = appointments.filter(app => app.status === status);
+      }
+      
+      // Render filtered appointments
+      renderAppointments(appointments, 'allAppointmentsContainer');
+    }
+    
+    function resetFilters() {
+      // Reset filter form
+      document.getElementById('dateFrom').value = '';
+      document.getElementById('dateTo').value = '';
+      document.getElementById('doctorFilter').value = '';
+      document.getElementById('patientFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      
+      // Reload all appointments
+      loadAllAppointments();
+    }
+  </script>
+</body>
+</html> 

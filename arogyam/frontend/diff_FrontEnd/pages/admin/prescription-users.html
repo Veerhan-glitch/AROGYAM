@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescription Product Users - Arogyam Admin</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+    
+    .prescription-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .prescription-table th, 
+    .prescription-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .prescription-table th {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .prescription-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .prescription-table tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .compliance-chart {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .chart-placeholder {
+      background-color: var(--primary-light);
+      height: 300px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-style: italic;
+    }
+    
+    .filter-section {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .compliance-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .verified {
+      background-color: rgba(46, 204, 113, 0.15);
+      color: #27ae60;
+    }
+    
+    .unverified {
+      background-color: rgba(231, 76, 60, 0.15);
+      color: #c0392b;
+    }
+    
+    .pending {
+      background-color: rgba(241, 196, 15, 0.15);
+      color: #f39c12;
+    }
+    
+    .product-list {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .product-list li {
+      margin-bottom: 5px;
+    }
+    
+    .action-column {
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="subpage">
+    <div class="subpage-header">
+      <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2>Prescription Product Users</h2>
+    </div>
+
+    <div class="subpage-content">
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-value" id="totalUsersValue">0</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="verifiedUsersValue">0</div>
+          <div class="stat-label">Verified Prescriptions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="pendingUsersValue">0</div>
+          <div class="stat-label">Pending Verification</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="prescriptionProductsValue">0</div>
+          <div class="stat-label">Prescription Products</div>
+        </div>
+      </div>
+
+      <div class="compliance-chart">
+        <h3>Prescription Compliance Overview</h3>
+        <div class="chart-placeholder">
+          <p>Prescription compliance chart would be displayed here in a real application</p>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-group">
+          <label for="complianceFilter">Compliance Status:</label>
+          <select id="complianceFilter" onchange="applyFilters()">
+            <option value="all">All Statuses</option>
+            <option value="verified">Verified</option>
+            <option value="pending">Pending Verification</option>
+            <option value="unverified">Unverified</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="timeFilter">Time Period:</label>
+          <select id="timeFilter" onchange="applyFilters()">
+            <option value="month">Last Month</option>
+            <option value="quarter">Last Quarter</option>
+            <option value="year">Last Year</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortByFilter">Sort By:</label>
+          <select id="sortByFilter" onchange="applyFilters()">
+            <option value="recent">Most Recent Order</option>
+            <option value="name">User Name</option>
+            <option value="productsCount">Products Count</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>Users with Prescription Products</h3>
+      <div id="usersTableContainer">
+        <table class="prescription-table">
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>Contact Info</th>
+              <th>Prescription Products</th>
+              <th>Last Order Date</th>
+              <th>Compliance Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Users will be loaded here -->
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                Loading users with prescription products...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../features.js"></script>
+  <script src="../../navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in and is admin
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || currentUser.userType !== 'admin') {
+        window.location.href = '../../index.html';
+        return;
+      }
+      
+      // Load prescription users data
+      loadPrescriptionUsersData();
+    });
+
+    function loadPrescriptionUsersData() {
+      // Get users, orders, products, medicines and prescriptions
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+      const prescriptions = JSON.parse(localStorage.getItem('prescriptions')) || [];
+      
+      // Mark products requiring prescription
+      const allProducts = [...products, ...medicines].map(product => ({
+        ...product,
+        requiresPrescription: product.requiresPrescription || 
+                             (product.category === 'Antibiotics') || 
+                             (product.name && product.name.includes('Prescription'))
+      }));
+      
+      // Get products that require prescription
+      const prescriptionProducts = allProducts.filter(product => product.requiresPrescription);
+      
+      // Get order items with prescription products
+      const prescriptionOrderItems = [];
+      
+      // From order items collection
+      orderItems.forEach(item => {
+        const product = prescriptionProducts.find(p => p.id === item.productId);
+        if (product) {
+          prescriptionOrderItems.push({
+            ...item,
+            product,
+            orderId: item.orderId
+          });
+        }
+      });
+      
+      // From orders with embedded items
+      orders.forEach(order => {
+        if (order.items && Array.isArray(order.items)) {
+          order.items.forEach(item => {
+            const product = prescriptionProducts.find(p => p.id === item.productId);
+            if (product) {
+              prescriptionOrderItems.push({
+                ...item,
+                product,
+                orderId: order.id,
+                userId: order.userId,
+                orderDate: order.orderDate || order.date
+              });
+            }
+          });
+        }
+      });
+      
+      // Apply time filter
+      const timeFilter = document.getElementById('timeFilter').value;
+      let filteredOrderItems = [...prescriptionOrderItems];
+      
+      if (timeFilter !== 'all') {
+        const now = new Date();
+        let cutoffDate = new Date();
+        
+        switch (timeFilter) {
+          case 'month':
+            cutoffDate.setMonth(now.getMonth() - 1);
+            break;
+          case 'quarter':
+            cutoffDate.setMonth(now.getMonth() - 3);
+            break;
+          case 'year':
+            cutoffDate.setFullYear(now.getFullYear() - 1);
+            break;
+        }
+        
+        filteredOrderItems = filteredOrderItems.filter(item => {
+          const order = orders.find(o => o.id === item.orderId);
+          return order && new Date(order.orderDate || order.date) >= cutoffDate;
+        });
+      }
+      
+      // Group order items by user
+      const userPrescriptionProducts = {};
+      
+      filteredOrderItems.forEach(item => {
+        const order = orders.find(o => o.id === item.orderId);
+        const userId = item.userId || (order ? order.userId : null);
+        
+        if (userId) {
+          if (!userPrescriptionProducts[userId]) {
+            userPrescriptionProducts[userId] = {
+              userId,
+              products: {},
+              orders: [],
+              lastOrderDate: null
+            };
+          }
+          
+          // Add product if not already added
+          if (!userPrescriptionProducts[userId].products[item.product.id]) {
+            userPrescriptionProducts[userId].products[item.product.id] = item.product;
+          }
+          
+          // Add order if not already added
+          if (order && !userPrescriptionProducts[userId].orders.includes(order.id)) {
+            userPrescriptionProducts[userId].orders.push(order.id);
+            
+            // Update last order date
+            const orderDate = new Date(order.orderDate || order.date);
+            if (!userPrescriptionProducts[userId].lastOrderDate || 
+                orderDate > userPrescriptionProducts[userId].lastOrderDate) {
+              userPrescriptionProducts[userId].lastOrderDate = orderDate;
+            }
+          }
+        }
+      });
+      
+      // Get compliance status for each user
+      Object.values(userPrescriptionProducts).forEach(userData => {
+        // Check if user has valid prescription
+        const userPrescriptions = prescriptions.filter(p => p.userId === userData.userId);
+        
+        if (userPrescriptions.length > 0) {
+          // Check if any prescription is verified
+          const verifiedPrescription = userPrescriptions.some(p => p.status === 'verified');
+          userData.complianceStatus = verifiedPrescription ? 'verified' : 'pending';
+        } else {
+          userData.complianceStatus = 'unverified';
+        }
+      });
+      
+      // Apply compliance filter
+      const complianceFilter = document.getElementById('complianceFilter').value;
+      let filteredUserData = Object.values(userPrescriptionProducts);
+      
+      if (complianceFilter !== 'all') {
+        filteredUserData = filteredUserData.filter(userData => 
+          userData.complianceStatus === complianceFilter
+        );
+      }
+      
+      // Sort users
+      const sortBy = document.getElementById('sortByFilter').value;
+      
+      switch (sortBy) {
+        case 'recent':
+          filteredUserData.sort((a, b) => b.lastOrderDate - a.lastOrderDate);
+          break;
+        case 'name':
+          filteredUserData.sort((a, b) => {
+            const userA = users.find(u => u.id === a.userId);
+            const userB = users.find(u => u.id === b.userId);
+            return (userA && userB) ? userA.name.localeCompare(userB.name) : 0;
+          });
+          break;
+        case 'productsCount':
+          filteredUserData.sort((a, b) => 
+            Object.keys(b.products).length - Object.keys(a.products).length
+          );
+          break;
+      }
+      
+      // Calculate statistics
+      const totalPrescriptionUsers = Object.keys(userPrescriptionProducts).length;
+      const verifiedUsers = Object.values(userPrescriptionProducts)
+        .filter(userData => userData.complianceStatus === 'verified').length;
+      const pendingUsers = Object.values(userPrescriptionProducts)
+        .filter(userData => userData.complianceStatus === 'pending').length;
+      
+      // Update statistics
+      document.getElementById('totalUsersValue').textContent = totalPrescriptionUsers;
+      document.getElementById('verifiedUsersValue').textContent = verifiedUsers;
+      document.getElementById('pendingUsersValue').textContent = pendingUsers;
+      document.getElementById('prescriptionProductsValue').textContent = prescriptionProducts.length;
+      
+      // Render table
+      renderPrescriptionUsers(filteredUserData, users);
+    }
+
+    function renderPrescriptionUsers(usersData, allUsers) {
+      const tableBody = document.getElementById('usersTableBody');
+      
+      if (usersData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+              No users found who ordered prescription products with the selected filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      const usersHTML = usersData.map(userData => {
+        // Get user info
+        const user = allUsers.find(u => u.id === userData.userId);
+        const userName = user ? user.name : 'Unknown User';
+        const email = user ? user.email : 'Unknown';
+        const phone = user ? user.phone : 'Unknown';
+        
+        // Format product list
+        const productsList = Object.values(userData.products).map(product => 
+          `<li>${product.name}</li>`
+        ).join('');
+        
+        // Format last order date
+        const lastOrderDate = userData.lastOrderDate 
+          ? userData.lastOrderDate.toLocaleDateString() 
+          : 'Unknown';
+        
+        // Set compliance badge class
+        let complianceClass = 'pending';
+        if (userData.complianceStatus === 'verified') {
+          complianceClass = 'verified';
+        } else if (userData.complianceStatus === 'unverified') {
+          complianceClass = 'unverified';
+        }
+        
+        // Format compliance status
+        const complianceText = userData.complianceStatus.charAt(0).toUpperCase() + 
+                              userData.complianceStatus.slice(1);
+        
+        return `
+          <tr>
+            <td>${userName}</td>
+            <td>
+              Email: ${email}<br>
+              Phone: ${phone}
+            </td>
+            <td>
+              <ul class="product-list">
+                ${productsList}
+              </ul>
+              <div style="font-size: 0.8rem; color: var(--text-light);">
+                Total: ${Object.keys(userData.products).length} products
+              </div>
+            </td>
+            <td>${lastOrderDate}</td>
+            <td>
+              <span class="compliance-badge ${complianceClass}">
+                ${complianceText}
+              </span>
+            </td>
+            <td class="action-column">
+              <button class="small-btn" onclick="viewPrescriptions('${userData.userId}')">
+                <i class="fas fa-prescription"></i>
+              </button>
+              <button class="small-btn" onclick="viewUserOrders('${userData.userId}')">
+                <i class="fas fa-shopping-bag"></i>
+              </button>
+              <button class="small-btn" onclick="contactUser('${userData.userId}')">
+                <i class="fas fa-envelope"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      
+      tableBody.innerHTML = usersHTML;
+    }
+
+    function applyFilters() {
+      loadPrescriptionUsersData();
+    }
+    
+    function viewPrescriptions(userId) {
+      // This would open prescription details in a real application
+      alert('View prescriptions for user ID: ' + userId);
+    }
+    
+    function viewUserOrders(userId) {
+      // This would open user orders in a real application
+      alert('View orders for user ID: ' + userId);
+    }
+    
+    function contactUser(userId) {
+      // This would open messaging UI in a real application
+      alert('Contact user ID: ' + userId);
+    }
+  </script>
+</body>
+</html> 
