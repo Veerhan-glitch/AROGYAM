@@ -1,4 +1,27 @@
 const API = '/api/';
+// document.addEventListener('DOMContentLoaded', function () {
+  const info = document.getElementById('info');
+  const Id = info?.dataset?.id;
+  
+  if (Id) {
+    const docIdEl = document.getElementById('doc_id');
+    if (docIdEl) docIdEl.value = Id;
+  
+    const docProfileIdEl = document.getElementById('doc_profileid');
+    if (docProfileIdEl) docProfileIdEl.value = Id;
+  
+    const custUserIdEl = document.getElementById('cust_userid');
+    if (custUserIdEl) custUserIdEl.value = Id;
+  
+    const docFeedbackUserIdEl = document.getElementById('doc_feedback_userid');
+    if (docFeedbackUserIdEl) docFeedbackUserIdEl.value = Id;
+
+    const appt_userid = document.getElementById('appt_userid');
+    if (appt_userid) appt_userid.value = Id;
+  }
+
+
+
     function showOutput(data) {
       document.getElementById('output').textContent = JSON.stringify(data, null, 2);
     }

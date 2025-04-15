@@ -9,7 +9,10 @@
     pre { white-space: pre-wrap; }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6" onload="loadDoctorSpecializations()">
+<body class="bg-gray-100 min-h-screen p-6">
+  <div id="info"
+  data-id="{{id }}">
+</div>
   <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Arogyam Doctor API Tester</h1>
     
@@ -20,7 +23,7 @@
         <div class="flex flex-col space-y-2">
           <label class="text-gray-600 font-medium">Doctor ID</label>
           <div class="flex space-x-2">
-            <input type="number" id="doc_id" placeholder="Doctor ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="doc_id" placeholder="Doctor ID" readonly class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <select id="doc_mode" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="all">All</option>
               <option value="upcoming">Upcoming</option>
@@ -28,7 +31,6 @@
             </select>
             <button onclick="getDoctorSchedule()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View My Schedule</button>
           </div>
-          <button onclick="getAppointmentsByDoctor()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Appointments</button>
         </div>
 
         
@@ -46,20 +48,12 @@
         <div class="flex flex-col space-y-2">
           <label class="text-gray-600 font-medium">Doctor ID</label>
           <div class="flex space-x-2">
-            <input type="number" id="doc_profileid" placeholder="Doctor ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="doc_profileid" placeholder="Doctor ID" readonly class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button onclick="viewDoctorProfile()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View My Profile</button>
           </div>
         </div>
 
-        <!-- Update Rating -->
-        <div class="flex flex-col space-y-2">
-          <h3 class="text-lg font-medium text-gray-600">Update Doctor Rating</h3>
-          <div class="flex space-x-2">
-            <input type="number" id="doc_upd_id" placeholder="Doctor ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="number" step="0.1" id="doc_new_rating" placeholder="New Rating" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="updateDoctorRating()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update Rating</button>
-          </div>
-        </div>
+
       </div>
     </section>
 

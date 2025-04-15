@@ -10,6 +10,10 @@
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
+  <body class="bg-gray-100 min-h-screen p-6">
+    <div id="info"
+    data-id="{{id }}">
+  </div>
   <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Arogyam Customer API Tester</h1>
     
@@ -20,7 +24,7 @@
         <div class="flex flex-col space-y-2">
           <label class="text-gray-600 font-medium">User ID</label>
           <div class="flex space-x-2">
-            <input type="number" id="cust_userid" placeholder="User ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="cust_userid" placeholder="User ID" readonly class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button onclick="getPastOrders()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Past Orders</button>
             <button onclick="getUserAppointments()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Appointments</button>
           </div>
@@ -57,7 +61,7 @@
         <div class="flex flex-col space-y-2">
           <h3 class="text-lg font-medium text-gray-600">Book Appointment</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="number" id="appt_userid" placeholder="User ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="appt_userid" placeholder="User ID" readonly class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="number" id="appt_docid" placeholder="Doctor ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="date" id="appt_date" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <select id="appt_type" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -92,7 +96,7 @@
         <div class="flex flex-col space-y-2">
           <h3 class="text-lg font-medium text-gray-600">Product Feedback</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="number" id="doc_feedback_userid" placeholder="User ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="doc_feedback_userid" placeholder="User ID" readonly class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="number" id="doc_feedback_prodid" placeholder="Product ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="text" id="doc_feedback_desc" placeholder="Feedback" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="number" step="0.1" id="doc_feedback_rating" placeholder="Rating" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -104,8 +108,8 @@
         <div class="flex flex-col space-y-2">
           <h3 class="text-lg font-medium text-gray-600">Lab Tests</h3>
           <div class="flex space-x-2">
-            <input type="text" id="labtest_query" placeholder="Test name" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="browseLabTests()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Browse Lab Tests</button>
+            <!-- <input type="text" id="labtest_query" placeholder="Test name" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="browseLabTests()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Browse Lab Tests</button> -->
           </div>
           <div class="flex space-x-2">
             <input type="number" id="report_testid" placeholder="Test ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">

@@ -164,28 +164,20 @@ def doctor_dashboard(request):
     if 'user_id' not in request.session:
         return redirect('login')  # Redirect to login if not logged in
 
-    doctor_id = request.session['user_id']
-    doctor_name = request.session['user_name']
-    doctor_rating = request.session.get('doctor_rating')
-    doctor_specialization = request.session.get('doctor_specialization')
+    id = request.session['user_id']
 
     return render(request, 'doctor_dashboard.html', {
-        'doctor_id': doctor_id,
-        'doctor_name': doctor_name,
-        'doctor_rating': doctor_rating,
-        'doctor_specialization': doctor_specialization
+        'id': id,
     })
 
 def customer_dashboard(request):
     if 'user_id' not in request.session:
         return redirect('login')  # Redirect to login if not logged in
 
-    user_id = request.session['user_id']
-    user_name = request.session['user_name']
+    id = request.session['user_id']
 
     return render(request, 'customer_dashboard.html', {
-        'user_id': user_id,
-        'user_name': user_name
+        'id': id,
     })
 
 def admin_dashboard(request):
