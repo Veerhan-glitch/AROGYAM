@@ -19,7 +19,7 @@ def home(request):
     )
     if user_type == 'customer':
         user = Users.objects.get(userid=user_id)
-        return render(request, 'home.html', {'user': user, 'trending_products': trending_products})
+        return redirect('customer_dashboard')
     # elif user_type == 'doctor':
     #     return redirect('doctor_dashboard')
     # elif user_type == 'admin':

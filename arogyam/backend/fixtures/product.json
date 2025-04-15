@@ -298,5 +298,17 @@
     "type": "Ointment",
     "prescriptionneeded": false
   }
+},
+{
+  "model": "backend.product",
+  "pk": 26,
+  "fields": {
+    "name": "1",
+    "brand": "1",
+    "price": "1.00",
+    "composition": "1",
+    "type": "1",
+    "prescriptionneeded": true
+  }
 }
 ]

@@ -11,7 +11,7 @@
   "model": "backend.useroffers",
   "pk": 2,
   "fields": {
-    "userid": 2,
+    "userid": 1,
     "offerid": 5
   }
 },
@@ -27,7 +27,7 @@
   "model": "backend.useroffers",
   "pk": 4,
   "fields": {
-    "userid": 4,
+    "userid": 3,
     "offerid": 10
   }
 },
@@ -43,7 +43,7 @@
   "model": "backend.useroffers",
   "pk": 6,
   "fields": {
-    "userid": 6,
+    "userid": 7,
     "offerid": 15
   }
 },
@@ -59,7 +59,7 @@
   "model": "backend.useroffers",
   "pk": 8,
   "fields": {
-    "userid": 8,
+    "userid": 10,
     "offerid": 20
   }
 },
@@ -67,7 +67,7 @@
   "model": "backend.useroffers",
   "pk": 9,
   "fields": {
-    "userid": 9,
+    "userid": 25,
     "offerid": 22
   }
 },
@@ -83,7 +83,7 @@
   "model": "backend.useroffers",
   "pk": 11,
   "fields": {
-    "userid": 11,
+    "userid": 10,
     "offerid": 1
   }
 },
@@ -107,7 +107,7 @@
   "model": "backend.useroffers",
   "pk": 14,
   "fields": {
-    "userid": 14,
+    "userid": 15,
     "offerid": 8
   }
 },
@@ -123,7 +123,7 @@
   "model": "backend.useroffers",
   "pk": 16,
   "fields": {
-    "userid": 16,
+    "userid": 18,
     "offerid": 11
   }
 },
@@ -131,7 +131,7 @@
   "model": "backend.useroffers",
   "pk": 17,
   "fields": {
-    "userid": 17,
+    "userid": 19,
     "offerid": 13
   }
 },
@@ -139,7 +139,7 @@
   "model": "backend.useroffers",
   "pk": 18,
   "fields": {
-    "userid": 18,
+    "userid": 21,
     "offerid": 14
   }
 },
@@ -147,7 +147,7 @@
   "model": "backend.useroffers",
   "pk": 19,
   "fields": {
-    "userid": 19,
+    "userid": 23,
     "offerid": 16
   }
 },
@@ -155,7 +155,7 @@
   "model": "backend.useroffers",
   "pk": 20,
   "fields": {
-    "userid": 20,
+    "userid": 25,
     "offerid": 17
   }
 },
@@ -163,7 +163,7 @@
   "model": "backend.useroffers",
   "pk": 21,
   "fields": {
-    "userid": 21,
+    "userid": 25,
     "offerid": 19
   }
 },
@@ -171,7 +171,7 @@
   "model": "backend.useroffers",
   "pk": 22,
   "fields": {
-    "userid": 22,
+    "userid": 5,
     "offerid": 21
   }
 },
@@ -179,7 +179,7 @@
   "model": "backend.useroffers",
   "pk": 23,
   "fields": {
-    "userid": 23,
+    "userid": 10,
     "offerid": 23
   }
 },
@@ -187,7 +187,7 @@
   "model": "backend.useroffers",
   "pk": 24,
   "fields": {
-    "userid": 24,
+    "userid": 12,
     "offerid": 24
   }
 },
@@ -195,7 +195,7 @@
   "model": "backend.useroffers",
   "pk": 25,
   "fields": {
-    "userid": 25,
+    "userid": 15,
     "offerid": 2
   }
 }

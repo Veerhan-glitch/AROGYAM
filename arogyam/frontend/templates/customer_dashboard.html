@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arogyam</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta name="description" content="Arogyam - Your Digital Health Partner">
+  <meta name="keywords" content="health, digital health, Arogyam, health partner">
+  <meta name="author" content="Your Name">
+</head>
+<body>
+
+<!-- User Dashboard -->
+<div class="dashboard user-dashboard" id="userDashboard">
+    <div class="dashboard-header">
+      <div class="user-info">
+        <h2 id="userWelcome">Welcome</h2>
+        <p id="userType"></p>
+      </div>
+      <div class="header-controls">
+        <div class="notification" onclick="toggleNotifications()">
+          <i class="fas fa-bell"></i>
+          <span class="notif-count">3</span>
+          <div class="notif-dropdown" id="notifDropdown">
+            <p><strong>Notifications</strong></p>
+            <ul id="notificationsList"></ul>
+          </div>
+        </div>
+        <div class="cart-icon">
+          <a href="pages/user/cart.html" title="View Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+        </div>
+        <div class="profile-icon" onclick="toggleProfileMenu()">
+          <i class="fas fa-user-circle"></i>
+          <div class="profile-dropdown" id="profileDropdown">
+            <ul>
+              <li onclick="showProfile('user')"><i class="fas fa-user"></i> My Profile</li>
+              <li onclick="showOrderHistory()"><i class="fas fa-history"></i> Order History</li>
+              <li onclick="window.location.href='pages/user/prescriptions.html'"><i class="fas fa-prescription"></i> Prescriptions</li>
+              <li onclick="window.location.href='pages/user/appointments.html'"><i class="fas fa-calendar-check"></i> Appointments</li>
+              <li class="divider"></li>
+              <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+          </div>
+        </div>
+        <button class="logoutBtn" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  
+    <div class="dashboard-intro">
+      <div class="quick-access">
+        <button class="quick-access-btn" onclick="window.location.href='pages/user/products.html'">
+          <i class="fas fa-shopping-basket"></i>
+          <span>Shop Medicines</span>
+        </button>
+        <button class="quick-access-btn" onclick="window.location.href='pages/user/appointments.html'">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Book Appointment</span>
+        </button>
+        <button class="quick-access-btn" onclick="window.location.href='pages/user/lab-tests.html'">
+          <i class="fas fa-vial"></i>
+          <span>Lab Tests</span>
+        </button>
+        <button class="quick-access-btn" onclick="window.location.href='pages/user/doctor-analytics.html'">
+          <i class="fas fa-user-md"></i>
+          <span>Find Doctors</span>
+        </button>
+      </div>
+    </div>
+  
+    <div class="dashboard-content">
+      <!-- Trending Products Section -->
+      <section class="dashboard-section" id="trendingProducts">
+        <h3>Trending Products</h3>
+        <div class="product-grid" id="trendingProductsList"></div>
+      </section>
+  
+      <!-- Top Doctors Section -->
+      <section class="dashboard-section" id="topDoctors">
+        <h3>Doctors</h3>
+        <div class="doctors-grid" id="topDoctorsList"></div>
+      </section>
+  
+      <!-- Appointments Section -->
+      <section class="dashboard-section" id="appointments">
+        <h3>Appointments</h3>
+        <div class="appointments-list" id="appointmentsList"></div>
+      </section>
+  
+      <!-- Prescriptions Section -->
+      <section class="dashboard-section" id="prescriptions">
+        <h3>Prescriptions</h3>
+        <div class="upload-section">
+          <input type="file" id="prescriptionFile" accept=".pdf,.jpg,.png">
+          <button class="action-btn" onclick="handlePrescriptionUpload()">Upload Prescription</button>
+        </div>
+        <div class="prescriptions-list" id="prescriptionsList"></div>
+      </section>
+  
+      <!-- Order History Section -->
+      <section class="dashboard-section" id="orderHistory">
+        <h3>Order History</h3>
+        <div class="orders-list" id="ordersList"></div>
+      </section>
+    </div>
+  </div>
+  
+
+  <script src="features.js"></script>
+  <script src="navigation.js"></script>
+  <script src="index.js"></script>
+  <script>
+
+  // Fix for profile menu toggles
+  function toggleProfileMenu() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(e) {
+      if (!e.target.closest('.profile-icon')) {
+        dropdown.style.display = 'none';
+        document.removeEventListener('click', closeDropdown);
+      }
+    });
+  }
+  </script>
+  </body>
+  </html>  

@@ -298,5 +298,17 @@
     "phonenumber": "4329012357",
     "password": "sanyasecure"
   }
+},
+{
+  "model": "backend.users",
+  "pk": 27,
+  "fields": {
+    "name": "1",
+    "address": "",
+    "age": null,
+    "email": "1@1.com",
+    "phonenumber": "1",
+    "password": "1"
+  }
 }
 ]

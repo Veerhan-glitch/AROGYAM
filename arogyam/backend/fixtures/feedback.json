@@ -171,16 +171,6 @@
 },
 {
   "model": "backend.feedback",
-  "pk": 18,
-  "fields": {
-    "userid": 21,
-    "productid": 1,
-    "description": "Great experience using the app.",
-    "rating": "4.80"
-  }
-},
-{
-  "model": "backend.feedback",
   "pk": 19,
   "fields": {
     "userid": 18,
@@ -211,16 +201,6 @@
 },
 {
   "model": "backend.feedback",
-  "pk": 22,
-  "fields": {
-    "userid": 5,
-    "productid": 1,
-    "description": "Easy to book doctor appointments.",
-    "rating": "4.70"
-  }
-},
-{
-  "model": "backend.feedback",
   "pk": 23,
   "fields": {
     "userid": 13,
@@ -247,6 +227,16 @@
     "productid": 10,
     "description": "Overall a great experience. Will shop again!",
     "rating": "5.00"
+  }
+},
+{
+  "model": "backend.feedback",
+  "pk": 26,
+  "fields": {
+    "userid": 1,
+    "productid": 3,
+    "description": "1",
+    "rating": "1.00"
   }
 }
 ]

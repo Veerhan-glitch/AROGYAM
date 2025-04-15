@@ -248,5 +248,35 @@
     "status": "Pending",
     "testdetails": "Detects HIV antibodies in the blood"
   }
+},
+{
+  "model": "backend.labtests",
+  "pk": 28,
+  "fields": {
+    "name": "1",
+    "price": "1.00",
+    "status": "Pending",
+    "testdetails": "1"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 29,
+  "fields": {
+    "name": "1",
+    "price": "1.00",
+    "status": "Pending",
+    "testdetails": "1"
+  }
+},
+{
+  "model": "backend.labtests",
+  "pk": 30,
+  "fields": {
+    "name": "1",
+    "price": "1.00",
+    "status": "Pending",
+    "testdetails": "1"
+  }
 }
 ]

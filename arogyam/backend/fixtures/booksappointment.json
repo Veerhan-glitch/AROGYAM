@@ -273,5 +273,16 @@
     "type": "Follow-up",
     "status": "Completed"
   }
+},
+{
+  "model": "backend.booksappointment",
+  "pk": 26,
+  "fields": {
+    "userid": 1,
+    "doctorid": 1,
+    "date": "2025-04-15",
+    "type": "Routine",
+    "status": "Scheduled"
+  }
 }
 ]

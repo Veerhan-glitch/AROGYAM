@@ -225,6 +225,8 @@ def product_details(request):
         except Product.DoesNotExist:
             return JsonResponse({"error": "Product not found"}, status=404)
 
+def customer_dashboard(request):
+    return render(request, 'customer/customer_dashboard.html')
 
 def order_history(request):
     orders = Orders.objects.filter(user=request.user).prefetch_related('orderitems')

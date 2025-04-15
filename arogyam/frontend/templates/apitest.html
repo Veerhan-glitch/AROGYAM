@@ -249,9 +249,9 @@
       callAPI("recent-doctor-appointments/", "GET");
     }
     function linkReport() {
-      const filepath = document.getElementById('rep_filepath').value;
+      const userid = document.getElementById('cust_userid').value;
       const test_id = document.getElementById('rep_testid2').value;
-      callAPI("link-report/", "POST", { filepath, test_id });
+      callAPI("link-report/", "POST", { userid, test_id });
     }
     function viewAllOffers() { callAPI("all-offers/", "GET"); }
     function sendNotification() {
@@ -287,6 +287,10 @@
       <button onclick="getPaymentHistory()">Payment History</button>
       <button onclick="getHighestRatedDoctorsBySpecialization()">Top-Rated Doctor per Specialization</button>
       <button onclick="getDoctorVisitCounts()">List All Doctors with Visit Count</button>
+      <br>
+      <h4>Take Lab Test</h4>
+      <input type="number" id="rep_testid2" placeholder="Test ID">
+      <button onclick="linkReport()">Take Test</button>
     </div>
     <div>
       <label>Order ID (Feedback):</label>
@@ -465,12 +469,7 @@
       <button onclick="getUsersWithPrescriptionOrders()">Users with Prescription Orders</button>
       <button onclick="findUsersFeedback()">Find Users With Orders and Feedback</button>
     </div>
-    <div>
-      <h4>Link Report to Lab Test</h4>
-      <input type="text" id="rep_filepath" placeholder="File Path">
-      <input type="number" id="rep_testid2" placeholder="Test ID">
-      <button onclick="linkReport()">Link Report</button>
-    </div>
+
     <div>
       <button onclick="viewAllOffers()">View All Offers</button>
       <button onclick="getRecentDoctorStats()">Recent Doctor Appointments + Avg Fee</button>

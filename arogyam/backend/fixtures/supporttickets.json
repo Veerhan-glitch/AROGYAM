@@ -248,5 +248,15 @@
     "status": "Resolved",
     "description": "Incorrect invoice received."
   }
+},
+{
+  "model": "backend.supporttickets",
+  "pk": 26,
+  "fields": {
+    "userid": 1,
+    "issuetype": "Payment Issue",
+    "status": "Open",
+    "description": "cant pay"
+  }
 }
 ]

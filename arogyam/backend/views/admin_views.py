@@ -136,9 +136,11 @@ def high_value_customers(request):
 def link_report(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        user = Users.objects.get(userid=data["userid"])
         report = Reports.objects.create(
-            filepath=data["filepath"],
-            testid_id=data["test_id"]
+            filepath="./report",
+            testid_id=data["test_id"],
+            userid=user,
         )
         serializer = ReportSerializer(report)
         return JsonResponse(serializer.data, safe=False)

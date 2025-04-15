@@ -245,8 +245,18 @@
   "fields": {
     "userid": 24,
     "message": "Limited time offer: Get 15% off on lab tests.",
-    "datetime": "2024-03-05T14:50:00",
+    "datetime": "2025-04-15T12:21:10",
     "type": "Offer"
+  }
+},
+{
+  "model": "backend.notifications",
+  "pk": 30,
+  "fields": {
+    "userid": 1,
+    "message": "1",
+    "datetime": "2025-04-15T13:43:33.612",
+    "type": "Appointment"
   }
 }
 ]

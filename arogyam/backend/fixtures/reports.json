@@ -1,202 +1,227 @@
 [
-{
-  "model": "backend.reports",
-  "pk": 1,
-  "fields": {
-    "filepath": "/reports/report_1.pdf",
-    "testid": 1
+  {
+    "model": "backend.reports",
+    "pk": 1,
+    "fields": {
+      "filepath": "/reports/report_1.pdf",
+      "testid": 1,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 2,
+    "fields": {
+      "filepath": "/reports/report_2.pdf",
+      "testid": 2,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 3,
+    "fields": {
+      "filepath": "/reports/report_3.pdf",
+      "testid": 3,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 4,
+    "fields": {
+      "filepath": "/reports/report_4.pdf",
+      "testid": 4,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 5,
+    "fields": {
+      "filepath": "/reports/report_5.pdf",
+      "testid": 5,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 6,
+    "fields": {
+      "filepath": "/reports/report_6.pdf",
+      "testid": 6,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 7,
+    "fields": {
+      "filepath": "/reports/report_7.pdf",
+      "testid": 7,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 8,
+    "fields": {
+      "filepath": "/reports/report_8.pdf",
+      "testid": 8,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 9,
+    "fields": {
+      "filepath": "/reports/report_9.pdf",
+      "testid": 9,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 10,
+    "fields": {
+      "filepath": "/reports/report_10.pdf",
+      "testid": 10,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 11,
+    "fields": {
+      "filepath": "/reports/report_11.pdf",
+      "testid": 11,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 12,
+    "fields": {
+      "filepath": "/reports/report_12.pdf",
+      "testid": 12,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 13,
+    "fields": {
+      "filepath": "/reports/report_13.pdf",
+      "testid": 13,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 14,
+    "fields": {
+      "filepath": "/reports/report_14.pdf",
+      "testid": 14,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 15,
+    "fields": {
+      "filepath": "/reports/report_15.pdf",
+      "testid": 15,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 16,
+    "fields": {
+      "filepath": "/reports/report_16.pdf",
+      "testid": 16,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 17,
+    "fields": {
+      "filepath": "/reports/report_17.pdf",
+      "testid": 17,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 18,
+    "fields": {
+      "filepath": "/reports/report_18.pdf",
+      "testid": 18,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 19,
+    "fields": {
+      "filepath": "/reports/report_19.pdf",
+      "testid": 19,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 20,
+    "fields": {
+      "filepath": "/reports/report_20.pdf",
+      "testid": 20,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 21,
+    "fields": {
+      "filepath": "/reports/report_21.pdf",
+      "testid": 21,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 22,
+    "fields": {
+      "filepath": "/reports/report_22.pdf",
+      "testid": 22,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 23,
+    "fields": {
+      "filepath": "/reports/report_23.pdf",
+      "testid": 23,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 24,
+    "fields": {
+      "filepath": "/reports/report_24.pdf",
+      "testid": 24,
+      "userid": 1
+    }
+  },
+  {
+    "model": "backend.reports",
+    "pk": 25,
+    "fields": {
+      "filepath": "/reports/report_25.pdf",
+      "testid": 25,
+      "userid": 1
+    }
   }
-},
-{
-  "model": "backend.reports",
-  "pk": 2,
-  "fields": {
-    "filepath": "/reports/report_2.pdf",
-    "testid": 2
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 3,
-  "fields": {
-    "filepath": "/reports/report_3.pdf",
-    "testid": 3
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 4,
-  "fields": {
-    "filepath": "/reports/report_4.pdf",
-    "testid": 4
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 5,
-  "fields": {
-    "filepath": "/reports/report_5.pdf",
-    "testid": 5
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 6,
-  "fields": {
-    "filepath": "/reports/report_6.pdf",
-    "testid": 6
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 7,
-  "fields": {
-    "filepath": "/reports/report_7.pdf",
-    "testid": 7
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 8,
-  "fields": {
-    "filepath": "/reports/report_8.pdf",
-    "testid": 8
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 9,
-  "fields": {
-    "filepath": "/reports/report_9.pdf",
-    "testid": 9
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 10,
-  "fields": {
-    "filepath": "/reports/report_10.pdf",
-    "testid": 10
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 11,
-  "fields": {
-    "filepath": "/reports/report_11.pdf",
-    "testid": 11
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 12,
-  "fields": {
-    "filepath": "/reports/report_12.pdf",
-    "testid": 12
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 13,
-  "fields": {
-    "filepath": "/reports/report_13.pdf",
-    "testid": 13
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 14,
-  "fields": {
-    "filepath": "/reports/report_14.pdf",
-    "testid": 14
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 15,
-  "fields": {
-    "filepath": "/reports/report_15.pdf",
-    "testid": 15
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 16,
-  "fields": {
-    "filepath": "/reports/report_16.pdf",
-    "testid": 16
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 17,
-  "fields": {
-    "filepath": "/reports/report_17.pdf",
-    "testid": 17
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 18,
-  "fields": {
-    "filepath": "/reports/report_18.pdf",
-    "testid": 18
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 19,
-  "fields": {
-    "filepath": "/reports/report_19.pdf",
-    "testid": 19
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 20,
-  "fields": {
-    "filepath": "/reports/report_20.pdf",
-    "testid": 20
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 21,
-  "fields": {
-    "filepath": "/reports/report_21.pdf",
-    "testid": 21
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 22,
-  "fields": {
-    "filepath": "/reports/report_22.pdf",
-    "testid": 22
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 23,
-  "fields": {
-    "filepath": "/reports/report_23.pdf",
-    "testid": 23
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 24,
-  "fields": {
-    "filepath": "/reports/report_24.pdf",
-    "testid": 24
-  }
-},
-{
-  "model": "backend.reports",
-  "pk": 25,
-  "fields": {
-    "filepath": "/reports/report_25.pdf",
-    "testid": 25
-  }
-}
-]
+  ]

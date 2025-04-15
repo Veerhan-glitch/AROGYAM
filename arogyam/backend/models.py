@@ -150,14 +150,14 @@ class Reports(models.Model):
     reportid = models.AutoField(primary_key=True)
     filepath = models.TextField()
     testid = models.ForeignKey(Labtests, on_delete=models.CASCADE, db_column='testid')
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
 
     class Meta:
         db_table = 'reports'
 
-    def __str__(self):
+    def _str_(self):
         return str(self.reportid)
-
-
+    
 class Supporttickets(models.Model):
     ticketid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')
