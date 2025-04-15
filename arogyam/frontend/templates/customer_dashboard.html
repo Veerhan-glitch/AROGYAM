@@ -1,135 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arogyam</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <meta name="description" content="Arogyam - Your Digital Health Partner">
-  <meta name="keywords" content="health, digital health, Arogyam, health partner">
-  <meta name="author" content="Your Name">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arogyam Customer API Tester</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    pre { white-space: pre-wrap; }
+  </style>
 </head>
-<body>
-
-<!-- User Dashboard -->
-<div class="dashboard user-dashboard" id="userDashboard">
-    <div class="dashboard-header">
-      <div class="user-info">
-        <h2 id="userWelcome">Welcome</h2>
-        <p id="userType"></p>
-      </div>
-      <div class="header-controls">
-        <div class="notification" onclick="toggleNotifications()">
-          <i class="fas fa-bell"></i>
-          <span class="notif-count">3</span>
-          <div class="notif-dropdown" id="notifDropdown">
-            <p><strong>Notifications</strong></p>
-            <ul id="notificationsList"></ul>
-          </div>
-        </div>
-        <div class="cart-icon">
-          <a href="pages/user/cart.html" title="View Cart">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count" id="cartCount">0</span>
-          </a>
-        </div>
-        <div class="profile-icon" onclick="toggleProfileMenu()">
-          <i class="fas fa-user-circle"></i>
-          <div class="profile-dropdown" id="profileDropdown">
-            <ul>
-              <li onclick="showProfile('user')"><i class="fas fa-user"></i> My Profile</li>
-              <li onclick="showOrderHistory()"><i class="fas fa-history"></i> Order History</li>
-              <li onclick="window.location.href='pages/user/prescriptions.html'"><i class="fas fa-prescription"></i> Prescriptions</li>
-              <li onclick="window.location.href='pages/user/appointments.html'"><i class="fas fa-calendar-check"></i> Appointments</li>
-              <li class="divider"></li>
-              <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-            </ul>
-          </div>
-        </div>
-        <button class="logoutBtn" onclick="logout()">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    </div>
-  
-    <div class="dashboard-intro">
-      <div class="quick-access">
-        <button class="quick-access-btn" onclick="window.location.href='pages/user/products.html'">
-          <i class="fas fa-shopping-basket"></i>
-          <span>Shop Medicines</span>
-        </button>
-        <button class="quick-access-btn" onclick="window.location.href='pages/user/appointments.html'">
-          <i class="fas fa-calendar-plus"></i>
-          <span>Book Appointment</span>
-        </button>
-        <button class="quick-access-btn" onclick="window.location.href='pages/user/lab-tests.html'">
-          <i class="fas fa-vial"></i>
-          <span>Lab Tests</span>
-        </button>
-        <button class="quick-access-btn" onclick="window.location.href='pages/user/doctor-analytics.html'">
-          <i class="fas fa-user-md"></i>
-          <span>Find Doctors</span>
-        </button>
-      </div>
-    </div>
-  
-    <div class="dashboard-content">
-      <!-- Trending Products Section -->
-      <section class="dashboard-section" id="trendingProducts">
-        <h3>Trending Products</h3>
-        <div class="product-grid" id="trendingProductsList"></div>
-      </section>
-  
-      <!-- Top Doctors Section -->
-      <section class="dashboard-section" id="topDoctors">
-        <h3>Doctors</h3>
-        <div class="doctors-grid" id="topDoctorsList"></div>
-      </section>
-  
-      <!-- Appointments Section -->
-      <section class="dashboard-section" id="appointments">
-        <h3>Appointments</h3>
-        <div class="appointments-list" id="appointmentsList"></div>
-      </section>
-  
-      <!-- Prescriptions Section -->
-      <section class="dashboard-section" id="prescriptions">
-        <h3>Prescriptions</h3>
-        <div class="upload-section">
-          <input type="file" id="prescriptionFile" accept=".pdf,.jpg,.png">
-          <button class="action-btn" onclick="handlePrescriptionUpload()">Upload Prescription</button>
-        </div>
-        <div class="prescriptions-list" id="prescriptionsList"></div>
-      </section>
-  
-      <!-- Order History Section -->
-      <section class="dashboard-section" id="orderHistory">
-        <h3>Order History</h3>
-        <div class="orders-list" id="ordersList"></div>
-      </section>
-    </div>
-  </div>
-  
-
-  <script src="features.js"></script>
-  <script src="navigation.js"></script>
-  <script src="index.js"></script>
-  <script>
-
-  // Fix for profile menu toggles
-  function toggleProfileMenu() {
-    const dropdown = document.getElementById('profileDropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Arogyam Customer API Tester</h1>
     
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function closeDropdown(e) {
-      if (!e.target.closest('.profile-icon')) {
-        dropdown.style.display = 'none';
-        document.removeEventListener('click', closeDropdown);
-      }
-    });
-  }
-  </script>
-  </body>
-  </html>  
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b-2 border-gray-300 pb-2">Customer Features</h2>
+      <div class="space-y-6">
+        <!-- User ID Input -->
+        <div class="flex flex-col space-y-2">
+          <label class="text-gray-600 font-medium">User ID</label>
+          <div class="flex space-x-2">
+            <input type="number" id="cust_userid" placeholder="User ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="getPastOrders()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Past Orders</button>
+            <button onclick="getUserAppointments()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Appointments</button>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="getUserPrescriptions()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Prescriptions</button>
+            <button onclick="getPaymentHistory()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Payment History</button>
+            <button onclick="getFeedbackByUser()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View My Feedback</button>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="getHighestRatedDoctorsBySpecialization()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Top-Rated Doctors</button>
+            <button onclick="getDoctorVisitCounts()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Doctors Visit Count</button>
+          </div>
+        </div>
+
+
+    <!-- Search doctor -->
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b-2 border-gray-300 pb-2">Doctor Search & Sort</h2>
+      <div class="flex flex-col space-y-2">
+        <label class="text-gray-600 font-medium">Specialization</label>
+        <div class="flex space-x-2">
+          <select id="doc_specialization" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+          <button onclick="filterDoctorsBySpecialization()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Filter Doctors</button>
+        </div>
+        <div class="flex space-x-2">
+          <button onclick="sortDoctorsByRating()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Sort by Rating</button>
+          <button onclick="sortDoctorsByFee()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Sort by Fee</button>
+          <button onclick="allDoctors()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Get All Doctors</button>
+        </div>
+      </div>
+    </section>
+
+        <!-- Book Appointment -->
+        <div class="flex flex-col space-y-2">
+          <h3 class="text-lg font-medium text-gray-600">Book Appointment</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="number" id="appt_userid" placeholder="User ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="appt_docid" placeholder="Doctor ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="date" id="appt_date" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select id="appt_type" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="Routine">Routine</option>
+              <option value="Emergency">Emergency</option>
+              <option value="Consultation">Consultation</option>
+            </select>
+          </div>
+          <button onclick="bookAppointment()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Book Appointment</button>
+        </div>
+
+        <!-- Product Search -->
+        <div class="flex flex-col space-y-2">
+          <label class="text-gray-600 font-medium">Search Products</label>
+          <div class="flex space-x-2">
+            <input type="text" id="prod_query" placeholder="Search by name/brand" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="searchProducts()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Search Products</button>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="flex flex-col space-y-2">
+          <label class="text-gray-600 font-medium">Product ID</label>
+          <div class="flex space-x-2">
+            <input type="number" id="prod_id" placeholder="Product ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="viewProductDetails()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Product Details</button>
+            <button onclick="getFeedbackByProduct()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Feedback by Product</button>
+          </div>
+        </div>
+
+        <!-- Product Feedback -->
+        <div class="flex flex-col space-y-2">
+          <h3 class="text-lg font-medium text-gray-600">Product Feedback</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="number" id="doc_feedback_userid" placeholder="User ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" id="doc_feedback_prodid" placeholder="Product ID" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="doc_feedback_desc" placeholder="Feedback" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="number" step="0.1" id="doc_feedback_rating" placeholder="Rating" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <button onclick="submitDoctorFeedback()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Submit Feedback</button>
+        </div>
+
+        <!-- Lab Tests -->
+        <div class="flex flex-col space-y-2">
+          <h3 class="text-lg font-medium text-gray-600">Lab Tests</h3>
+          <div class="flex space-x-2">
+            <input type="text" id="labtest_query" placeholder="Test name" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="browseLabTests()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Browse Lab Tests</button>
+          </div>
+          <div class="flex space-x-2">
+            <input type="number" id="report_testid" placeholder="Test ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="viewReports()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Reports</button>
+          </div>
+          <div class="flex space-x-2">
+            <input type="number" id="rep_testid2" placeholder="Test ID" class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="linkReport()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Take Test</button>
+          </div>
+        </div>
+
+        <!-- Support Tickets -->
+        <div class="flex flex-col space-y-2">
+          <h3 class="text-lg font-medium text-gray-600">Support Ticket</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <select id="ticket_type" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="Payment Issue">Payment Issue</option>
+              <option value="Technical Issue">Technical Issue</option>
+              <option value="Other">Other</option>
+            </select>
+            <input type="text" id="ticket_desc" placeholder="Description" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="submitSupportTicket()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Submit Ticket</button>
+            <button onclick="viewSupportTickets()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View My Tickets</button>
+          </div>
+        </div>
+
+        <!-- Notifications and Offers -->
+        <div class="flex space-x-2">
+          <button onclick="getUserNotifications()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View My Notifications</button>
+          <button onclick="getUserOffers()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View Offers Used</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b-2 border-gray-300 pb-2">Output</h2>
+      <pre id="output" class="bg-gray-50 p-4 rounded-lg border border-gray-200">Responses will appear here...</pre>
+    </section>
+  </div>
+  <script src="api_test.js"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ from django.urls import path
 from arogyam.backend import views
 
 urlpatterns = [
+    path('doctor_dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
     path('doctor-schedule/', views.doctor_schedule, name='doctor_schedule'),
     path('doctor-feedback/', views.doctor_feedback, name='doctor_feedback'),
     path('health-records/', views.health_records, name='health_records'),

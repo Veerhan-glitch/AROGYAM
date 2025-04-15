@@ -121,3 +121,4 @@ def sort_doctors_by_fee(request):
 def get_specialization_values(request):
     specs = Doctor.objects.values_list("specialization", flat=True).distinct()
     return JsonResponse(list(specs), safe=False)
+

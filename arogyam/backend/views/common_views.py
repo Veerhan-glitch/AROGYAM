@@ -20,10 +20,10 @@ def home(request):
     if user_type == 'customer':
         user = Users.objects.get(userid=user_id)
         return redirect('customer_dashboard')
-    # elif user_type == 'doctor':
-    #     return redirect('doctor_dashboard')
-    # elif user_type == 'admin':
-    #     return redirect('admin_dashboard')
+    elif user_type == 'doctor':
+        return redirect('doctor_dashboard')
+    elif user_type == 'admin':
+        return redirect('admin_dashboard')
     else:
         return render(request, 'home.html', {'trending_products': trending_products})  # Guest view
 
@@ -176,9 +176,46 @@ def doctor_dashboard(request):
         'doctor_specialization': doctor_specialization
     })
 
+def customer_dashboard(request):
+    if 'user_id' not in request.session:
+        return redirect('login')  # Redirect to login if not logged in
+
+    user_id = request.session['user_id']
+    user_name = request.session['user_name']
+
+    return render(request, 'customer_dashboard.html', {
+        'user_id': user_id,
+        'user_name': user_name
+    })
+
+def admin_dashboard(request):
+    if 'user_id' not in request.session:
+        return redirect('login')  # Redirect to login if not logged in
+
+    user_id = request.session['user_id']
+    user_name = request.session['user_name']
+
+    return render(request, 'admin/admin_dashboard.html', {
+        'user_id': user_id,
+        'user_name': user_name
+    })
+
+
 def logout(request):
     if 'user_id' in request.session:
         del request.session['user_id']
         del request.session['user_name']
         del request.session['user_type']
     return redirect('login')
+
+
+
+
+
+
+
+
+
+
+
+
