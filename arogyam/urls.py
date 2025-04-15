@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/appointments/', views.get_appointments, name='appointments'),
     path('logout/', views.logout, name='logout'),
     path('customer_dashboard/', views.customer_dashboard, name='customer_dashboard'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     # path('logout/', views.logout_view, name='logout'),
-    # path('', include('arogyam.backend.urls')),
+    path('', include('arogyam.backend.urls'))
 ]

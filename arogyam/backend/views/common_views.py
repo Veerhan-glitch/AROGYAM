@@ -58,7 +58,7 @@ def login(request):
 
         elif role == 'admin':
             # Example hardcoded admin (customize for real use)
-            if email == 'admin' and password == 'admin123':
+            if email == 'admin@arogyam.com' and password == 'admin':
                 request.session['user_type'] = 'admin'
                 request.session['user_name'] = 'Admin'
                 return redirect('admin_dashboard')
@@ -169,7 +169,7 @@ def doctor_dashboard(request):
     doctor_rating = request.session.get('doctor_rating')
     doctor_specialization = request.session.get('doctor_specialization')
 
-    return render(request, 'doc/appointments.html', {
+    return render(request, 'doctor_dashboard.html', {
         'doctor_id': doctor_id,
         'doctor_name': doctor_name,
         'doctor_rating': doctor_rating,
@@ -195,7 +195,7 @@ def admin_dashboard(request):
     user_id = request.session['user_id']
     user_name = request.session['user_name']
 
-    return render(request, 'admin/admin_dashboard.html', {
+    return render(request, 'admin_dashboard.html', {
         'user_id': user_id,
         'user_name': user_name
     })
