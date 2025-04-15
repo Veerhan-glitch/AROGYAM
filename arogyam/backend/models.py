@@ -103,7 +103,7 @@ class Booksappointment(models.Model):
         db_table = 'booksappointment'
 
     def __str__(self):
-        return str(self.appointmentid)
+        return f"User {self.userid} - Doc {self.doctorid}"
 
 
 class Healthrecords(models.Model):

@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arogyam</title>
+  <link rel="stylesheet" href="../../static/css/doc_style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta name="description" content="Arogyam - Your Digital Health Partner">
+  <meta name="keywords" content="health, digital health, Arogyam, health partner">
+  <meta name="author" content="Your Name">
+</head>
+<body>
+<div id="doctor-info"
+  data-doctor-id="{{ doctor_id }}"
+  data-doctor-name="{{ doctor_name }}"
+  data-doctor-rating="{{ doctor_rating }}"
+  data-doctor-specialization="{{ doctor_specialization }}">
+</div>
+<div class="dashboard doctor-dashboard" id="doctorDashboard">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <h2 id="doctorWelcome">Welcome, </h2>
+      <p id="doctorSpecialization"></p>
+      <p id="doctorRating"></p>
+      <section class="dashboard-section" id="doctorRating">
+        <div class="rating-summary">
+          <div class="rating-value">
+            <span id="doctorRatingValue"></span>
+            <div class="rating-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="header-controls">
+      <div class="notification" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notif-count">3</span>
+        <div class="notif-dropdown" id="doctorNotifDropdown">
+          <p><strong>Notifications</strong></p>
+          <ul id="doctorNotificationsList"></ul>
+        </div>
+      </div>
+      <div class="profile-icon" onclick="toggleDoctorProfileMenu()">
+        <i class="fas fa-user-circle"></i>
+        <div class="profile-dropdown" id="doctorProfileDropdown">
+          <ul>
+            <li onclick="showProfile('doctor')"><i class="fas fa-user"></i> My Profile</li>
+            <li onclick="document.getElementById('doctorSchedule').scrollIntoView({behavior: 'smooth'})"><i class="fas fa-calendar-check"></i> My Appointments</li>
+            <li class="divider"></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </div>
+      </div>
+      <button class="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+      
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <section class="dashboard-section" id="doctorSchedule">
+      <h3>Manage Your Schedule</h3>
+      
+      <div class="appointments-tabs">
+        <button class="tab-btn active" data-tab="today">Today's Appointments</button>
+        <button class="tab-btn" data-tab="upcoming">Upcoming Appointments</button>
+        <button class="tab-btn" data-tab="past">Past Appointments</button>
+      </div>
+      
+      <div class="tab-content active" id="today-tab">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="statusFilter">Filter by Status:</label>
+            <select id="statusFilter" onchange="filterAppointments('today')">
+              <option value="all">All</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="typeFilter">Appointment Type:</label>
+            <select id="typeFilter" onchange="filterAppointments('today')">
+              <option value="all">All Types</option>
+              <option value="checkup">Checkup</option>
+              <option value="consultation">Consultation</option>
+              <option value="followup">Follow-up</option>
+              <option value="emergency">Emergency</option>
+              <option value="routine">Routine</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="todayAppointmentsList">
+          <!-- Today's appointments will be loaded here -->
+          <p class="empty-state">Loading today's appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="upcoming-tab">
+        <div class="filter-bar">
+          <div class="date-filter">
+            <label for="dateFrom">From:</label>
+            <input type="date" id="dateFrom" onchange="filterUpcomingAppointments()">
+            <label for="dateTo">To:</label>
+            <input type="date" id="dateTo" onchange="filterUpcomingAppointments()">
+          </div>
+          <div class="filter-group">
+            <label for="upcomingTypeFilter">Appointment Type:</label>
+            <select id="upcomingTypeFilter" onchange="filterUpcomingAppointments()">
+              <option value="all">All Types</option>
+              <option value="checkup">Checkup</option>
+              <option value="consultation">Consultation</option>
+              <option value="followup">Follow-up</option>
+              <option value="emergency">Emergency</option>
+              <option value="routine">Routine</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="upcomingAppointmentsList">
+          <!-- Upcoming appointments will be loaded here -->
+          <p class="empty-state">Loading upcoming appointments...</p>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="past-tab">
+        <div class="filter-bar">
+          <div class="date-filter">
+            <label for="pastDateFrom">From:</label>
+            <input type="date" id="pastDateFrom" onchange="filterPastAppointments()">
+            <label for="pastDateTo">To:</label>
+            <input type="date" id="pastDateTo" onchange="filterPastAppointments()">
+          </div>
+          <div class="filter-group">
+            <label for="pastTypeFilter">Appointment Type:</label>
+            <select id="pastTypeFilter" onchange="filterPastAppointments()">
+              <option value="all">All Types</option>
+              <option value="checkup">Checkup</option>
+              <option value="consultation">Consultation</option>
+              <option value="followup">Follow-up</option>
+              <option value="emergency">Emergency</option>
+              <option value="routine">Routine</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="appointments-list" id="pastAppointmentsList">
+          <!-- Past appointments will be loaded here -->
+          <p class="empty-state">Loading past appointments...</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<script src="../../static/js/doc_scripts.js"></script>
+
+
+</body>
+</html>
