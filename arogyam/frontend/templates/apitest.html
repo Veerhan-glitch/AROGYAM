@@ -37,15 +37,15 @@
       if (!userid) { alert("Enter your User ID!"); return; }
       callAPI("feedback-by-user/", "POST", { userid });
     }
-    function getFeedbackByOrder() {
-      const orderid = document.getElementById('order_id_feedback').value;
-      if (!orderid) { alert("Enter Order ID!"); return; }
-      callAPI("feedback-by-order/", "POST", { orderid });
+    function getFeedbackByProduct() {
+      const productid = document.getElementById('prod_id').value;
+      if (!productid) { alert("Enter Product ID!"); return; }
+      callAPI("feedback-by-product/", "POST", { productid });
     }
     function getUserAppointments() {
       const userid = document.getElementById('cust_userid').value;
       if (!userid) { alert("Enter your User ID!"); return; }
-      callAPI("appointments/", "POST", { userid });
+      callAPI("user_appointments/", "POST", { userid });
     }
     function getUserPrescriptions() {
       const userid = document.getElementById('cust_userid').value;
@@ -120,14 +120,14 @@
     }
     function submitDoctorFeedback() {
       const userid = document.getElementById('doc_feedback_userid').value;
-      const orderid = document.getElementById('doc_feedback_orderid').value;
+      const prodid = document.getElementById('doc_feedback_prodid').value;
       const description = document.getElementById('doc_feedback_desc').value;
       const rating = document.getElementById('doc_feedback_rating').value;
-      if (!userid || !orderid || !description || !rating) {
+      if (!userid || !prodid || !description || !rating) {
         alert("Fill all doctor feedback fields.");
         return;
       }
-      callAPI("doctor-feedback/", "POST", { userid, orderid, description, rating });
+      callAPI("doctor-feedback/", "POST", { userid, prodid, description, rating });
     }
     function viewHealthRecords() {
       const userid = document.getElementById('health_userid').value;
@@ -181,6 +181,18 @@
       .catch(err => console.error(err));
     }
     // ---------- ADMIN FUNCTIONS ----------
+    function getHighValueCustomers() {
+      callAPI("high-value-customers/", "GET");
+    }
+    function getPatientMedicalSummary() {
+      callAPI("patient-medical-summary/", "GET");
+    }
+    function getUsersWithPrescriptionOrders() {
+      callAPI("users-prescription-orders/", "GET");
+    }
+    function getUsersSpendingWithOffers() {
+      callAPI("users-spending-with-offers/", "GET");
+    }
     function viewAllUsers() { callAPI("all-users/", "GET"); }
     function addUser() {
       const name = document.getElementById('new_user_name').value;
@@ -203,17 +215,22 @@
       const prescriptionneeded = document.getElementById('new_prod_pres').checked;
       callAPI("add-product/", "POST", { name, brand, price, composition, type, prescriptionneeded });
     }
+    function listDoctorsRatings() {
+      callAPI("doctors-ratings/", "GET");
+    }
     function updateProductPrice() {
       const product_id = document.getElementById('upd_prod_id').value;
       const new_price = parseFloat(document.getElementById('upd_prod_price').value);
       callAPI("update-product-price/", "POST", { product_id, new_price });
+    }
+    function getRecentActiveUsers() {
+      callAPI("recent-active-users/", "GET");
     }
     function deleteProduct() {
       const product_id = document.getElementById('del_prod_id').value;
       if (!product_id) { alert("Enter Product ID to delete."); return; }
       callAPI("delete-product/" + product_id + "/", "DELETE");
     }
-    function getSalesByMonth() { callAPI("sales-by-month/", "GET"); }
     function getMostOrderedProducts() { callAPI("most-ordered-products/", "GET"); }
     function addLabTest() {
       const name = document.getElementById('lab_name').value;
@@ -221,6 +238,15 @@
       const status = document.getElementById('lab_status').value;
       const testdetails = document.getElementById('lab_details').value;
       callAPI("add-lab-test/", "POST", { name, price, status, testdetails });
+    }
+    function getUserOrderHistory() {
+      callAPI("user-order-history/", "GET");
+    }
+    function getTopRevenueProductsForPrescriptionUsers() {
+      callAPI("top-revenue-products-prescription-users/", "GET");
+    }
+    function getRecentDoctorStats() {
+      callAPI("recent-doctor-appointments/", "GET");
     }
     function linkReport() {
       const filepath = document.getElementById('rep_filepath').value;
@@ -233,6 +259,15 @@
       const message = document.getElementById('not_message').value;
       const type = document.getElementById('not_type').value;
       callAPI("send-notification/", "POST", { user_id, message, type });
+    }
+    function findUsersFeedback() {
+      callAPI("users-with-orders-feedback/", "GET");
+    }
+    function getHighestRatedDoctorsBySpecialization() {
+      callAPI("highest-avg-rated-doctor/", "GET");
+    }
+    function getDoctorVisitCounts() {
+      callAPI("doctors-total-visits/", "GET");
     }
     // Load doctor specializations on page load.
     window.onload = loadDoctorSpecializations;
@@ -250,11 +285,12 @@
       <button onclick="getUserAppointments()">View Appointments</button>
       <button onclick="getUserPrescriptions()">View Prescriptions</button>
       <button onclick="getPaymentHistory()">Payment History</button>
+      <button onclick="getHighestRatedDoctorsBySpecialization()">Top-Rated Doctor per Specialization</button>
+      <button onclick="getDoctorVisitCounts()">List All Doctors with Visit Count</button>
     </div>
     <div>
       <label>Order ID (Feedback):</label>
       <input type="number" id="order_id_feedback" placeholder="Order ID">
-      <button onclick="getFeedbackByOrder()">Feedback by Order</button>
       <button onclick="getFeedbackByUser()">View My Feedback</button>
     </div>
     <div>
@@ -266,6 +302,7 @@
       <label>Product ID:</label>
       <input type="number" id="prod_id" placeholder="Product ID">
       <button onclick="viewProductDetails()">View Product Details</button>
+      <button onclick="getFeedbackByProduct()">Feedback by Product</button>
     </div>
     <div>
       <h4>Book Appointment</h4>
@@ -325,8 +362,8 @@
       <h4>Doctor Feedback</h4>
       <label>User ID:</label>
       <input type="number" id="doc_feedback_userid" placeholder="User ID">
-      <label>Order ID:</label>
-      <input type="number" id="doc_feedback_orderid" placeholder="Order ID">
+      <label>Product ID:</label>
+      <input type="number" id="doc_feedback_prodid" placeholder="Product ID">
       <label>Feedback:</label>
       <input type="text" id="doc_feedback_desc" placeholder="Feedback">
       <label>Rating:</label>
@@ -369,6 +406,10 @@
     <h2>Admin Features</h2>
     <div>
       <button onclick="viewAllUsers()">View All Users</button>
+      <button onclick="getHighValueCustomers()">Find High Value Customers</button>
+      <button onclick="listDoctorsRatings()">List Doctors with Their Highest and Lowest Ratings</button>
+      <button onclick="getPatientMedicalSummary()">Get Medical Summary</button>
+      <button onclick="getUserOrderHistory()">User Order History</button>
     </div>
     <div>
       <h4>Add New User</h4>
@@ -390,6 +431,9 @@
       <button onclick="addProduct()">Add Product</button>
     </div>
     <div>
+      <button onclick="getTopRevenueProductsForPrescriptionUsers()">Top 5 Products for Users with Prescriptions</button>
+    </div>    
+    <div>
       <h4>Update Product Price</h4>
       <input type="number" id="upd_prod_id" placeholder="Product ID">
       <input type="number" step="0.01" id="upd_prod_price" placeholder="New Price">
@@ -401,7 +445,6 @@
       <button onclick="deleteProduct()">Delete Product</button>
     </div>
     <div>
-      <button onclick="getSalesByMonth()">Total Sales by Month</button>
       <button onclick="getMostOrderedProducts()">Most Ordered Products</button>
     </div>
     <div>
@@ -410,11 +453,17 @@
       <input type="number" step="0.01" id="lab_price" placeholder="Price">
       <label>Status:</label>
       <select id="lab_status">
-          <option value="Available">Available</option>
-          <option value="Unavailable">Unavailable</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+
       </select>
       <input type="text" id="lab_details" placeholder="Details">
       <button onclick="addLabTest()">Add Lab Test</button>
+    </div>
+    <div>
+      <button onclick="getUsersWithPrescriptionOrders()">Users with Prescription Orders</button>
+      <button onclick="findUsersFeedback()">Find Users With Orders and Feedback</button>
     </div>
     <div>
       <h4>Link Report to Lab Test</h4>
@@ -424,18 +473,31 @@
     </div>
     <div>
       <button onclick="viewAllOffers()">View All Offers</button>
+      <button onclick="getRecentDoctorStats()">Recent Doctor Appointments + Avg Fee</button>
     </div>
+    <div>
+      <button onclick="getUsersSpendingWithOffers()">Users Spending with Offers</button>
+    </div>    
     <div>
       <h4>Send Notification</h4>
       <input type="number" id="not_userid" placeholder="User ID">
       <input type="text" id="not_message" placeholder="Message">
       <label>Type:</label>
       <select id="not_type">
-          <option value="Lab">Lab</option>
-          <option value="Support">Support</option>
-          <option value="General">General</option>
+        <option value="Appointment">Appointment</option>
+        <option value="Order Update">Order Update</option>
+        <option value="Payment">Payment</option>
+        <option value="Prescription">Prescription</option>
+        <option value="Offer">Offer</option>
+        <option value="Lab Test">Lab Test</option>
+        <option value="Support">Support</option>
+        <option value="Health Record">Health Record</option>
+        <option value="General">General</option>
+        <option value="Feedback">Feedback</option>
+        <option value="Reminder">Reminder</option>
       </select>
       <button onclick="sendNotification()">Send Notification</button>
+      <button onclick="getRecentActiveUsers()">Users Active in Last Year</button>
     </div>
   </section>
   <hr>

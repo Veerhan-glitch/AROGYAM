@@ -116,41 +116,39 @@ def get_appointments(request):
     current_date = date.today()
 
     if doctor_id:
-        appointments = Booksappointment.objects.filter(doctorid=doctor_id)
-
         # Check for the type filter parameter.
         # If provided and not equal to "all", filter appointments by the specified type.
         type_filter = request.GET.get('type')
         if type_filter and type_filter.lower() != "all":
-            appointments = appointments.filter(type=type_filter)
+            appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(type=type_filter)
 
         # Filter for today's appointments
         if 'today' in request.GET:
-            appointments = appointments.filter(date=current_date)
+            appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date=current_date)
 
         # Filter for upcoming appointments
         elif 'upcoming' in request.GET:
             from_date = request.GET.get('fromDate')
             to_date = request.GET.get('toDate')
-            appointments = appointments.filter(date__gt=current_date)  # Only future appointments
+            appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__gt=current_date)  # Only future appointments
 
             # Apply date range if provided
             if from_date:
-                appointments = appointments.filter(date__gte=from_date)
+                appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__gte=from_date)
             if to_date:
-                appointments = appointments.filter(date__lte=to_date)
+                appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__lte=to_date)
 
         # Filter for past appointments
         elif 'past' in request.GET:
             from_date = request.GET.get('fromDate')
             to_date = request.GET.get('toDate')
-            appointments = appointments.filter(date__lt=current_date)  # Only past appointments
+            appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__lt=current_date)  # Only past appointments
 
             # Apply date range if provided
             if from_date:
-                appointments = appointments.filter(date__gte=from_date)
+                appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__gte=from_date)
             if to_date:
-                appointments = appointments.filter(date__lte=to_date)
+                appointments = Booksappointment.objects.filter(doctorid=doctor_id).filter(date__lte=to_date)
 
         # Convert the query result to a list of dictionaries for JSON response
         appointment_list = list(appointments.values(

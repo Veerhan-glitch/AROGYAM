@@ -2,7 +2,7 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from arogyam.backend.models import Booksappointment, Feedback, Healthrecords, Doctor
-from arogyam.backend.serializers import AppointmentSerializer, DoctorSerializer
+from arogyam.backend.serializers import AppointmentSerializer, DoctorSerializer, HealthRecordSerializer
 
 @csrf_exempt
 def doctor_schedule(request):
@@ -30,20 +30,20 @@ def doctor_feedback(request):
         data = json.loads(request.body)
         Feedback.objects.create(
             userid_id=data["userid"],
-            orderid_id=data["orderid"],
+            productid_id=data["prodid"],
             description=data["description"],
             rating=data["rating"]
         )
         return JsonResponse({"message": "Feedback submitted"})
 
-# @csrf_exempt
-# def health_records(request):
-#     # Expects POST with {"userid": ...}
-#     if request.method == "POST":
-#         userid = json.loads(request.body).get("userid")
-#         records = Healthrecords.objects.filter(userid_id=userid)
-#         serializer = HealthRecordSerializer(records, many=True)
-#         return JsonResponse(serializer.data, safe=False)
+@csrf_exempt
+def health_records(request):
+    # Expects POST with {"userid": ...}
+    if request.method == "POST":
+        userid = json.loads(request.body).get("userid")
+        records = Healthrecords.objects.filter(userid_id=userid)
+        serializer = HealthRecordSerializer(records, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
 def doctor_profile(request):

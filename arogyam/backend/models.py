@@ -198,6 +198,7 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback {self.feedbackid} - User {self.userid_id} - Product {self.productid_id}"
+
 class Notifications(models.Model):
     notificationid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='userid')

@@ -4,7 +4,7 @@ from arogyam.backend import views
 urlpatterns = [
     path('doctor-schedule/', views.doctor_schedule, name='doctor_schedule'),
     path('doctor-feedback/', views.doctor_feedback, name='doctor_feedback'),
-    # path('health-records/', views.health_records, name='health_records'),
+    path('health-records/', views.health_records, name='health_records'),
     path('doctor-profile/', views.doctor_profile, name='doctor_profile'),
     path('update-doctor-rating/', views.update_doctor_rating, name='update_doctor_rating'),
     path('appointments-by-doctor/', views.get_appointments_by_doctor, name='appointments_by_doctor'),

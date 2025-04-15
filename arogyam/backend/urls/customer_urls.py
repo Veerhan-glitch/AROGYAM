@@ -6,9 +6,11 @@ from django.urls import path
 urlpatterns = [
     path('home/', views.home, name='home'),
     path('feedback-by-user/', views.feedback_by_user, name='feedback_by_user'),
-    path('feedback-by-order/', views.feedback_by_product, name='feedback_by_order'),
+    path('feedback-by-product/', views.feedback_by_product, name='feedback_by_order'),
     path('orders/', views.user_orders, name='user_orders'),
-    path('appointments/', views.user_appointments, name='user_appointments'),
+    path('highest-avg-rated-doctor/', views.highest_avg_rated_doctor_by_specialization, name='highest_avg_rated_doctor'),
+    path('doctors-total-visits/', views.doctors_with_total_visits, name='doctors_total_visits'),
+    path('user_appointments/', views.user_appointments, name='user_appointments'),
     path('prescriptions/', views.prescriptions, name='prescriptions'),
     path('book-appointment/', views.book_appointment, name='book_appointment'),
     path('payment-history/', views.user_payments, name='user_payments'),

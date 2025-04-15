@@ -1,13 +1,13 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, F, Max, DecimalField, OuterRef, Subquery, Count
 from django.utils.dateparse import parse_date
 from django.views.decorators.csrf import csrf_exempt
 from arogyam.backend.models import (
     Feedback, Booksappointment, Labtests, Prescription, Orders, 
     Orderitems, Payments, Reports, Supporttickets, Notifications, 
-    Product, Useroffers
+    Product, Useroffers, Doctor
 )
 from arogyam.backend.serializers import (
     FeedbackSerializer, AppointmentSerializer, LabTestSerializer, 
@@ -76,6 +76,7 @@ def user_appointments(request):
         serializer = AppointmentSerializer(apps, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+
 @csrf_exempt
 def prescriptions(request):
     if request.method == "POST":
@@ -136,6 +137,51 @@ def support_ticket(request):
         return JsonResponse({"message": "Support ticket submitted"})
     return JsonResponse({"error": "Invalid method"}, status=400)
 
+def highest_avg_rated_doctor_by_specialization(request):
+    """
+    Returns the doctor(s) with the highest average (here, current) rating in each specialization.
+    
+    This uses a subquery to compute the maximum rating for each specialization and then filters
+    doctors to only those whose rating equals that maximum.
+    """
+    # Define a subquery that calculates the maximum rating for the specialization corresponding to the outer query.
+    max_rating_subquery = Doctor.objects.filter(
+        specialization=OuterRef('specialization')
+    ).values('specialization').annotate(
+        max_rating=Max('rating')
+    ).values('max_rating')[:1]  # We only need one value
+
+    # Annotate each doctor with the maximum rating for his/her specialization
+    qs = Doctor.objects.annotate(
+        highest_rating=Subquery(max_rating_subquery, output_field=DecimalField())
+    ).filter(
+        rating=F('highest_rating')
+    )
+    
+    # Prepare the result: doctor ID, name as DoctorName, specialization, and avg_rating (same as rating here)
+    result = list(qs.values(
+        'doctorid',
+        'specialization',
+        doctorName=F('name'),
+        avg_rating=F('rating')
+    ))
+    return JsonResponse(result, safe=False)
+
+def doctors_with_total_visits(request):
+    """
+    Returns all doctors along with their total number of patient visits (appointments).
+    """
+    doctors = Doctor.objects.annotate(
+        total_visits=Count('booksappointment', distinct=True)
+    ).values(
+        'doctorid',
+        'specialization',
+        'total_visits',
+        doctorName=F('name')
+    ).order_by('-total_visits')
+
+    return JsonResponse(list(doctors), safe=False)
+
 @csrf_exempt
 def user_support_tickets(request):
     if request.method == "POST":
@@ -168,6 +214,7 @@ def search_products(request):
         serializer = ProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+@csrf_exempt
 def product_details(request):
     if request.method == "POST":
         pid = json.loads(request.body).get("productid")
