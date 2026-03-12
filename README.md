@@ -1,4 +1,4 @@
-#inital setup
+#inital setup:
 Clone the repository:
 
 ##
